@@ -1,0 +1,115 @@
+.hover-accent {
+  transition: filter 160ms ease, transform 160ms ease;
+}
+
+.hover-accent:hover {
+  filter: brightness(1.04);
+}
+
+.hover-icon {
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+.hover-icon:hover {
+  transform: translateY(-1px);
+  opacity: 0.92;
+}
+
+.hover-lift {
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+}
+
+.footer-social-icon {
+  transition: color 160ms ease, border-color 160ms ease;
+}
+
+.footer-social-icon:hover {
+  color: var(--footer-social-hover);
+  border-color: var(--footer-social-hover);
+}
+
+:root {
+  --hover-transition-fast: 160ms ease;
+  --hover-transition-normal: 220ms ease;
+}
+
+.hover-fade {
+  transition: opacity var(--hover-transition-fast);
+}
+
+.hover-fade:hover {
+  opacity: 0.86;
+}
+
+.hover-lift {
+  transition:
+    transform var(--hover-transition-normal),
+    box-shadow var(--hover-transition-normal);
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.12),
+    0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.hover-accent {
+  transition:
+    filter var(--hover-transition-fast),
+    transform var(--hover-transition-fast);
+}
+
+.hover-accent:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.hover-icon {
+  transition:
+    transform var(--hover-transition-fast),
+    background-color var(--hover-transition-fast);
+}
+
+.hover-icon:hover {
+  transform: scale(1.06);
+}
+
+.footer-social-icon {
+  color: inherit;
+  transition:
+    color var(--hover-transition-fast),
+    transform var(--hover-transition-fast),
+    border-color var(--hover-transition-fast);
+}
+
+.footer-social-icon:hover {
+  color: var(--footer-social-hover, currentColor);
+  border-color: var(--footer-social-hover, currentColor);
+  transform: scale(1.06);
+}
+
+button,
+.btn {
+  transition:
+    transform var(--hover-transition-fast),
+    filter var(--hover-transition-fast),
+    box-shadow var(--hover-transition-fast);
+}
+
+button:hover,
+.btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.12) saturate(1.1) contrast(1.03);
+}
+
+button:active,
+.btn:active {
+  transform: translateY(0);
+  filter: brightness(0.96) saturate(0.96);
+}

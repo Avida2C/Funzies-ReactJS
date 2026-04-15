@@ -1,0 +1,26 @@
+{
+  "name": "ecommerce",
+  "version": "1.0.0",
+  "description": "Funzies storefront rebuilt with React + Tailwind CSS + DaisyUI",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "react-icons": "^5.6.0",
+    "react-router-dom": "^7.14.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.0.1",
+    "autoprefixer": "^10.5.0",
+    "daisyui": "^5.5.19",
+    "postcss": "^8.5.9",
+    "tailwindcss": "^3.4.17",
+    "vite": "^8.0.8"
+  }
+}
