@@ -1,9 +1,10 @@
 import AppLayout from "../components/AppLayout";
+import ThemedSurface from "../components/ThemedSurface";
 
 export default function CheckoutLikePage({ title, description, actionText }) {
   return (
     <AppLayout title={title} description={description}>
-      <section className="bg-base-100 rounded-box shadow p-6 space-y-5">
+      <ThemedSurface className="p-6 space-y-5">
         <div className="grid gap-4 md:grid-cols-2">
           <label className="form-control">
             <span className="label-text">Name</span>
@@ -19,7 +20,7 @@ export default function CheckoutLikePage({ title, description, actionText }) {
           </label>
         </div>
         <button type="button" className="btn btn-primary">{actionText}</button>
-      </section>
+      </ThemedSurface>
     </AppLayout>
   );
 }

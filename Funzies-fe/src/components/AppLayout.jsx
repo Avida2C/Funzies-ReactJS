@@ -15,6 +15,39 @@ import { textStyles } from "../theme/typography";
 import { logoDarkMode, logoLightMode } from "../lib/storeData";
 import { useTheme } from "../theme/themeContext";
 
+/** Scroll padding so the page clears the fixed `MobileBottomNav` (matches its row: py-2 + icon + labels + border). */
+const MOBILE_BOTTOM_NAV_SCROLL_PADDING =
+  "max(3.75rem, calc(env(safe-area-inset-bottom, 0px) + 3.25rem))";
+
+const FOOTER_LINK_COLUMNS = [
+  {
+    title: "Help Center",
+    titleTo: "/help-center",
+    items: [
+      { label: "Return & Refund Policy", to: "/return-refund-policy" },
+      { label: "Shipping Information", to: "/shipping-information" },
+      { label: "Purchase Protection", to: "/purchase-protection" },
+    ],
+  },
+  {
+    title: "Company",
+    titleTo: "/company",
+    items: [
+      { label: "About Us", to: "/about-us" },
+      { label: "Careers", to: "/careers" },
+    ],
+  },
+  {
+    title: "Legal",
+    titleTo: "/legal",
+    items: [
+      { label: "Privacy Policy & Terms of Use", to: "/privacy" },
+      { label: "Trust & Safety", to: "/trust-safety" },
+      { label: "Accessibility", to: "/accessibility" },
+    ],
+  },
+];
+
 function MobileBottomNav() {
   const { colors } = useTheme();
   const location = useLocation();
@@ -97,7 +130,10 @@ export default function AppLayout({ title, description, children, showPageHeader
   };
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: colors.background }}>
+    <div
+      className="min-h-screen"
+      style={{ backgroundColor: colors.background, paddingBottom: MOBILE_BOTTOM_NAV_SCROLL_PADDING }}
+    >
       <header className="border-b" style={{ borderColor: colors.border, backgroundColor: colors.background }}>
         <div className="mx-auto grid w-full max-w-[1200px] grid-cols-[auto,1fr,auto] items-center gap-3 px-4 py-3">
           <Link to="/" className="inline-flex items-center leading-none" aria-label="Funzies Collection home">
@@ -147,8 +183,11 @@ export default function AppLayout({ title, description, children, showPageHeader
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-[1200px] p-4 pb-24 md:p-6" style={{ backgroundColor: colors.panel }}>
-        <div className={contentClassName}>
+      <main
+        className="mx-auto w-full max-w-[1200px] p-4 pb-6 md:px-6 md:pt-6 md:pb-6"
+        style={{ backgroundColor: colors.panel }}
+      >
+        <div className={`${contentClassName} [&_p]:max-w-[70ch] [&_li]:max-w-[70ch]`}>
           {showPageHeader && (
             <section className="rounded-box p-5 shadow" style={{ backgroundColor: colors.background }}>
               <h1 className="text-3xl font-bold" style={{ ...textStyles.title, color: colors.text }}>{title}</h1>
@@ -160,18 +199,42 @@ export default function AppLayout({ title, description, children, showPageHeader
       </main>
 
       <footer className="border-t" style={{ borderColor: colors.border, backgroundColor: colors.background }}>
-        <div className="mx-auto grid w-full max-w-[1200px] gap-6 px-4 py-8 md:grid-cols-2 md:px-6 lg:grid-cols-4">
-          <div><h3 className="mb-2 text-lg font-semibold" style={{ color: colors.primary }}>Get to know us</h3><p className="text-sm" style={{ color: colors.text }}>About Us</p></div>
-          <div><h3 className="mb-2 text-lg font-semibold" style={{ color: colors.primary }}>Customer service</h3><p className="text-sm" style={{ color: colors.text }}>Shipping Information</p></div>
-          <div><h3 className="mb-2 text-lg font-semibold" style={{ color: colors.primary }}>Download the app</h3><p className="text-sm" style={{ color: colors.text }}>Track orders any time</p></div>
-          <div>
-            <h3 className="mb-2 text-lg font-semibold" style={{ color: colors.primary }}>Connect with Funzies</h3>
-            <div className="mt-2 flex items-center gap-3" style={{ color: colors.text }}>
-              <a href="https://www.facebook.com/" target="_blank" rel="noreferrer" aria-label="Facebook" className="footer-social-icon inline-flex h-8 w-8 items-center justify-center rounded border" style={{ borderColor: colors.border, "--footer-social-hover": colors.primary }}><FiFacebook size={16} /></a>
-              <a href="https://twitter.com/" target="_blank" rel="noreferrer" aria-label="Twitter" className="footer-social-icon inline-flex h-8 w-8 items-center justify-center rounded border" style={{ borderColor: colors.border, "--footer-social-hover": colors.primary }}><FiTwitter size={16} /></a>
-              <a href="https://www.instagram.com/" target="_blank" rel="noreferrer" aria-label="Instagram" className="footer-social-icon inline-flex h-8 w-8 items-center justify-center rounded border" style={{ borderColor: colors.border, "--footer-social-hover": colors.primary }}><FiInstagram size={16} /></a>
+        <div className="mx-auto w-full max-w-[1200px] px-4 py-8 md:px-6">
+          <section className="grid gap-8 lg:grid-cols-4">
+            {FOOTER_LINK_COLUMNS.map((column) => (
+              <div key={column.title}>
+                <h3 className="mb-3 text-lg font-semibold">
+                  <Link to={column.titleTo} className="hover:underline" style={{ color: colors.primary }}>
+                    {column.title}
+                  </Link>
+                </h3>
+                <ul className="space-y-2">
+                  {column.items.map((item) => (
+                    <li key={`${column.title}-${item.label}`} className="text-sm">
+                      <Link to={item.to} className="hover:underline" style={{ color: colors.text }}>
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+            <div>
+              <h3 className="mb-2 text-lg font-semibold" style={{ color: colors.primary }}>Connect with Funzies</h3>
+              <div className="mt-2 flex items-center gap-3" style={{ color: colors.text }}>
+                <a href="https://www.facebook.com/" target="_blank" rel="noreferrer" aria-label="Facebook" className="footer-social-icon inline-flex h-8 w-8 items-center justify-center rounded border" style={{ borderColor: colors.border, "--footer-social-hover": colors.primary }}><FiFacebook size={16} /></a>
+                <a href="https://twitter.com/" target="_blank" rel="noreferrer" aria-label="Twitter" className="footer-social-icon inline-flex h-8 w-8 items-center justify-center rounded border" style={{ borderColor: colors.border, "--footer-social-hover": colors.primary }}><FiTwitter size={16} /></a>
+                <a href="https://www.instagram.com/" target="_blank" rel="noreferrer" aria-label="Instagram" className="footer-social-icon inline-flex h-8 w-8 items-center justify-center rounded border" style={{ borderColor: colors.border, "--footer-social-hover": colors.primary }}><FiInstagram size={16} /></a>
+              </div>
             </div>
-          </div>
+          </section>
+
+          <section
+            className="mt-8 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 border-t pt-4 text-sm"
+            style={{ borderColor: colors.primary, color: colors.text }}
+          >
+            <span>© Funzies Collection 2023. All Rights Reserved.</span>
+          </section>
         </div>
       </footer>
       <MobileBottomNav />

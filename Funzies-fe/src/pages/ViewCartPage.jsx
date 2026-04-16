@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import AppLayout from "../components/AppLayout";
+import ThemedSurface from "../components/ThemedSurface";
 import { activeProducts, price } from "../lib/storeData";
 
 export default function ViewCartPage() {
@@ -8,7 +9,7 @@ export default function ViewCartPage() {
 
   return (
     <AppLayout title="Cart" description="Overview of selected items in your cart.">
-      <section className="bg-base-100 rounded-box shadow p-6 space-y-4">
+      <ThemedSurface className="p-6 space-y-4">
         {cartItems.map((item) => (
           <div key={item.ID} className="flex items-center justify-between border-b pb-3 last:border-0">
             <div>
@@ -23,7 +24,7 @@ export default function ViewCartPage() {
           <span className="text-primary">{price.format(total)}</span>
         </div>
         <Link to="/checkout" className="btn btn-primary">Proceed to checkout</Link>
-      </section>
+      </ThemedSurface>
     </AppLayout>
   );
 }

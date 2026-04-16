@@ -59,7 +59,7 @@ function HomeSection({ title, products }) {
   return (
     <section className="space-y-4">
       <div className="flex items-end justify-between border-b pb-3" style={{ borderColor: colors.primary }}>
-        <h2 className="text-[30px] leading-none" style={{ color: colors.text }}>{title}</h2>
+        <h2 className="leading-tight" style={{ ...textStyles.sectionTitle, color: colors.text }}>{title}</h2>
         <Link to="/shop" className="text-sm font-semibold hover:opacity-80" style={{ color: colors.primary }}>View more</Link>
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
