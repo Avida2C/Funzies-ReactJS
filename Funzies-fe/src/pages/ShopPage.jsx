@@ -1,7 +1,9 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { FiHeart, FiShoppingCart } from "react-icons/fi";
+import { FaHeart } from "react-icons/fa";
 import AppLayout from "../components/AppLayout";
 import { useTheme } from "../theme/themeContext";
+import { useWishlist } from "../lib/wishlistContext";
 import {
   activeCategories,
   activeProducts,
@@ -14,7 +16,9 @@ import {
 } from "../lib/storeData";
 
 function ShopProductCard({ product, colors }) {
+  const { isWishlisted, toggleWishlist } = useWishlist();
   const productImage = resolveAssetPath(product.Image) || frontProductImage;
+  const wishlisted = isWishlisted(product.ID);
   return (
     <article className="hover-lift rounded-lg p-2 shadow-sm" style={{ backgroundColor: colors.background }}>
       <Link to={`/product-page/${product.ID}`}><img src={productImage} alt={product.Name} className="h-36 w-full rounded object-cover md:h-40" loading="lazy" /></Link>
@@ -23,7 +27,17 @@ function ShopProductCard({ product, colors }) {
         <p className="text-base font-semibold" style={{ color: colors.primary }}>{price.format(product.Price)}</p>
         <div className="flex items-center gap-2">
           <button type="button" className="hover-accent h-7 flex-1 rounded px-2 text-xs font-semibold text-white" style={{ backgroundColor: colors.success }}><span className="inline-flex items-center gap-1"><FiShoppingCart size={12} />Add to Cart</span></button>
-          <button type="button" className="hover-icon h-7 w-7 rounded text-white" style={{ backgroundColor: colors.primary }} aria-label="Add to wishlist"><span className="inline-flex items-center justify-center"><FiHeart size={14} /></span></button>
+          <button
+            type="button"
+            className="hover-icon h-7 w-7 rounded text-white"
+            style={{ backgroundColor: colors.primary }}
+            aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+            onClick={() => toggleWishlist(product.ID)}
+          >
+            <span className="inline-flex items-center justify-center">
+              {wishlisted ? <FaHeart size={13} /> : <FiHeart size={14} />}
+            </span>
+          </button>
         </div>
       </div>
     </article>

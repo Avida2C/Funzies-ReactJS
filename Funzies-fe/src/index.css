@@ -2,3 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Prevent horizontal layout shift when routes toggle page scrollbar. */
+html {
+  scrollbar-gutter: stable;
+}
+
+body {
+  overflow-y: scroll;
+}
+

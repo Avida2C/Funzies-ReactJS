@@ -2,6 +2,7 @@ import { Link, useLocation, useNavigate, useSearchParams } from "react-router-do
 import { useEffect, useState } from "react";
 import {
   FiFacebook,
+  FiHeart,
   FiHome,
   FiInstagram,
   FiList,
@@ -52,6 +53,8 @@ function MobileBottomNav() {
   const { colors } = useTheme();
   const location = useLocation();
   const isShopRoute = location.pathname === "/shop";
+  const navLinkClassName = "flex h-[56px] flex-col items-center justify-center gap-1 px-1 text-xs";
+  const navLabelClassName = "whitespace-nowrap leading-none";
   const navItemStyle = (isActive) => ({
     color: isActive ? colors.primary : colors.text,
     fontWeight: isActive ? 700 : 500,
@@ -62,33 +65,39 @@ function MobileBottomNav() {
       className="fixed inset-x-0 bottom-0 z-30 border-t backdrop-blur"
       style={{ borderColor: colors.border, backgroundColor: `${colors.panel}f2` }}
     >
-      <ul className="mx-auto grid max-w-[1200px] grid-cols-4">
+      <ul className="mx-auto grid max-w-[1200px] grid-cols-5">
         <li>
-          <Link to="/" className="flex flex-col items-center gap-1 py-2 text-xs" style={navItemStyle(location.pathname === "/")}>
+          <Link to="/" className={navLinkClassName} style={navItemStyle(location.pathname === "/")}>
             <FiHome size={16} />
-            <span style={textStyles.caption}>Home</span>
+            <span className={navLabelClassName} style={textStyles.caption}>Home</span>
           </Link>
         </li>
         <li>
           <Link
             to="/shop?category=1"
-            className="flex flex-col items-center gap-1 py-2 text-xs"
+            className={navLinkClassName}
             style={navItemStyle(isShopRoute && location.search.includes("category="))}
           >
             <FiList size={16} />
-            <span style={textStyles.caption}>Categories</span>
+            <span className={navLabelClassName} style={textStyles.caption}>Categories</span>
           </Link>
         </li>
         <li>
-          <Link to="/viewcart" className="flex flex-col items-center gap-1 py-2 text-xs" style={navItemStyle(location.pathname === "/viewcart")}>
+          <Link to="/wishlist" className={navLinkClassName} style={navItemStyle(location.pathname === "/wishlist")}>
+            <FiHeart size={16} />
+            <span className={navLabelClassName} style={textStyles.caption}>Wishlist</span>
+          </Link>
+        </li>
+        <li>
+          <Link to="/viewcart" className={navLinkClassName} style={navItemStyle(location.pathname === "/viewcart")}>
             <FiShoppingCart size={16} />
-            <span style={textStyles.caption}>Cart</span>
+            <span className={navLabelClassName} style={textStyles.caption}>Cart</span>
           </Link>
         </li>
         <li>
-          <Link to="/account" className="flex flex-col items-center gap-1 py-2 text-xs" style={navItemStyle(location.pathname === "/account")}>
+          <Link to="/account" className={navLinkClassName} style={navItemStyle(location.pathname === "/account")}>
             <FiUser size={16} />
-            <span style={textStyles.caption}>Account</span>
+            <span className={navLabelClassName} style={textStyles.caption}>Account</span>
           </Link>
         </li>
       </ul>

@@ -1,7 +1,9 @@
 import { Link, Navigate, useParams } from "react-router-dom";
 import { FiHeart, FiShoppingCart } from "react-icons/fi";
+import { FaHeart } from "react-icons/fa";
 import AppLayout from "../components/AppLayout";
 import { useTheme } from "../theme/themeContext";
+import { useWishlist } from "../lib/wishlistContext";
 import {
   activeProducts,
   categoriesById,
@@ -27,6 +29,7 @@ function ShopProductCard({ product, colors }) {
 
 export default function ProductPage() {
   const { colors } = useTheme();
+  const { isWishlisted, toggleWishlist } = useWishlist();
   const params = useParams();
   const product = productsById.get(Number(params.productId));
   if (!product) return <Navigate to="/404" replace />;
@@ -35,6 +38,7 @@ export default function ProductPage() {
   const brand = brandsById.get(product.Brand);
   const productImage = resolveAssetPath(product.Image) || frontProductImage;
   const relatedProducts = activeProducts.filter((item) => item.ID !== product.ID).slice(0, 8);
+  const wishlisted = isWishlisted(product.ID);
 
   return (
     <AppLayout showPageHeader={false} contentClassName="space-y-6">
@@ -56,7 +60,15 @@ export default function ProductPage() {
           </div>
           <div className="flex items-center gap-2">
             <button type="button" className="btn text-white" style={{ backgroundColor: colors.success }}><span className="inline-flex items-center gap-1"><FiShoppingCart size={16} />Add to Cart</span></button>
-            <button type="button" className="btn text-white" style={{ backgroundColor: colors.primary }} aria-label="Add to wishlist"><FiHeart size={18} /></button>
+            <button
+              type="button"
+              className="btn text-white"
+              style={{ backgroundColor: colors.primary }}
+              aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+              onClick={() => toggleWishlist(product.ID)}
+            >
+              {wishlisted ? <FaHeart size={16} /> : <FiHeart size={18} />}
+            </button>
           </div>
         </div>
       </section>

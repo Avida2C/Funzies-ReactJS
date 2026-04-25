@@ -3,11 +3,12 @@ import { Link } from "react-router-dom";
 import { FiChevronLeft, FiChevronRight, FiHeart, FiShoppingCart } from "react-icons/fi";
 import { GiArcTriomphe } from "react-icons/gi";
 import { SiPlaystation, SiSteam } from "react-icons/si";
-import { FaXbox } from "react-icons/fa";
+import { FaHeart, FaXbox } from "react-icons/fa";
 import { BsNintendoSwitch } from "react-icons/bs";
 import AppLayout from "../components/AppLayout";
 import { textStyles } from "../theme/typography";
 import { useTheme } from "../theme/themeContext";
+import { useWishlist } from "../lib/wishlistContext";
 import { activeProducts, frontBannerImage, frontHeroImage, frontProductImage, price, resolveAssetPath } from "../lib/storeData";
 
 const heroSlides = [
@@ -17,7 +18,9 @@ const heroSlides = [
 
 function FrontProductCard({ product }) {
   const { colors } = useTheme();
+  const { isWishlisted, toggleWishlist } = useWishlist();
   const productImage = resolveAssetPath(product.Image) || frontProductImage;
+  const wishlisted = isWishlisted(product.ID);
   return (
     <article className="hover-lift rounded-lg p-3 shadow" style={{ backgroundColor: colors.background }}>
       <Link to={`/product-page/${product.ID}`}>
@@ -30,8 +33,16 @@ function FrontProductCard({ product }) {
           <button type="button" className="hover-accent h-9 flex-1 rounded px-3 text-sm font-semibold text-white" style={{ backgroundColor: colors.success }}>
             <span className="inline-flex items-center gap-1"><FiShoppingCart size={14} />Add to Cart</span>
           </button>
-          <button type="button" className="hover-icon h-9 w-9 rounded text-white" style={{ backgroundColor: colors.primary }} aria-label="Add to wishlist">
-            <span className="inline-flex items-center justify-center"><FiHeart size={16} /></span>
+          <button
+            type="button"
+            className="hover-icon h-9 w-9 rounded text-white"
+            style={{ backgroundColor: colors.primary }}
+            aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+            onClick={() => toggleWishlist(product.ID)}
+          >
+            <span className="inline-flex items-center justify-center">
+              {wishlisted ? <FaHeart size={15} /> : <FiHeart size={16} />}
+            </span>
           </button>
         </div>
       </div>

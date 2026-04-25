@@ -2,9 +2,11 @@ import { useEffect, useMemo, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { darkThemeColors, lightThemeColors } from "./theme/colors";
 import { THEME_STORAGE_KEY, ThemeContext, getInitialThemeMode } from "./theme/themeContext";
+import { WISHLIST_STORAGE_KEY, WishlistContext, getInitialWishlistIds } from "./lib/wishlistContext";
 import HomePage from "./pages/HomePage";
 import ShopPage from "./pages/ShopPage";
 import ProductPage from "./pages/ProductPage";
+import WishlistPage from "./pages/WishlistPage";
 import CheckoutLikePage from "./pages/CheckoutLikePage";
 import ViewCartPage from "./pages/ViewCartPage";
 import LegalPage from "./pages/LegalPage";
@@ -33,10 +35,15 @@ import AdminSettingsPage from "./pages/admin/AdminSettingsPage";
 
 function App() {
   const [themeMode, setThemeMode] = useState(getInitialThemeMode);
+  const [wishlistProductIds, setWishlistProductIds] = useState(getInitialWishlistIds);
 
   useEffect(() => {
     window.localStorage.setItem(THEME_STORAGE_KEY, themeMode);
   }, [themeMode]);
+
+  useEffect(() => {
+    window.localStorage.setItem(WISHLIST_STORAGE_KEY, JSON.stringify(wishlistProductIds));
+  }, [wishlistProductIds]);
 
   // DaisyUI semantic classes (bg-base-100, text-base-content, etc.) read from <html data-theme="…">.
   // Without this, only ThemeContext inline colors update — cards stay on the wrong palette in light mode.
@@ -57,42 +64,60 @@ function App() {
     [themeMode],
   );
 
+  const wishlistContextValue = useMemo(
+    () => ({
+      wishlistProductIds,
+      isWishlisted: (productId) => wishlistProductIds.includes(productId),
+      toggleWishlist: (productId) => {
+        setWishlistProductIds((currentIds) =>
+          currentIds.includes(productId)
+            ? currentIds.filter((id) => id !== productId)
+            : [...currentIds, productId],
+        );
+      },
+    }),
+    [wishlistProductIds],
+  );
+
   return (
     <ThemeContext.Provider value={themeContextValue}>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/shop" element={<ShopPage />} />
-        <Route path="/product-page/:productId" element={<ProductPage />} />
-        <Route path="/viewcart" element={<ViewCartPage />} />
-        <Route path="/checkout" element={<CheckoutLikePage title="Checkout" description="Complete your order details and confirm purchase." actionText="Confirm order" />} />
-        <Route path="/account" element={<CheckoutLikePage title="My Account" description="Manage your account information." actionText="Update profile" />} />
-        <Route path="/create-account" element={<CheckoutLikePage title="Create Account" description="Create a new customer account." actionText="Create account" />} />
-        <Route path="/forgot-password" element={<CheckoutLikePage title="Forgot Password" description="Request a secure password reset link." actionText="Send reset link" />} />
-        <Route path="/order-confirmed" element={<OrderConfirmedPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/help-center" element={<HelpCenterPage />} />
-        <Route path="/company" element={<CompanyPage />} />
-        <Route path="/careers" element={<CareersPage />} />
-        <Route path="/careers/:roleId" element={<CareerRolePage />} />
-        <Route path="/careers/:roleId/apply" element={<CareerApplicationPage />} />
-        <Route path="/careers/:roleId/application-received" element={<CareerApplicationReceivedPage />} />
-        <Route path="/legal" element={<LegalCenterPage />} />
-        <Route path="/trust-safety" element={<TrustSafetyPage />} />
-        <Route path="/return-refund-policy" element={<ReturnRefundPolicyPage />} />
-        <Route path="/shipping-information" element={<ShippingInformationPage />} />
-        <Route path="/accessibility" element={<AccessibilityPage />} />
-        <Route path="/about-us" element={<AboutUsPage />} />
-        <Route path="/purchase-protection" element={<PurchaseProtectionPage />} />
-        <Route path="/privacy" element={<PolicyCenterPage />} />
-        <Route path="/terms" element={<PolicyCenterPage />} />
-        <Route path="/admin" element={<AdminDashboardPage />} />
-        <Route path="/admin/products" element={<AdminProductsPage />} />
-        <Route path="/admin/orders" element={<AdminOrdersPage />} />
-        <Route path="/admin/users" element={<AdminUsersPage />} />
-        <Route path="/admin/settings" element={<AdminSettingsPage />} />
-        <Route path="/404" element={<NotFoundPage />} />
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
+      <WishlistContext.Provider value={wishlistContextValue}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/shop" element={<ShopPage />} />
+          <Route path="/wishlist" element={<WishlistPage />} />
+          <Route path="/product-page/:productId" element={<ProductPage />} />
+          <Route path="/viewcart" element={<ViewCartPage />} />
+          <Route path="/checkout" element={<CheckoutLikePage title="Checkout" description="Complete your order details and confirm purchase." actionText="Confirm order" />} />
+          <Route path="/account" element={<CheckoutLikePage title="My Account" description="Manage your account information." actionText="Update profile" />} />
+          <Route path="/create-account" element={<CheckoutLikePage title="Create Account" description="Create a new customer account." actionText="Create account" />} />
+          <Route path="/forgot-password" element={<CheckoutLikePage title="Forgot Password" description="Request a secure password reset link." actionText="Send reset link" />} />
+          <Route path="/order-confirmed" element={<OrderConfirmedPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/help-center" element={<HelpCenterPage />} />
+          <Route path="/company" element={<CompanyPage />} />
+          <Route path="/careers" element={<CareersPage />} />
+          <Route path="/careers/:roleId" element={<CareerRolePage />} />
+          <Route path="/careers/:roleId/apply" element={<CareerApplicationPage />} />
+          <Route path="/careers/:roleId/application-received" element={<CareerApplicationReceivedPage />} />
+          <Route path="/legal" element={<LegalCenterPage />} />
+          <Route path="/trust-safety" element={<TrustSafetyPage />} />
+          <Route path="/return-refund-policy" element={<ReturnRefundPolicyPage />} />
+          <Route path="/shipping-information" element={<ShippingInformationPage />} />
+          <Route path="/accessibility" element={<AccessibilityPage />} />
+          <Route path="/about-us" element={<AboutUsPage />} />
+          <Route path="/purchase-protection" element={<PurchaseProtectionPage />} />
+          <Route path="/privacy" element={<PolicyCenterPage />} />
+          <Route path="/terms" element={<PolicyCenterPage />} />
+          <Route path="/admin" element={<AdminDashboardPage />} />
+          <Route path="/admin/products" element={<AdminProductsPage />} />
+          <Route path="/admin/orders" element={<AdminOrdersPage />} />
+          <Route path="/admin/users" element={<AdminUsersPage />} />
+          <Route path="/admin/settings" element={<AdminSettingsPage />} />
+          <Route path="/404" element={<NotFoundPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </WishlistContext.Provider>
     </ThemeContext.Provider>
   );
 }
