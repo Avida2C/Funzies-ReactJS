@@ -62,7 +62,7 @@ function MobileBottomNav() {
       className="fixed inset-x-0 bottom-0 z-30 border-t backdrop-blur"
       style={{ borderColor: colors.border, backgroundColor: `${colors.panel}f2` }}
     >
-      <ul className="mx-auto grid max-w-[1200px] grid-cols-5">
+      <ul className="mx-auto grid max-w-[1200px] grid-cols-4">
         <li>
           <Link to="/" className="flex flex-col items-center gap-1 py-2 text-xs" style={navItemStyle(location.pathname === "/")}>
             <FiHome size={16} />
@@ -77,16 +77,6 @@ function MobileBottomNav() {
           >
             <FiList size={16} />
             <span style={textStyles.caption}>Categories</span>
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/shop"
-            className="flex flex-col items-center gap-1 py-2 text-xs"
-            style={navItemStyle(isShopRoute && !location.search.includes("category="))}
-          >
-            <FiSearch size={16} />
-            <span style={textStyles.caption}>Search</span>
           </Link>
         </li>
         <li>
