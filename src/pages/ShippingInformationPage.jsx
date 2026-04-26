@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import AppLayout from "../components/AppLayout";
+import SupportHelpSection from "../components/SupportHelpSection";
 import ThemedSurface from "../components/ThemedSurface";
 
 export default function ShippingInformationPage() {
@@ -96,20 +97,7 @@ export default function ShippingInformationPage() {
           </p>
         </ThemedSurface>
 
-        <ThemedSurface className="p-6 space-y-4">
-          <h2 className="text-xl font-semibold text-base-content">Questions about your shipment?</h2>
-          <p className="leading-7 text-base-content/80">
-            Our support team can help with tracking, address changes before dispatch, and delivery issues.
-          </p>
-          <div className="flex flex-wrap gap-3">
-            <Link to="/contact" className="btn btn-primary btn-sm">
-              Contact support
-            </Link>
-            <Link to="/help-center" className="btn btn-outline btn-sm">
-              Help center
-            </Link>
-          </div>
-        </ThemedSurface>
+        <SupportHelpSection />
       </div>
     </AppLayout>
   );

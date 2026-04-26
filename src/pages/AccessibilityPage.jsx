@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
 import AppLayout from "../components/AppLayout";
+import SupportHelpSection from "../components/SupportHelpSection";
 import ThemedSurface from "../components/ThemedSurface";
 
 export default function AccessibilityPage() {
@@ -85,33 +85,7 @@ export default function AccessibilityPage() {
           </section>
         </ThemedSurface>
 
-        <ThemedSurface className="p-6 space-y-4">
-          <h2 className="text-xl font-semibold text-base-content">Tell us about a barrier</h2>
-          <p className="leading-7 text-base-content/80">
-            Found a &quot;bug&quot; in our accessibility? We want to fix it. Email us with as much detail as you can:
-            the page or screen, what you were trying to do, and your browser and assistive technology (including
-            versions if you know them). Screenshots or short recordings help, but are optional.
-          </p>
-          <p className="leading-7 text-base-content/80">
-            <strong className="text-base-content">Accessibility email:</strong>{" "}
-            <a className="link link-primary" href="mailto:demo@infofunzies.com.mt">
-              demo@infofunzies.com.mt
-            </a>
-          </p>
-          <p className="leading-7 text-base-content/80">
-            <strong className="text-base-content">Response time:</strong> We aim to reply within 2 business days. If you
-            need help with an order and accessibility is part of the issue, include your order number so we can route you
-            quickly.
-          </p>
-          <div className="flex flex-wrap gap-3 pt-2">
-            <Link to="/contact" className="btn btn-outline btn-sm">
-              Contact support
-            </Link>
-            <Link to="/help-center" className="btn btn-outline btn-sm">
-              Help Center
-            </Link>
-          </div>
-        </ThemedSurface>
+        <SupportHelpSection />
       </div>
     </AppLayout>
   );
