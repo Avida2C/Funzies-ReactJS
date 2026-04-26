@@ -8,6 +8,7 @@ import { BsNintendoSwitch } from "react-icons/bs";
 import AppLayout from "../components/AppLayout";
 import { textStyles } from "../theme/typography";
 import { useTheme } from "../theme/themeContext";
+import { useCart } from "../lib/cartContext";
 import { useWishlist } from "../lib/wishlistContext";
 import { activeProducts, frontBannerImage, frontHeroImage, frontProductImage, price, resolveAssetPath } from "../lib/storeData";
 
@@ -26,6 +27,7 @@ const popularTags = [
 
 function FrontProductCard({ product }) {
   const { colors } = useTheme();
+  const { addToCart } = useCart();
   const { isWishlisted, toggleWishlist } = useWishlist();
   const productImage = resolveAssetPath(product.Image) || frontProductImage;
   const wishlisted = isWishlisted(product.ID);
@@ -38,7 +40,12 @@ function FrontProductCard({ product }) {
         <Link to={`/product-page/${product.ID}`}><p className="line-clamp-1 text-[13px]" style={{ color: colors.text }}>{product.Name.trim()}</p></Link>
         <p className="text-lg font-semibold" style={{ color: colors.primary }}>{price.format(product.Price)}</p>
         <div className="flex items-center gap-2">
-          <button type="button" className="hover-accent h-9 flex-1 rounded px-3 text-sm font-semibold text-white" style={{ backgroundColor: colors.success }}>
+          <button
+            type="button"
+            className="hover-accent h-9 flex-1 rounded px-3 text-sm font-semibold text-white"
+            style={{ backgroundColor: colors.success }}
+            onClick={() => addToCart(product.ID)}
+          >
             <span className="inline-flex items-center gap-1"><FiShoppingCart size={14} />Add to Cart</span>
           </button>
           <button

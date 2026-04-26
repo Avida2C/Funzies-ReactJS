@@ -2,11 +2,13 @@ import { Link } from "react-router-dom";
 import { FiHeart, FiShoppingCart } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
 import AppLayout from "../components/AppLayout";
+import { useCart } from "../lib/cartContext";
 import { useTheme } from "../theme/themeContext";
 import { useWishlist } from "../lib/wishlistContext";
 import { activeProducts, frontProductImage, price, resolveAssetPath } from "../lib/storeData";
 
 function WishlistProductCard({ product, colors, onToggleWishlist }) {
+  const { addToCart } = useCart();
   const productImage = resolveAssetPath(product.Image) || frontProductImage;
 
   return (
@@ -24,7 +26,12 @@ function WishlistProductCard({ product, colors, onToggleWishlist }) {
           {price.format(product.Price)}
         </p>
         <div className="flex items-center gap-2">
-          <button type="button" className="hover-accent h-9 flex-1 rounded px-3 text-sm font-semibold text-white" style={{ backgroundColor: colors.success }}>
+          <button
+            type="button"
+            className="hover-accent h-9 flex-1 rounded px-3 text-sm font-semibold text-white"
+            style={{ backgroundColor: colors.success }}
+            onClick={() => addToCart(product.ID)}
+          >
             <span className="inline-flex items-center gap-1">
               <FiShoppingCart size={14} />
               Add to Cart

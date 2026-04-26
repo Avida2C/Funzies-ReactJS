@@ -2,6 +2,7 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import { FiHeart, FiShoppingCart } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
 import AppLayout from "../components/AppLayout";
+import { useCart } from "../lib/cartContext";
 import { useTheme } from "../theme/themeContext";
 import { useWishlist } from "../lib/wishlistContext";
 import {
@@ -29,6 +30,7 @@ function ShopProductCard({ product, colors }) {
 
 export default function ProductPage() {
   const { colors } = useTheme();
+  const { addToCart } = useCart();
   const { isWishlisted, toggleWishlist } = useWishlist();
   const params = useParams();
   const product = productsById.get(Number(params.productId));
@@ -59,7 +61,7 @@ export default function ProductPage() {
             <div className="rounded p-3" style={{ backgroundColor: colors.background }}><span style={{ color: colors.text }}>Brand</span><p className="font-semibold">{brand?.Name ?? "Unknown"}</p></div>
           </div>
           <div className="flex items-center gap-2">
-            <button type="button" className="btn text-white" style={{ backgroundColor: colors.success }}><span className="inline-flex items-center gap-1"><FiShoppingCart size={16} />Add to Cart</span></button>
+            <button type="button" className="btn text-white" style={{ backgroundColor: colors.success }} onClick={() => addToCart(product.ID)}><span className="inline-flex items-center gap-1"><FiShoppingCart size={16} />Add to Cart</span></button>
             <button
               type="button"
               className="btn text-white"

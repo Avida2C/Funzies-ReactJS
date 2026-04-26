@@ -2,6 +2,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { FiHeart, FiShoppingCart } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
 import AppLayout from "../components/AppLayout";
+import { useCart } from "../lib/cartContext";
 import { useTheme } from "../theme/themeContext";
 import { useWishlist } from "../lib/wishlistContext";
 import {
@@ -61,6 +62,7 @@ const SORT_LABELS = {
 };
 
 function ShopProductCard({ product, colors }) {
+  const { addToCart } = useCart();
   const { isWishlisted, toggleWishlist } = useWishlist();
   const productImage = resolveAssetPath(product.Image) || frontProductImage;
   const wishlisted = isWishlisted(product.ID);
@@ -71,7 +73,14 @@ function ShopProductCard({ product, colors }) {
         <Link to={`/product-page/${product.ID}`}><p className="truncate text-[11px]" style={{ color: colors.text }}>{product.Name.trim()}</p></Link>
         <p className="text-base font-semibold" style={{ color: colors.primary }}>{price.format(product.Price)}</p>
         <div className="flex items-center gap-2">
-          <button type="button" className="hover-accent h-7 flex-1 rounded px-2 text-xs font-semibold text-white" style={{ backgroundColor: colors.success }}><span className="inline-flex items-center gap-1"><FiShoppingCart size={12} />Add to Cart</span></button>
+          <button
+            type="button"
+            className="hover-accent h-7 flex-1 rounded px-2 text-xs font-semibold text-white"
+            style={{ backgroundColor: colors.success }}
+            onClick={() => addToCart(product.ID)}
+          >
+            <span className="inline-flex items-center gap-1"><FiShoppingCart size={12} />Add to Cart</span>
+          </button>
           <button
             type="button"
             className="hover-icon h-7 w-7 rounded text-white"

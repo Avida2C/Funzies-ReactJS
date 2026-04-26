@@ -11,10 +11,12 @@ import {
   FiTwitter,
   FiUser,
 } from "react-icons/fi";
+import { BsCartFill } from "react-icons/bs";
 import { LuLightbulb, LuLightbulbOff } from "react-icons/lu";
 import { textStyles } from "../theme/typography";
 import { logoDarkMode, logoLightMode } from "../lib/storeData";
 import { useTheme } from "../theme/themeContext";
+import { useCart } from "../lib/cartContext";
 
 /** Scroll padding so the page clears the fixed `MobileBottomNav` (matches its row: py-2 + icon + labels + border). */
 const MOBILE_BOTTOM_NAV_SCROLL_PADDING =
@@ -51,6 +53,7 @@ const FOOTER_LINK_COLUMNS = [
 
 function MobileBottomNav() {
   const { colors } = useTheme();
+  const { cartCount } = useCart();
   const location = useLocation();
   const isShopRoute = location.pathname === "/shop";
   const navLinkClassName = "flex h-[56px] flex-col items-center justify-center gap-1 px-1 text-xs";
@@ -90,7 +93,17 @@ function MobileBottomNav() {
         </li>
         <li>
           <Link to="/viewcart" className={navLinkClassName} style={navItemStyle(location.pathname === "/viewcart")}>
-            <FiShoppingCart size={16} />
+            <span className="relative inline-flex">
+              {cartCount > 0 ? <BsCartFill size={16} /> : <FiShoppingCart size={16} />}
+              {cartCount > 0 && (
+                <span
+                  className="absolute -right-2 -top-2 inline-flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] leading-none text-white"
+                  style={{ backgroundColor: "#ef4444" }}
+                >
+                  {cartCount > 99 ? "99+" : cartCount}
+                </span>
+              )}
+            </span>
             <span className={navLabelClassName} style={textStyles.caption}>Cart</span>
           </Link>
         </li>
@@ -107,6 +120,7 @@ function MobileBottomNav() {
 
 export default function AppLayout({ title, description, children, showPageHeader = true, contentClassName = "space-y-6" }) {
   const { colors, mode, toggleTheme } = useTheme();
+  const { cartCount } = useCart();
   const location = useLocation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -173,9 +187,17 @@ export default function AppLayout({ title, description, children, showPageHeader
               </span>
             </Link>
             <Link to="/viewcart" className="hover-accent inline-flex h-full items-center rounded px-3 text-xs font-semibold" style={{ border: `1px solid ${colors.primary}`, color: colors.primary }}>
-              <span className="inline-flex items-center gap-1" style={textStyles.button}>
-                <FiShoppingCart size={14} />
-                Cart (0)
+              <span className="inline-flex items-center gap-1.5" style={textStyles.button}>
+                <span className="relative inline-flex h-[14px] w-[14px] items-center justify-center">
+                  <FiShoppingCart size={14} />
+                  {cartCount > 0 && (
+                    <span
+                      className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full border"
+                      style={{ backgroundColor: "#ef4444", borderColor: colors.background }}
+                    />
+                  )}
+                </span>
+                Cart
               </span>
             </Link>
           </div>
