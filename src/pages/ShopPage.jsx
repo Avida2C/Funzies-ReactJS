@@ -1,6 +1,7 @@
 import { Link, useSearchParams } from "react-router-dom";
-import { FiHeart, FiShoppingCart } from "react-icons/fi";
+import { FiHeart, FiList, FiShoppingCart } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
+import { useEffect, useRef, useState } from "react";
 import AppLayout from "../components/AppLayout";
 import { useCart } from "../lib/cartContext";
 import { useTheme } from "../theme/themeContext";
@@ -61,6 +62,8 @@ const SORT_LABELS = {
   "name-desc": "Name: Z to A",
 };
 
+const PRODUCTS_PAGE_SIZE = 10;
+
 function ShopProductCard({ product, colors }) {
   const { addToCart } = useCart();
   const { isWishlisted, toggleWishlist } = useWishlist();
@@ -101,6 +104,9 @@ function ShopProductCard({ product, colors }) {
 export default function ShopPage() {
   const { colors } = useTheme();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] = useState(false);
+  const [visibleProductsCount, setVisibleProductsCount] = useState(PRODUCTS_PAGE_SIZE);
+  const loadMoreTriggerRef = useRef(null);
   const rawCategory = searchParams.get("category");
   const rawQuery = searchParams.get("q") ?? "";
   const selectedSort = searchParams.get("sort") ?? "featured";
@@ -169,6 +175,34 @@ export default function ShopPage() {
     return 0;
   });
 
+  useEffect(() => {
+    setVisibleProductsCount(PRODUCTS_PAGE_SIZE);
+  }, [selectedSort, normalizedQuery, selectedCategoryId]);
+
+  const visibleProducts = sortedProducts.slice(0, visibleProductsCount);
+  const hasMoreProducts = visibleProducts.length < sortedProducts.length;
+
+  useEffect(() => {
+    if (!hasMoreProducts || !loadMoreTriggerRef.current) {
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting) {
+          setVisibleProductsCount((previousCount) =>
+            Math.min(previousCount + PRODUCTS_PAGE_SIZE, sortedProducts.length),
+          );
+        }
+      },
+      { rootMargin: "120px 0px" },
+    );
+
+    observer.observe(loadMoreTriggerRef.current);
+    return () => observer.disconnect();
+  }, [hasMoreProducts, sortedProducts.length]);
+
   const handleSortChange = (event) => {
     const nextSort = event.target.value;
     const params = new URLSearchParams(searchParams);
@@ -206,28 +240,75 @@ export default function ShopPage() {
   const hasCategoryTag = hasCategoryFilter && Boolean(selectedCategoryName);
   const hasSortFilter = selectedSort !== "featured";
   const hasAnyFilter = hasSearchFilter || hasCategoryTag || hasSortFilter;
+  const closeMobileCategories = () => setIsMobileCategoriesOpen(false);
+
+  const renderCategoryLinks = (onNavigate) => (
+    <ul className="space-y-2">
+      {categoriesWithCount.map((category) => {
+        const isActive = hasCategoryFilter && category.id === selectedCategoryId;
+        const params = new URLSearchParams(searchParams);
+        params.delete("q");
+        params.set("category", String(category.id));
+        const categoryLink = `/shop?${params.toString()}`;
+        return (
+          <li key={category.id} className="flex items-center justify-between text-sm" style={{ color: colors.text }}>
+            <Link
+              to={categoryLink}
+              className="truncate rounded px-2 py-1 hover:underline"
+              style={{ color: isActive ? colors.primary : colors.text, fontWeight: isActive ? 700 : 400 }}
+              onClick={onNavigate}
+            >
+              {category.name}
+            </Link>
+            <Link
+              to={categoryLink}
+              className="min-w-[28px] rounded-full px-2 py-0.5 text-center text-xs font-semibold text-white"
+              style={{ backgroundColor: colors.primary }}
+              onClick={onNavigate}
+            >
+              {category.count}
+            </Link>
+          </li>
+        );
+      })}
+    </ul>
+  );
 
   return (
     <AppLayout showPageHeader={false} contentClassName="space-y-5">
+      {isMobileCategoriesOpen && (
+        <div className="fixed inset-0 z-40 lg:hidden">
+          <button
+            type="button"
+            className="absolute inset-0"
+            style={{ backgroundColor: "rgba(0,0,0,0.45)" }}
+            onClick={closeMobileCategories}
+            aria-label="Close categories sidebar"
+          />
+          <aside
+            className="absolute left-0 top-0 h-full w-[82%] max-w-[320px] overflow-y-auto p-4 shadow-xl"
+            style={{ backgroundColor: colors.background }}
+          >
+            <div className="mb-3 flex items-center justify-between">
+              <h2 className="text-lg font-semibold" style={{ color: colors.primary }}>Product Categories</h2>
+              <button
+                type="button"
+                className="rounded px-2 py-1 text-sm font-semibold"
+                style={{ border: `1px solid ${colors.border}`, color: colors.text }}
+                onClick={closeMobileCategories}
+              >
+                Close
+              </button>
+            </div>
+            {renderCategoryLinks(closeMobileCategories)}
+          </aside>
+        </div>
+      )}
       <section className="overflow-hidden rounded-lg shadow"><img src={frontBannerImage} alt="Shop gaming banner" className="h-28 w-full object-cover md:h-36" /></section>
       <section className="grid gap-4 lg:grid-cols-[220px,1fr]">
-        <aside className="rounded-lg p-4" style={{ backgroundColor: colors.background }}>
+        <aside className="hidden rounded-lg p-4 lg:block" style={{ backgroundColor: colors.background }}>
           <h2 className="mb-3 text-lg font-semibold" style={{ color: colors.primary }}>Product Categories</h2>
-          <ul className="space-y-2">
-            {categoriesWithCount.map((category) => {
-              const isActive = hasCategoryFilter && category.id === selectedCategoryId;
-              const params = new URLSearchParams(searchParams);
-              params.delete("q");
-              params.set("category", String(category.id));
-              const categoryLink = `/shop?${params.toString()}`;
-              return (
-                <li key={category.id} className="flex items-center justify-between text-sm" style={{ color: colors.text }}>
-                  <Link to={categoryLink} className="truncate rounded px-2 py-1 hover:underline" style={{ color: isActive ? colors.primary : colors.text, fontWeight: isActive ? 700 : 400 }}>{category.name}</Link>
-                  <Link to={categoryLink} className="min-w-[28px] rounded-full px-2 py-0.5 text-center text-xs font-semibold text-white" style={{ backgroundColor: colors.primary }}>{category.count}</Link>
-                </li>
-              );
-            })}
-          </ul>
+          {renderCategoryLinks()}
         </aside>
         <div className="space-y-3">
           {hasAnyFilter && (
@@ -272,11 +353,23 @@ export default function ShopPage() {
               </button>
             </section>
           )}
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg p-3 shadow-sm" style={{ backgroundColor: colors.background }}>
+          <div
+            className="flex items-center gap-3 overflow-x-auto rounded-lg p-3 shadow-sm whitespace-nowrap"
+            style={{ backgroundColor: colors.background }}
+          >
+            <button
+              type="button"
+              className="inline-flex h-10 w-10 items-center justify-center rounded text-white lg:hidden"
+              style={{ backgroundColor: colors.primary }}
+              onClick={() => setIsMobileCategoriesOpen(true)}
+              aria-label="Open categories"
+            >
+              <FiList size={18} />
+            </button>
             <p className="text-sm font-medium" style={{ color: colors.text }}>
               {sortedProducts.length} item{sortedProducts.length === 1 ? "" : "s"}
             </p>
-            <label className="flex items-center gap-2 text-sm" style={{ color: colors.text }}>
+            <label className="ml-auto flex items-center gap-2 text-sm" style={{ color: colors.text }}>
               <span>Sort by</span>
               <select
                 value={selectedSort}
@@ -295,9 +388,16 @@ export default function ShopPage() {
             </label>
           </div>
           {sortedProducts.length > 0 ? (
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {sortedProducts.map((product) => <ShopProductCard key={product.ID} product={product} colors={colors} />)}
-            </div>
+            <section className="space-y-4">
+              <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
+                {visibleProducts.map((product) => <ShopProductCard key={product.ID} product={product} colors={colors} />)}
+              </div>
+              {hasMoreProducts && (
+                <div ref={loadMoreTriggerRef} className="flex justify-center py-2 text-xs" style={{ color: colors.text }}>
+                  Loading more products...
+                </div>
+              )}
+            </section>
           ) : (
             <section
               className="flex min-h-[280px] flex-col items-center justify-center rounded-lg p-6 text-center shadow-sm"
