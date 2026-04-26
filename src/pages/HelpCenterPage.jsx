@@ -4,6 +4,7 @@ import { FiChevronRight, FiHelpCircle, FiPackage, FiRotateCcw, FiSearch, FiShiel
 import { LuScale } from "react-icons/lu";
 import AppLayout from "../components/AppLayout";
 import ThemedSurface from "../components/ThemedSurface";
+import SupportHelpSection from "../components/SupportHelpSection";
 import { useTheme } from "../theme/themeContext";
 
 const QUICK_TOPICS = [
@@ -93,8 +94,10 @@ function normalizeText(value) {
 }
 
 export default function HelpCenterPage() {
-  const { colors } = useTheme();
+  const { colors, mode } = useTheme();
   const [query, setQuery] = useState("");
+  const searchLikeTextColor = mode === "dark" ? "#1f2a36" : colors.text;
+  const searchLikePlaceholderColor = mode === "dark" ? "#6b7280" : "#9ca3af";
 
   const filteredFaq = useMemo(() => {
     const trimmed = query.trim();
@@ -117,16 +120,17 @@ export default function HelpCenterPage() {
     >
       <div className="grid gap-6">
         <section
-          className="rounded-box border border-primary/20 p-6 shadow md:p-8"
+          className="rounded-box border p-6 shadow md:p-8"
           style={{
+            borderColor: `${colors.primary}33`,
             background: `linear-gradient(to bottom right, ${colors.primary}1a, ${colors.background}, ${colors.background})`,
           }}
         >
           <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
             <div className="space-y-2">
               <p
-                className="inline-flex rounded-full border border-primary/30 px-3 py-1 text-xs font-semibold text-primary"
-                style={{ backgroundColor: `${colors.background}cc` }}
+                className="inline-flex rounded-full border px-3 py-1 text-xs font-semibold"
+                style={{ backgroundColor: `${colors.background}cc`, borderColor: `${colors.primary}4d`, color: colors.primary }}
               >
                 Self-serve first
               </p>
@@ -143,8 +147,9 @@ export default function HelpCenterPage() {
                 <span className="sr-only">Search help articles</span>
                 <div className="relative">
                   <FiSearch
-                    className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-base-content/50"
-                    size={18}
+                    className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2"
+                    style={{ color: "#ef4444" }}
+                    size={16}
                     aria-hidden
                   />
                   <input
@@ -152,9 +157,11 @@ export default function HelpCenterPage() {
                     value={query}
                     onChange={(event) => setQuery(event.target.value)}
                     placeholder="Try: tracking, refund, authentic…"
-                    className="input input-bordered w-full pl-10"
+                    className="help-center-search-input h-9 w-full rounded border p-0.5 pl-7 pr-2 text-sm outline-none"
+                    style={{ borderColor: colors.primary, backgroundColor: colors.white, color: searchLikeTextColor }}
                     autoComplete="off"
                   />
+                  <style>{`.help-center-search-input::placeholder { color: ${searchLikePlaceholderColor}; opacity: 1; }`}</style>
                 </div>
               </label>
             </div>
@@ -162,15 +169,15 @@ export default function HelpCenterPage() {
 
           <div className="mt-5 flex flex-wrap gap-2 text-sm">
             <span className="text-base-content/60">Jump to:</span>
-            <a href="#popular-topics" className="link link-primary">
+            <a href="#popular-topics" className="link" style={{ color: colors.primary }}>
               Popular topics
             </a>
             <span className="text-base-content/40">·</span>
-            <a href="#faq" className="link link-primary">
+            <a href="#faq" className="link" style={{ color: colors.primary }}>
               FAQ
             </a>
             <span className="text-base-content/40">·</span>
-            <a href="#contact" className="link link-primary">
+            <a href="#contact" className="link" style={{ color: colors.primary }}>
               Contact
             </a>
           </div>
@@ -191,16 +198,19 @@ export default function HelpCenterPage() {
                 <li key={topic.to}>
                   <Link
                     to={topic.to}
-                    className="group flex h-full gap-4 rounded-box border p-4 shadow-sm transition hover:border-primary/40 hover:shadow-md"
-                    style={{ backgroundColor: colors.background, borderColor: colors.border }}
+                    className="group flex h-full gap-4 rounded-box border p-4 shadow-sm transition hover:shadow-md"
+                    style={{ backgroundColor: colors.background, borderColor: `${colors.primary}4d` }}
                   >
-                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <span
+                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
+                      style={{ backgroundColor: `${colors.primary}1a`, color: colors.primary }}
+                    >
                       <Icon size={20} aria-hidden />
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="flex items-start justify-between gap-2">
-                        <span className="font-semibold text-base-content group-hover:text-primary">{topic.title}</span>
-                        <FiChevronRight className="mt-0.5 shrink-0 text-base-content/40 group-hover:text-primary" size={18} aria-hidden />
+                        <span className="font-semibold text-base-content">{topic.title}</span>
+                        <FiChevronRight className="mt-0.5 shrink-0 text-base-content/40" size={18} aria-hidden style={{ color: colors.primary }} />
                       </span>
                       <span className="mt-1 block text-sm leading-6 text-base-content/75">{topic.blurb}</span>
                     </span>
@@ -213,11 +223,11 @@ export default function HelpCenterPage() {
           <div className="rounded-box border border-dashed p-4" style={{ borderColor: colors.border, backgroundColor: colors.panel }}>
             <p className="text-sm leading-6 text-base-content/80">
               <strong className="text-base-content">Tip:</strong> If your question is about privacy or terms, start at{" "}
-              <Link to="/privacy" className="link link-primary">
+              <Link to="/privacy" className="link" style={{ color: colors.primary }}>
                 Privacy &amp; Terms
               </Link>{" "}
               or the{" "}
-              <Link to="/legal" className="link link-primary">
+              <Link to="/legal" className="link" style={{ color: colors.primary }}>
                 Legal center
               </Link>
               .
@@ -270,21 +280,7 @@ export default function HelpCenterPage() {
         </section>
 
         <section id="contact" className="scroll-mt-24">
-          <ThemedSurface bordered className="p-6">
-            <h2 className="text-xl font-semibold text-base-content">Still need a human?</h2>
-            <p className="mt-2 max-w-3xl leading-7 text-base-content/80">
-              When self-serve is not enough, our team can help with order issues, returns, and product questions. Include
-              your order number and any photos so we can resolve things in one pass.
-            </p>
-            <div className="mt-4 flex flex-wrap gap-3">
-              <Link to="/contact" className="btn btn-primary btn-sm">
-                Contact support
-              </Link>
-              <Link to="/accessibility" className="btn btn-outline btn-sm">
-                Accessibility
-              </Link>
-            </div>
-          </ThemedSurface>
+          <SupportHelpSection showHelpCenterButton={false} />
         </section>
       </div>
     </AppLayout>

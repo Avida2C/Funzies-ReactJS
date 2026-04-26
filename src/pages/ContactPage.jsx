@@ -30,9 +30,16 @@ const INITIAL_FORM = {
 };
 
 export default function ContactPage() {
-  const { colors } = useTheme();
+  const { colors, mode } = useTheme();
   const [form, setForm] = useState(INITIAL_FORM);
   const [submitted, setSubmitted] = useState(false);
+  const formFieldTextColor = mode === "dark" ? "#1f2a36" : colors.text;
+  const formPlaceholderColor = mode === "dark" ? "#6b7280" : "#9ca3af";
+  const formFieldStyle = {
+    borderColor: colors.primary,
+    backgroundColor: colors.white,
+    color: formFieldTextColor,
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -57,13 +64,17 @@ export default function ContactPage() {
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:items-start">
         <div className="space-y-6">
           <section
-            className="rounded-box border border-primary/20 p-6 shadow"
+            className="rounded-box border p-6 shadow"
             style={{
+              borderColor: `${colors.primary}33`,
               background: `linear-gradient(to bottom right, ${colors.primary}1a, ${colors.background}, ${colors.background})`,
             }}
           >
             <div className="flex items-start gap-3">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary">
+              <span
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
+                style={{ backgroundColor: `${colors.primary}26`, color: colors.primary }}
+              >
                 <FiMessageCircle size={22} aria-hidden />
               </span>
               <div className="space-y-2">
@@ -86,7 +97,8 @@ export default function ContactPage() {
                 <li key={item.to}>
                   <Link
                     to={item.to}
-                    className="flex items-start justify-between gap-3 rounded-lg border border-base-300 bg-base-200/20 px-4 py-3 transition hover:border-primary/40 hover:bg-base-200/40"
+                    className="flex items-start justify-between gap-3 rounded-lg border border-base-300 bg-base-200/20 px-4 py-3 transition hover:bg-base-200/40"
+                    style={{ borderColor: `${colors.primary}4d` }}
                   >
                     <span>
                       <span className="font-medium text-base-content">{item.label}</span>
@@ -106,30 +118,30 @@ export default function ContactPage() {
             </p>
             <ul className="space-y-2 text-sm leading-7 text-base-content/80">
               <li className="flex flex-wrap items-center gap-2">
-                <FiMail className="text-primary" size={16} aria-hidden />
+                <FiMail size={16} aria-hidden style={{ color: colors.primary }} />
                 <strong className="text-base-content">Support:</strong>
-                <a className="link link-primary" href="mailto:demo@infofunzies.com.mt">
+                <a className="link" href="mailto:demo@infofunzies.com.mt" style={{ color: colors.primary }}>
                   demo@infofunzies.com.mt
                 </a>
               </li>
               <li className="flex flex-wrap items-center gap-2">
-                <FiMail className="text-primary" size={16} aria-hidden />
+                <FiMail size={16} aria-hidden style={{ color: colors.primary }} />
                 <strong className="text-base-content">Corporate:</strong>
-                <a className="link link-primary" href="mailto:corporate@funziescollection.com">
+                <a className="link" href="mailto:corporate@funziescollection.com" style={{ color: colors.primary }}>
                   corporate@funziescollection.com
                 </a>
               </li>
               <li className="flex flex-wrap items-center gap-2">
-                <FiMail className="text-primary" size={16} aria-hidden />
+                <FiMail size={16} aria-hidden style={{ color: colors.primary }} />
                 <strong className="text-base-content">Partnerships:</strong>
-                <a className="link link-primary" href="mailto:partners@funziescollection.com">
+                <a className="link" href="mailto:partners@funziescollection.com" style={{ color: colors.primary }}>
                   partners@funziescollection.com
                 </a>
               </li>
             </ul>
             <p className="text-sm leading-6 text-base-content/80">
               Accessibility feedback:{" "}
-              <Link to="/accessibility" className="link link-primary">
+              <Link to="/accessibility" className="link" style={{ color: colors.primary }}>
                 Accessibility
               </Link>
               .
@@ -140,19 +152,25 @@ export default function ContactPage() {
         <ThemedSurface className="p-6 md:p-8">
           {submitted ? (
             <div className="space-y-4">
-              <div className="rounded-lg border border-success/30 bg-success/10 px-4 py-3 text-success">
+              <div className="rounded-lg bg-success/10 text-success">
                 <p className="font-semibold">Message received</p>
                 <p className="mt-1 text-sm leading-6 opacity-90">
                   Thanks{form.name ? `, ${form.name}` : ""}. This demo does not send email yet, but your details are ready
                   to wire to your support inbox or ticket system.
                 </p>
               </div>
-              <button type="button" className="btn btn-outline btn-sm" onClick={handleSendAnother}>
+              <button
+                type="button"
+                className="hover-accent inline-flex h-9 items-center rounded px-3 text-xs font-semibold"
+                style={{ border: `1px solid ${colors.primary}`, color: colors.primary }}
+                onClick={handleSendAnother}
+              >
                 Send another message
               </button>
             </div>
           ) : (
             <form className="space-y-4" onSubmit={handleSubmit}>
+              <style>{`.contact-form-input::placeholder { color: ${formPlaceholderColor}; opacity: 1; }`}</style>
               <div className="space-y-1">
                 <h2 className="text-xl font-semibold text-base-content">Send us a message</h2>
                 <p className="text-sm leading-6 text-base-content/80">
@@ -162,11 +180,13 @@ export default function ContactPage() {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="form-control w-full">
-                  <span className="label-text mb-1.5 text-sm font-medium text-base-content">Name</span>
+                  <span className="label-text mb-1.5 text-sm font-medium" style={{ color: colors.text }}>Name</span>
                   <input
-                    className="input input-bordered w-full"
+                    className="contact-form-input h-10 w-full rounded border px-3 text-sm outline-none"
+                    style={formFieldStyle}
                     type="text"
                     name="name"
+                    placeholder="Enter your full name"
                     required
                     autoComplete="name"
                     value={form.name}
@@ -174,11 +194,13 @@ export default function ContactPage() {
                   />
                 </label>
                 <label className="form-control w-full">
-                  <span className="label-text mb-1.5 text-sm font-medium text-base-content">Email</span>
+                  <span className="label-text mb-1.5 text-sm font-medium" style={{ color: colors.text }}>Email</span>
                   <input
-                    className="input input-bordered w-full"
+                    className="contact-form-input h-10 w-full rounded border px-3 text-sm outline-none"
+                    style={formFieldStyle}
                     type="email"
                     name="email"
+                    placeholder="Enter your email address"
                     required
                     autoComplete="email"
                     value={form.email}
@@ -188,10 +210,11 @@ export default function ContactPage() {
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
-                <label className="form-control w-full">
-                  <span className="label-text mb-1.5 text-sm font-medium text-base-content">Topic</span>
+                <label className="form-control w-full sm:mb-6">
+                  <span className="label-text mb-1.5 text-sm font-medium" style={{ color: colors.text }}>Topic</span>
                   <select
-                    className="select select-bordered w-full"
+                    className="h-10 w-full rounded border px-3 text-sm outline-none"
+                    style={formFieldStyle}
                     name="topic"
                     value={form.topic}
                     onChange={handleChange}
@@ -203,10 +226,11 @@ export default function ContactPage() {
                     ))}
                   </select>
                 </label>
-                <label className="form-control w-full">
-                  <span className="label-text mb-1.5 text-sm font-medium text-base-content">Order number (optional)</span>
+                <label className="form-control mb-4 w-full sm:mb-0">
+                  <span className="label-text mb-1.5 text-sm font-medium" style={{ color: colors.text }}>Order number (optional)</span>
                   <input
-                    className="input input-bordered w-full"
+                    className="contact-form-input h-10 w-full rounded border px-3 text-sm outline-none"
+                    style={formFieldStyle}
                     type="text"
                     name="orderNumber"
                     placeholder="e.g. FC-102938"
@@ -217,10 +241,11 @@ export default function ContactPage() {
                 </label>
               </div>
 
-              <label className="form-control w-full">
-                <span className="label-text mb-1.5 text-sm font-medium text-base-content">Message</span>
+              <label className="form-control w-full pt-3">
+                <span className="label-text mb-1.5 text-sm font-medium" style={{ color: colors.text }}>Message</span>
                 <textarea
-                  className="textarea textarea-bordered min-h-36 w-full"
+                  className="contact-form-input min-h-36 w-full rounded border px-3 py-2 text-sm outline-none"
+                  style={formFieldStyle}
                   name="message"
                   required
                   placeholder="Tell us what happened and what you need."
@@ -230,11 +255,19 @@ export default function ContactPage() {
               </label>
 
               <div className="flex flex-wrap gap-3 pt-2">
-                <button type="submit" className="btn btn-primary">
+                <button
+                  type="submit"
+                  className="btn px-6"
+                  style={{ backgroundColor: colors.primary, borderColor: colors.primary, color: colors.white }}
+                >
                   Send message
                 </button>
-                <Link to="/help-center" className="btn btn-outline">
-                  Browse Help Center
+                <Link
+                  to="/help-center"
+                  className="inline-flex items-center rounded px-3 text-xs font-semibold"
+                  style={{ border: `1px solid ${colors.primary}`, color: colors.primary, minHeight: "2.5rem" }}
+                >
+                  Help Center
                 </Link>
               </div>
             </form>
