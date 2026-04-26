@@ -74,9 +74,9 @@ function MobileBottomNav() {
         </li>
         <li>
           <Link
-            to="/shop?category=1"
+            to="/shop"
             className={navLinkClassName}
-            style={navItemStyle(isShopRoute && location.search.includes("category="))}
+            style={navItemStyle(isShopRoute)}
           >
             <FiList size={16} />
             <span className={navLabelClassName} style={textStyles.caption}>Categories</span>

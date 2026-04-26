@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FiChevronLeft, FiChevronRight, FiHeart, FiShoppingCart } from "react-icons/fi";
+import { FiBox, FiChevronLeft, FiChevronRight, FiGift, FiHeart, FiPlayCircle, FiShoppingCart } from "react-icons/fi";
 import { GiArcTriomphe } from "react-icons/gi";
 import { SiPlaystation, SiSteam } from "react-icons/si";
 import { FaHeart, FaXbox } from "react-icons/fa";
@@ -14,6 +14,14 @@ import { activeProducts, frontBannerImage, frontHeroImage, frontProductImage, pr
 const heroSlides = [
   { src: frontHeroImage, alt: "Featured collectibles banner" },
   { src: frontBannerImage, alt: "Gaming channel banner" },
+];
+
+const popularTags = [
+  { label: "Minecraft", icon: FiBox, color: "success", query: "Minecraft" },
+  { label: "Anime", icon: FiPlayCircle, color: "warning", query: "Anime" },
+  { label: "Funko Pop", icon: FiGift, color: "#7c3aed", query: "Funko Pop" },
+  { label: "Nintendo", icon: BsNintendoSwitch, color: "primary", query: "Nintendo" },
+  { label: "PlayStation", icon: SiPlaystation, color: "info", query: "PlayStation" },
 ];
 
 function FrontProductCard({ product }) {
@@ -86,12 +94,27 @@ export default function HomePage() {
     <AppLayout showPageHeader={false} contentClassName="space-y-8">
       <HeroCarousel colors={colors} />
       <HomeSection title="Newest Products" products={activeProducts.slice(0, 5)} />
-      <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-        <article className="flex h-36 flex-col items-center justify-center gap-2 rounded-lg text-3xl font-bold text-white" style={{ backgroundColor: colors.primary }}><BsNintendoSwitch size={58} /><span style={textStyles.button}>Nintendo</span></article>
-        <article className="flex h-36 flex-col items-center justify-center gap-2 rounded-lg text-3xl font-bold text-white" style={{ backgroundColor: colors.info }}><SiPlaystation size={58} /><span style={textStyles.button}>PlayStation</span></article>
-        <article className="flex h-36 flex-col items-center justify-center gap-2 rounded-lg text-3xl font-bold text-white" style={{ backgroundColor: colors.success }}><FaXbox size={58} /><span style={textStyles.button}>XBOX</span></article>
-        <article className="flex h-36 flex-col items-center justify-center gap-2 rounded-lg text-3xl font-bold text-white" style={{ backgroundColor: colors.warning }}><GiArcTriomphe size={58} /><span style={textStyles.button}>Arcade</span></article>
-        <article className="flex h-36 flex-col items-center justify-center gap-2 rounded-lg text-3xl font-bold text-white" style={{ backgroundColor: "#7c3aed" }}><SiSteam size={58} /><span style={textStyles.button}>PC</span></article>
+      <section className="space-y-4">
+        <div className="border-b pb-3" style={{ borderColor: colors.primary }}>
+          <h2 className="leading-tight" style={{ ...textStyles.sectionTitle, color: colors.text }}>Popular Tags</h2>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+          {popularTags.map((tag) => {
+            const Icon = tag.icon;
+            const backgroundColor = colors[tag.color] ?? tag.color;
+            return (
+              <Link
+                key={tag.label}
+                to={`/shop?q=${encodeURIComponent(tag.query)}`}
+                className="hover-lift flex h-36 flex-col items-center justify-center gap-2 rounded-lg text-3xl font-bold text-white"
+                style={{ backgroundColor }}
+              >
+                <Icon size={58} />
+                <span style={textStyles.button}>{tag.label}</span>
+              </Link>
+            );
+          })}
+        </div>
       </section>
       <HomeSection title="Best Sellers" products={activeProducts.slice(1, 6)} />
       <section className="overflow-hidden rounded-lg shadow"><img src={frontBannerImage} alt="Gaming channel banner" className="h-[180px] w-full object-cover" /></section>
