@@ -23,7 +23,15 @@ import { useAuth } from "../lib/authContext";
 const MOBILE_BOTTOM_NAV_SCROLL_PADDING =
   "max(3.75rem, calc(env(safe-area-inset-bottom, 0px) + 3.25rem))";
 
+const DEFAULT_DOCUMENT_TITLE = "Funzies Collection";
+
 const FOOTER_LINK_COLUMNS = [
+  {
+    title: "Company",
+    titleTo: "/company",
+    showFooterLogo: true,
+    items: [{ label: "Careers", to: "/careers" }],
+  },
   {
     title: "Help Center",
     titleTo: "/help-center",
@@ -31,14 +39,6 @@ const FOOTER_LINK_COLUMNS = [
       { label: "Return & Refund Policy", to: "/return-refund-policy" },
       { label: "Shipping Information", to: "/shipping-information" },
       { label: "Purchase Protection", to: "/purchase-protection" },
-    ],
-  },
-  {
-    title: "Company",
-    titleTo: "/company",
-    items: [
-      { label: "About Us", to: "/about-us" },
-      { label: "Careers", to: "/careers" },
     ],
   },
   {
@@ -151,6 +151,11 @@ export default function AppLayout({ title, description, children, showPageHeader
   const [searchTerm, setSearchTerm] = useState(searchParams.get("q") ?? "");
   const searchTextColor = mode === "dark" ? "#1f2a36" : colors.text;
   const searchPlaceholderColor = mode === "dark" ? "#6b7280" : "#9ca3af";
+
+  useEffect(() => {
+    const pageLabel = typeof title === "string" ? title.trim() : "";
+    document.title = pageLabel ? `${pageLabel} | ${DEFAULT_DOCUMENT_TITLE}` : DEFAULT_DOCUMENT_TITLE;
+  }, [title]);
 
   useEffect(() => {
     setSearchTerm(searchParams.get("q") ?? "");
@@ -268,12 +273,25 @@ export default function AppLayout({ title, description, children, showPageHeader
           <section className="grid grid-cols-2 gap-6 lg:grid-cols-4">
             {FOOTER_LINK_COLUMNS.map((column) => (
               <div key={column.title}>
-                <h3 className="mb-3 text-lg font-semibold">
+                {column.showFooterLogo && (
+                  <Link
+                    to="/"
+                    className="mb-4 inline-flex items-center leading-none"
+                    aria-label="Funzies Collection home"
+                  >
+                    <img
+                      src={mode === "dark" ? logoDarkMode : logoLightMode}
+                      alt="Funzies Collection"
+                      className="h-10 w-auto"
+                    />
+                  </Link>
+                )}
+                <h3 className="mb-1 text-lg font-semibold">
                   <Link to={column.titleTo} className="hover:underline" style={{ color: colors.primary }}>
                     {column.title}
                   </Link>
                 </h3>
-                <ul className="space-y-2">
+                <ul className="space-y-1">
                   {column.items.map((item) => (
                     <li key={`${column.title}-${item.label}`} className="text-sm">
                       <Link to={item.to} className="hover:underline" style={{ color: colors.text }}>

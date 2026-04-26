@@ -4,6 +4,7 @@ import { FiHeart, FiShoppingCart, FiTruck, FiPackage } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
 import AppLayout from "../components/AppLayout";
 import QuantityControl from "../components/QuantityControl";
+import ThemedButton from "../components/ThemedButton";
 import { useCart } from "../lib/cartContext";
 import { useTheme } from "../theme/themeContext";
 import { useWishlist } from "../lib/wishlistContext";
@@ -57,26 +58,27 @@ function ShopProductCard({ product, colors, onAddToCart, onToggleWishlist, wishl
           <p className="text-lg font-semibold" style={{ color: colors.primary }}>{price.format(product.Price)}</p>
         </div>
         <div className="flex items-center gap-2">
-          <button
+          <ThemedButton
             type="button"
-            className="btn h-10 flex-1 text-white"
-            style={{ backgroundColor: colors.success }}
+            variant="greenSolid"
+            className="h-10 flex-1"
             onClick={() => onAddToCart(product.ID)}
           >
             <span className="inline-flex items-center gap-1">
               <FiShoppingCart size={15} />
               Add to Cart
             </span>
-          </button>
-          <button
+          </ThemedButton>
+          <ThemedButton
             type="button"
-            className="btn h-10 w-10 p-0 text-white"
-            style={{ backgroundColor: colors.primary }}
+            variant="redSolid"
+            size="sm"
+            className="h-10 w-10 p-0"
             aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
             onClick={() => onToggleWishlist(product.ID)}
           >
             {wishlisted ? <FaHeart size={14} /> : <FiHeart size={16} />}
-          </button>
+          </ThemedButton>
         </div>
       </div>
     </article>
@@ -127,7 +129,7 @@ export default function ProductPage() {
   };
 
   return (
-    <AppLayout showPageHeader={false} contentClassName="space-y-8">
+    <AppLayout title={product.Name.trim()} showPageHeader={false} contentClassName="space-y-8">
       <section className="text-sm" style={{ color: colors.text }}>
         <Link to="/" className="hover:underline" style={{ color: colors.text }}>Home</Link>&nbsp;&gt;&nbsp;
         <Link to={`/shop?category=${product.Category}`} className="hover:underline" style={{ color: colors.text }}>{category?.Name ?? "Category"}</Link>&nbsp;&gt;&nbsp;
@@ -181,26 +183,27 @@ export default function ProductPage() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <button
+            <ThemedButton
               type="button"
-              className="btn h-10 px-4 text-white"
-              style={{ backgroundColor: colors.success }}
+              variant="greenSolid"
+              className="h-10 px-4"
               onClick={() => handleAddToCart(product.ID, quantity)}
             >
               <span className="inline-flex items-center gap-1">
                 <FiShoppingCart size={16} />
                 Add to Cart
               </span>
-            </button>
-            <button
+            </ThemedButton>
+            <ThemedButton
               type="button"
-              className="btn h-10 w-10 p-0 text-white"
-              style={{ backgroundColor: colors.primary }}
+              variant="redSolid"
+              size="sm"
+              className="h-10 w-10 p-0"
               aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
               onClick={() => toggleWishlist(product.ID)}
             >
               {wishlisted ? <FaHeart size={16} /> : <FiHeart size={18} />}
-            </button>
+            </ThemedButton>
           </div>
           <div className="space-y-3 rounded p-3" style={{ backgroundColor: colors.background }}>
             <div className="flex items-start gap-3">
@@ -254,14 +257,14 @@ export default function ProductPage() {
             </article>
           ))}
         </div>
-        <button
+        <ThemedButton
           type="button"
-          className="btn w-full text-white"
-          style={{ backgroundColor: colors.success }}
+          variant="greenSolid"
+          className="w-full"
           onClick={() => navigate(`/product-page/${product.ID}/reviews`)}
         >
           See All Reviews
-        </button>
+        </ThemedButton>
       </section>
       <section className="space-y-4">
         <div className="border-b pb-3" style={{ borderColor: colors.primary }}>

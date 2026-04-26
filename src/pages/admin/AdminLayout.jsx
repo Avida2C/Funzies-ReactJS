@@ -1,5 +1,8 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "../../theme/themeContext";
+
+const DEFAULT_ADMIN_DOCUMENT_TITLE = "Funzies Collection";
 
 const adminLinks = [
   { to: "/admin", label: "Dashboard" },
@@ -11,6 +14,11 @@ const adminLinks = [
 
 export default function AdminLayout({ title, description, children }) {
   const { colors } = useTheme();
+
+  useEffect(() => {
+    const pageLabel = typeof title === "string" ? title.trim() : "";
+    document.title = pageLabel ? `${pageLabel} | ${DEFAULT_ADMIN_DOCUMENT_TITLE}` : `Admin | ${DEFAULT_ADMIN_DOCUMENT_TITLE}`;
+  }, [title]);
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: colors.background }}>

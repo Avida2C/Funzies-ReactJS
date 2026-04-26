@@ -28,7 +28,6 @@ import TrustSafetyPage from "./pages/TrustSafetyPage";
 import LegalCenterPage from "./pages/LegalCenterPage";
 import PolicyCenterPage from "./pages/PolicyCenterPage";
 import CompanyPage from "./pages/CompanyPage";
-import AboutUsPage from "./pages/AboutUsPage";
 import CareersPage from "./pages/CareersPage";
 import CareerRolePage from "./pages/CareerRolePage";
 import CareerApplicationPage from "./pages/CareerApplicationPage";
@@ -204,7 +203,7 @@ function App() {
             <Route path="/return-refund-policy" element={<ReturnRefundPolicyPage />} />
             <Route path="/shipping-information" element={<ShippingInformationPage />} />
             <Route path="/accessibility" element={<AccessibilityPage />} />
-            <Route path="/about-us" element={<AboutUsPage />} />
+            <Route path="/about-us" element={<Navigate to="/company" replace />} />
             <Route path="/purchase-protection" element={<PurchaseProtectionPage />} />
             <Route path="/privacy" element={<PolicyCenterPage />} />
             <Route path="/terms" element={<PolicyCenterPage />} />

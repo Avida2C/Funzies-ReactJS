@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { FiChevronRight, FiHelpCircle, FiPackage, FiRotateCcw, FiSearch, FiShield, FiUser } from "react-icons/fi";
 import { LuScale } from "react-icons/lu";
+import Accordion from "../components/Accordion";
 import AppLayout from "../components/AppLayout";
 import ThemedSurface from "../components/ThemedSurface";
 import SupportHelpSection from "../components/SupportHelpSection";
@@ -112,6 +113,16 @@ export default function HelpCenterPage() {
       return haystack.includes(needle);
     });
   }, [query]);
+
+  const faqAccordionItems = useMemo(
+    () =>
+      filteredFaq.map((item) => ({
+        id: item.q,
+        title: item.q,
+        content: item.a,
+      })),
+    [filteredFaq],
+  );
 
   return (
     <AppLayout
@@ -253,29 +264,7 @@ export default function HelpCenterPage() {
               </p>
             </ThemedSurface>
           ) : (
-            <div className="space-y-2">
-              {filteredFaq.map((item) => (
-                <details
-                  key={item.q}
-                  className="group rounded-box border shadow-sm open:shadow-md"
-                  style={{ backgroundColor: colors.background, borderColor: colors.border }}
-                >
-                  <summary className="cursor-pointer list-none p-4 pr-12 font-medium text-base-content marker:hidden [&::-webkit-details-marker]:hidden">
-                    <span className="relative block">
-                      {item.q}
-                      <FiChevronRight
-                        className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-base-content/45 transition group-open:rotate-90"
-                        size={18}
-                        aria-hidden
-                      />
-                    </span>
-                  </summary>
-                  <div className="border-t px-4 pb-4 pt-3" style={{ borderColor: colors.border }}>
-                    <p className="leading-7 text-base-content/80">{item.a}</p>
-                  </div>
-                </details>
-              ))}
-            </div>
+            <Accordion items={faqAccordionItems} />
           )}
         </section>
 

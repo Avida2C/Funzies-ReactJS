@@ -75,7 +75,7 @@ export default function ProductReviewsPage() {
   }, [productReviews, selectedRating]);
 
   return (
-    <AppLayout showPageHeader={false} contentClassName="space-y-8">
+    <AppLayout title={`${product.Name.trim()} · Reviews`} showPageHeader={false} contentClassName="space-y-8">
       <section className="text-sm" style={{ color: colors.text }}>
         <Link to="/" className="hover:underline" style={{ color: colors.text }}>Home</Link>&nbsp;&gt;&nbsp;
         <Link to={`/shop?category=${product.Category}`} className="hover:underline" style={{ color: colors.text }}>{category?.Name ?? "Category"}</Link>&nbsp;&gt;&nbsp;

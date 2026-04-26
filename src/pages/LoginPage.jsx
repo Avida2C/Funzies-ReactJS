@@ -134,7 +134,7 @@ export default function LoginPage({ initialMode = "login" }) {
     : { ...textStyles.title, color: colors.primary, fontWeight: 400 };
 
   return (
-    <AppLayout title="Authentication" description="Access your account." showPageHeader={false} contentClassName="">
+    <AppLayout title={copy.title} description="Access your account." showPageHeader={false} contentClassName="">
       <section className="rounded-box border p-5 shadow md:p-8" style={panelStyles.outer}>
         <div className="grid gap-6 xl:grid-cols-[minmax(0,500px)_360px] xl:justify-between">
           <div className={`space-y-4 ${isForgotMode ? "max-w-[600px]" : "max-w-[500px]"}`}>

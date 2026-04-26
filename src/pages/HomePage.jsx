@@ -6,6 +6,7 @@ import { SiPlaystation, SiSteam } from "react-icons/si";
 import { FaHeart, FaXbox } from "react-icons/fa";
 import { BsNintendoSwitch } from "react-icons/bs";
 import AppLayout from "../components/AppLayout";
+import ThemedButton from "../components/ThemedButton";
 import { textStyles } from "../theme/typography";
 import { useTheme } from "../theme/themeContext";
 import { useCart } from "../lib/cartContext";
@@ -51,17 +52,18 @@ function FrontProductCard({ product }) {
           >
             <span className="inline-flex items-center gap-1"><FiShoppingCart size={14} />Add to Cart</span>
           </button>
-          <button
+          <ThemedButton
             type="button"
-            className="hover-icon h-9 w-9 rounded text-white"
-            style={{ backgroundColor: colors.primary }}
+            variant="redSolid"
+            size="sm"
+            className="hover-icon h-9 w-9 p-0"
             aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
             onClick={() => toggleWishlist(product.ID)}
           >
             <span className="inline-flex items-center justify-center">
               {wishlisted ? <FaHeart size={15} /> : <FiHeart size={16} />}
             </span>
-          </button>
+          </ThemedButton>
         </div>
       </div>
     </article>
@@ -108,7 +110,7 @@ function HomeSection({ title, products }) {
 export default function HomePage() {
   const { colors } = useTheme();
   return (
-    <AppLayout showPageHeader={false} contentClassName="space-y-8">
+    <AppLayout title="Home" showPageHeader={false} contentClassName="space-y-8">
       <HeroCarousel colors={colors} />
       <HomeSection title="Newest Products" products={activeProducts.slice(0, MOBILE_HOME_SECTION_PRODUCT_COUNT)} />
       <section className="space-y-4">

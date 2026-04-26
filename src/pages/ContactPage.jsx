@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { FiExternalLink, FiMail, FiMessageCircle } from "react-icons/fi";
 import AppLayout from "../components/AppLayout";
 import ThemedSurface from "../components/ThemedSurface";
@@ -31,6 +31,7 @@ const INITIAL_FORM = {
 
 export default function ContactPage() {
   const { colors, mode } = useTheme();
+  const location = useLocation();
   const [form, setForm] = useState(INITIAL_FORM);
   const [submitted, setSubmitted] = useState(false);
   const formFieldTextColor = mode === "dark" ? "#1f2a36" : colors.text;
@@ -55,6 +56,15 @@ export default function ContactPage() {
     setSubmitted(false);
     setForm(INITIAL_FORM);
   };
+
+  useEffect(() => {
+    if (location.hash !== "#contact-form") return;
+    const el = document.getElementById("contact-form");
+    if (!el) return;
+    requestAnimationFrame(() => {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, [location.pathname, location.hash]);
 
   return (
     <AppLayout
@@ -169,7 +179,7 @@ export default function ContactPage() {
               </button>
             </div>
           ) : (
-            <form className="space-y-4" onSubmit={handleSubmit}>
+            <form id="contact-form" className="scroll-mt-24 space-y-4" onSubmit={handleSubmit}>
               <style>{`.contact-form-input::placeholder { color: ${formPlaceholderColor}; opacity: 1; }`}</style>
               <div className="space-y-1">
                 <h2 className="text-xl font-semibold text-base-content">Send us a message</h2>

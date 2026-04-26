@@ -3,6 +3,7 @@ import { FiHeart, FiList, FiShoppingCart } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
 import { useEffect, useRef, useState } from "react";
 import AppLayout from "../components/AppLayout";
+import ThemedButton from "../components/ThemedButton";
 import { useCart } from "../lib/cartContext";
 import { useTheme } from "../theme/themeContext";
 import { useWishlist } from "../lib/wishlistContext";
@@ -84,17 +85,18 @@ function ShopProductCard({ product, colors }) {
           >
             <span className="inline-flex items-center gap-1"><FiShoppingCart size={12} />Add to Cart</span>
           </button>
-          <button
+          <ThemedButton
             type="button"
-            className="hover-icon h-7 w-7 rounded text-white"
-            style={{ backgroundColor: colors.primary }}
+            variant="redSolid"
+            size="sm"
+            className="hover-icon h-7 w-7 p-0"
             aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
             onClick={() => toggleWishlist(product.ID)}
           >
             <span className="inline-flex items-center justify-center">
               {wishlisted ? <FaHeart size={13} /> : <FiHeart size={14} />}
             </span>
-          </button>
+          </ThemedButton>
         </div>
       </div>
     </article>
@@ -275,7 +277,7 @@ export default function ShopPage() {
   );
 
   return (
-    <AppLayout showPageHeader={false} contentClassName="space-y-5">
+    <AppLayout title="Shop" showPageHeader={false} contentClassName="space-y-5">
       {isMobileCategoriesOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
           <button
