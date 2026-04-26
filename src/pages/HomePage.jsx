@@ -25,6 +25,9 @@ const popularTags = [
   { label: "PlayStation", icon: SiPlaystation, color: "info", query: "PlayStation" },
 ];
 
+const MOBILE_HOME_SECTION_PRODUCT_COUNT = 6;
+const DESKTOP_HOME_SECTION_PRODUCT_COUNT = 5;
+
 function FrontProductCard({ product }) {
   const { colors } = useTheme();
   const { addToCart } = useCart();
@@ -88,8 +91,15 @@ function HomeSection({ title, products }) {
         <h2 className="leading-tight" style={{ ...textStyles.sectionTitle, color: colors.text }}>{title}</h2>
         <Link to="/shop" className="text-sm font-semibold hover:opacity-80" style={{ color: colors.primary }}>View more</Link>
       </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-        {products.map((product) => <FrontProductCard key={`${title}-${product.ID}`} product={product} />)}
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-5">
+        {products.map((product, index) => (
+          <div
+            key={`${title}-${product.ID}`}
+            className={index >= DESKTOP_HOME_SECTION_PRODUCT_COUNT ? "md:hidden" : ""}
+          >
+            <FrontProductCard product={product} />
+          </div>
+        ))}
       </div>
     </section>
   );
@@ -100,32 +110,34 @@ export default function HomePage() {
   return (
     <AppLayout showPageHeader={false} contentClassName="space-y-8">
       <HeroCarousel colors={colors} />
-      <HomeSection title="Newest Products" products={activeProducts.slice(0, 5)} />
+      <HomeSection title="Newest Products" products={activeProducts.slice(0, MOBILE_HOME_SECTION_PRODUCT_COUNT)} />
       <section className="space-y-4">
         <div className="border-b pb-3" style={{ borderColor: colors.primary }}>
           <h2 className="leading-tight" style={{ ...textStyles.sectionTitle, color: colors.text }}>Popular Tags</h2>
         </div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-          {popularTags.map((tag) => {
+        <div className="grid grid-cols-4 gap-2 md:grid-cols-2 md:gap-4 lg:grid-cols-3 xl:grid-cols-5">
+          {popularTags.map((tag, index) => {
             const Icon = tag.icon;
             const backgroundColor = colors[tag.color] ?? tag.color;
             return (
               <Link
                 key={tag.label}
                 to={`/shop?q=${encodeURIComponent(tag.query)}`}
-                className="hover-lift flex h-36 flex-col items-center justify-center gap-2 rounded-lg text-3xl font-bold text-white"
+                className={`hover-lift ${
+                  index >= 4 ? "hidden md:flex" : "flex"
+                } h-24 flex-col items-center justify-center gap-1 rounded-lg py-2 text-3xl font-bold text-white md:h-36 md:gap-2 md:py-0`}
                 style={{ backgroundColor }}
               >
-                <Icon size={58} />
+                <Icon className="h-7 w-7 md:h-[58px] md:w-[58px]" />
                 <span style={textStyles.button}>{tag.label}</span>
               </Link>
             );
           })}
         </div>
       </section>
-      <HomeSection title="Best Sellers" products={activeProducts.slice(1, 6)} />
+      <HomeSection title="Best Sellers" products={activeProducts.slice(1, 1 + MOBILE_HOME_SECTION_PRODUCT_COUNT)} />
       <section className="overflow-hidden rounded-lg shadow"><img src={frontBannerImage} alt="Gaming channel banner" className="h-[180px] w-full object-cover" /></section>
-      <HomeSection title="Pre-Order" products={activeProducts.slice(2, 7)} />
+      <HomeSection title="Pre-Order" products={activeProducts.slice(2, 2 + MOBILE_HOME_SECTION_PRODUCT_COUNT)} />
     </AppLayout>
   );
 }

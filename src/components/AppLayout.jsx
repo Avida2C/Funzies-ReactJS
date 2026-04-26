@@ -17,6 +17,7 @@ import { textStyles } from "../theme/typography";
 import { logoDarkMode, logoLightMode } from "../lib/storeData";
 import { useTheme } from "../theme/themeContext";
 import { useCart } from "../lib/cartContext";
+import { useAuth } from "../lib/authContext";
 
 /** Scroll padding so the page clears the fixed `MobileBottomNav` (matches its row: py-2 + icon + labels + border). */
 const MOBILE_BOTTOM_NAV_SCROLL_PADDING =
@@ -44,18 +45,39 @@ const FOOTER_LINK_COLUMNS = [
     title: "Legal",
     titleTo: "/legal",
     items: [
-      { label: "Privacy Policy & Terms of Use", to: "/privacy" },
       { label: "Trust & Safety", to: "/trust-safety" },
       { label: "Accessibility", to: "/accessibility" },
     ],
   },
 ];
 
+const FOOTER_SECURITY_CERTIFICATIONS = [
+  { label: "Trustly secured", src: "https://www.figma.com/api/mcp/asset/2792fe29-8936-4e86-affd-c950b0313414", width: 39 },
+  { label: "Visa secured", src: "https://www.figma.com/api/mcp/asset/0f6eee51-5aa9-46cb-b379-9a276c529722", width: 29 },
+  { label: "Mastercard identity check", src: "https://www.figma.com/api/mcp/asset/3e2a382b-05c9-42b7-959e-3d10442aa58f", width: 61 },
+  { label: "SafeKey", src: "https://www.figma.com/api/mcp/asset/6f115673-864e-4a7a-b2a9-881c27ec303a", width: 61 },
+  { label: "Protect buy", src: "https://www.figma.com/api/mcp/asset/19db8e0e-dd8e-4b44-a23a-9fe1505d5cce", width: 39 },
+  { label: "JCB secured", src: "https://www.figma.com/api/mcp/asset/4886e1d5-2b8b-404a-bcea-78873307aad2", width: 39 },
+  { label: "PCI certified", src: "https://www.figma.com/api/mcp/asset/23fab86c-09dd-4d7c-bf7f-f9e8778c857e", width: 61 },
+];
+
+const FOOTER_PAYMENT_METHODS = [
+  { label: "PayPal", src: "https://www.figma.com/api/mcp/asset/05d48617-45db-4dda-a09e-413793242ef1", width: 38 },
+  { label: "Visa", src: "https://www.figma.com/api/mcp/asset/e151541f-be3b-4c94-ac13-c792e201ecb3", width: 38 },
+  { label: "Mastercard", src: "https://www.figma.com/api/mcp/asset/bec9bfc6-751f-4bb7-bdd1-1c54afa3fa53", width: 38 },
+  { label: "American Express", src: "https://www.figma.com/api/mcp/asset/00edbf29-a405-4fc7-96c7-7eb0348a3620", width: 39 },
+  { label: "Discover", src: "https://www.figma.com/api/mcp/asset/49613c20-2376-4e6d-81f5-cd5d7b8841b8", width: 39 },
+  { label: "Apple Pay", src: "https://www.figma.com/api/mcp/asset/c6cb4305-4c24-43fa-8235-9e4ef558fa7a", width: 39 },
+  { label: "Google Pay", src: "https://www.figma.com/api/mcp/asset/3a600c16-aa87-4dc6-847c-50098e747571", width: 39 },
+];
+
 function MobileBottomNav() {
   const { colors } = useTheme();
   const { cartCount } = useCart();
+  const { isAuthenticated } = useAuth();
   const location = useLocation();
   const isShopRoute = location.pathname === "/shop";
+  const accountRoute = isAuthenticated ? "/account" : "/login";
   const navLinkClassName = "flex h-[56px] flex-col items-center justify-center gap-1 px-1 text-xs";
   const navLabelClassName = "whitespace-nowrap leading-none";
   const navItemStyle = (isActive) => ({
@@ -108,7 +130,7 @@ function MobileBottomNav() {
           </Link>
         </li>
         <li>
-          <Link to="/account" className={navLinkClassName} style={navItemStyle(location.pathname === "/account")}>
+          <Link to={accountRoute} className={navLinkClassName} style={navItemStyle(location.pathname === accountRoute)}>
             <FiUser size={16} />
             <span className={navLabelClassName} style={textStyles.caption}>Account</span>
           </Link>
@@ -121,8 +143,10 @@ function MobileBottomNav() {
 export default function AppLayout({ title, description, children, showPageHeader = true, contentClassName = "space-y-6" }) {
   const { colors, mode, toggleTheme } = useTheme();
   const { cartCount } = useCart();
+  const { isAuthenticated, displayName } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const accountRoute = isAuthenticated ? "/account" : "/login";
   const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(searchParams.get("q") ?? "");
   const searchTextColor = mode === "dark" ? "#1f2a36" : colors.text;
@@ -148,11 +172,11 @@ export default function AppLayout({ title, description, children, showPageHeader
       style={{ backgroundColor: colors.background, paddingBottom: MOBILE_BOTTOM_NAV_SCROLL_PADDING }}
     >
       <header className="border-b" style={{ borderColor: colors.border, backgroundColor: colors.background }}>
-        <div className="mx-auto grid w-full max-w-[1200px] grid-cols-[auto,1fr,auto] items-center gap-3 px-4 py-3">
+        <div className="mx-auto hidden w-full max-w-[1200px] grid-cols-[auto,1fr,auto] items-center gap-3 px-4 py-3 md:grid">
           <Link to="/" className="inline-flex items-center leading-none" aria-label="Funzies Collection home">
-            <img src={mode === "dark" ? logoDarkMode : logoLightMode} alt="Funzies Collection" className="h-8 w-auto md:h-10" />
+            <img src={mode === "dark" ? logoDarkMode : logoLightMode} alt="Funzies Collection" className="h-10 w-auto" />
           </Link>
-          <div className="hidden px-2 md:block">
+          <div className="px-2">
             <form onSubmit={submitSearch} className="flex h-9 w-full items-center overflow-hidden rounded border" style={{ borderColor: colors.primary, backgroundColor: colors.white }}>
               <input
                 type="text"
@@ -180,10 +204,10 @@ export default function AppLayout({ title, description, children, showPageHeader
                 {mode === "dark" ? "Light" : "Dark"}
               </span>
             </button>
-            <Link to="/account" className="hover-accent inline-flex h-full items-center rounded px-3 text-xs font-semibold" style={{ border: `1px solid ${colors.border}`, color: colors.text }}>
+            <Link to={accountRoute} className="hover-accent inline-flex h-full items-center rounded px-3 text-xs font-semibold" style={{ border: `1px solid ${colors.border}`, color: colors.text }}>
               <span className="inline-flex items-center gap-1" style={textStyles.button}>
                 <FiUser size={14} />
-                Hello, Nadine
+                {`Hello, ${displayName}`}
               </span>
             </Link>
             <Link to="/viewcart" className="hover-accent inline-flex h-full items-center rounded px-3 text-xs font-semibold" style={{ border: `1px solid ${colors.primary}`, color: colors.primary }}>
@@ -201,6 +225,26 @@ export default function AppLayout({ title, description, children, showPageHeader
               </span>
             </Link>
           </div>
+        </div>
+        <div className="mx-auto w-full max-w-[1200px] px-4 py-3 md:hidden">
+          <form
+            onSubmit={submitSearch}
+            className="flex h-9 w-full items-center overflow-hidden rounded border"
+            style={{ borderColor: colors.primary, backgroundColor: colors.white }}
+          >
+            <input
+              type="text"
+              placeholder="Search products"
+              className="top-search-input h-full w-full bg-transparent px-3 text-sm outline-none"
+              style={{ color: searchTextColor, caretColor: searchTextColor }}
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+            />
+            <style>{`.top-search-input::placeholder { color: ${searchPlaceholderColor}; opacity: 1; }`}</style>
+            <button type="submit" className="px-3 text-sm" style={{ color: colors.primary }} aria-label="Search">
+              <FiSearch size={16} />
+            </button>
+          </form>
         </div>
       </header>
 
@@ -221,7 +265,7 @@ export default function AppLayout({ title, description, children, showPageHeader
 
       <footer className="border-t" style={{ borderColor: colors.border, backgroundColor: colors.background }}>
         <div className="mx-auto w-full max-w-[1200px] px-4 py-8 md:px-6">
-          <section className="grid gap-8 lg:grid-cols-4">
+          <section className="grid grid-cols-2 gap-6 lg:grid-cols-4">
             {FOOTER_LINK_COLUMNS.map((column) => (
               <div key={column.title}>
                 <h3 className="mb-3 text-lg font-semibold">
@@ -251,10 +295,46 @@ export default function AppLayout({ title, description, children, showPageHeader
           </section>
 
           <section
-            className="mt-8 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 border-t pt-4 text-sm"
+            className="mt-8 grid gap-6 px-1 md:grid-cols-2"
+          >
+            <div>
+              <h4 className="mb-2 text-xl font-semibold" style={{ color: colors.primary }}>Security certification</h4>
+              <div className="flex flex-wrap items-center gap-2">
+                {FOOTER_SECURITY_CERTIFICATIONS.map((item) => (
+                  <img
+                    key={item.label}
+                    src={item.src}
+                    alt={item.label}
+                    className="h-[25px] object-contain"
+                    style={{ width: `${item.width}px` }}
+                  />
+                ))}
+              </div>
+            </div>
+            <div>
+              <h4 className="mb-2 text-xl font-semibold" style={{ color: colors.primary }}>We accept</h4>
+              <div className="flex flex-wrap items-center gap-2">
+                {FOOTER_PAYMENT_METHODS.map((item) => (
+                  <img
+                    key={item.label}
+                    src={item.src}
+                    alt={item.label}
+                    className="h-[26px] object-contain"
+                    style={{ width: `${item.width}px` }}
+                  />
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section
+            className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 border-t pt-4 text-sm"
             style={{ borderColor: colors.primary, color: colors.text }}
           >
             <span>© Funzies Collection 2023. All Rights Reserved.</span>
+            <Link to="/privacy" className="underline" style={{ color: colors.text }}>
+              Privacy Policy & Terms of Use
+            </Link>
           </section>
         </div>
       </footer>

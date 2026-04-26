@@ -100,7 +100,7 @@ export default function WishlistPage() {
           </div>
         </section>
       ) : (
-        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <section className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4">
           {wishlistProducts.map((product) => (
             <WishlistProductCard key={product.ID} product={product} colors={colors} onToggleWishlist={toggleWishlist} />
           ))}
