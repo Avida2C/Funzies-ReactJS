@@ -3,7 +3,7 @@ import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { darkThemeColors, lightThemeColors } from "./theme/colors";
 import { THEME_STORAGE_KEY, ThemeContext, getInitialThemeMode } from "./theme/themeContext";
 import { WISHLIST_STORAGE_KEY, WishlistContext, getInitialWishlistIds } from "./lib/wishlistContext";
-import { CART_STORAGE_KEY, CartContext, getInitialCartItemIds } from "./lib/cartContext";
+import { CART_STORAGE_KEY, CartContext, getGuestCartItemIds, getPersistedCartItemIds, GUEST_CART_STORAGE_KEY } from "./lib/cartContext";
 import {
   ADMIN_AUTH_STORAGE_KEY,
   AUTH_PROFILE_STORAGE_KEY,
@@ -72,7 +72,7 @@ function App() {
   const { pathname } = useLocation();
   const [themeMode, setThemeMode] = useState(getInitialThemeMode);
   const [wishlistProductIds, setWishlistProductIds] = useState(getInitialWishlistIds);
-  const [cartItemIds, setCartItemIds] = useState(getInitialCartItemIds);
+  const [cartItemIds, setCartItemIds] = useState(getGuestCartItemIds);
   const [isAuthenticated, setIsAuthenticated] = useState(getInitialIsAuthenticated);
   const [authProfile, setAuthProfile] = useState(getInitialAuthProfile);
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(getInitialIsAdminAuthenticated);
@@ -86,20 +86,23 @@ function App() {
   }, [wishlistProductIds]);
 
   useEffect(() => {
+    // Persist cart only for signed-in users.
+    if (!isAuthenticated) return;
     window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItemIds));
-  }, [cartItemIds]);
+  }, [cartItemIds, isAuthenticated]);
 
   useEffect(() => {
-    window.localStorage.setItem(AUTH_STORAGE_KEY, isAuthenticated ? "signed-in" : "guest");
-  }, [isAuthenticated]);
-
-  useEffect(() => {
-    window.localStorage.setItem(AUTH_PROFILE_STORAGE_KEY, JSON.stringify(authProfile));
-  }, [authProfile]);
-
-  useEffect(() => {
-    window.localStorage.setItem(ADMIN_AUTH_STORAGE_KEY, isAdminAuthenticated ? "signed-in" : "guest");
-  }, [isAdminAuthenticated]);
+    // Persist guest cart with a 2-hour expiry (clears after closing the site for 2h).
+    if (isAuthenticated) return;
+    if (cartItemIds.length === 0) {
+      window.localStorage.removeItem(GUEST_CART_STORAGE_KEY);
+      return;
+    }
+    window.localStorage.setItem(
+      GUEST_CART_STORAGE_KEY,
+      JSON.stringify({ updatedAt: Date.now(), items: cartItemIds }),
+    );
+  }, [cartItemIds, isAuthenticated]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -184,20 +187,26 @@ function App() {
       signOut: () => {
         window.localStorage.removeItem(WISHLIST_STORAGE_KEY);
         window.localStorage.removeItem(CART_STORAGE_KEY);
+        window.localStorage.removeItem(GUEST_CART_STORAGE_KEY);
         window.localStorage.removeItem(THEME_STORAGE_KEY);
         window.localStorage.removeItem(ADMIN_AUTH_STORAGE_KEY);
+        window.localStorage.removeItem(AUTH_STORAGE_KEY);
+        window.localStorage.removeItem(AUTH_PROFILE_STORAGE_KEY);
         setIsAuthenticated(false);
         setIsAdminAuthenticated(false);
         setWishlistProductIds(getInitialWishlistIds);
-        setCartItemIds(getInitialCartItemIds);
+        setCartItemIds([]);
         setThemeMode(getInitialThemeMode);
       },
       signIn: ({ displayName, email } = {}) => {
         setAuthProfile({
-          displayName: typeof displayName === "string" && displayName.trim() ? displayName.trim() : "Nadine",
+          displayName: typeof displayName === "string" ? displayName.trim() : "",
           email: typeof email === "string" ? email.trim() : "",
         });
         setIsAuthenticated(true);
+        // Restore persisted cart for signed-in sessions (same device/browser).
+        window.localStorage.removeItem(GUEST_CART_STORAGE_KEY);
+        setCartItemIds(getPersistedCartItemIds);
       },
       signInAdmin: ({ email, password } = {}) => {
         if (validateAdminCredentials(email, password)) {

@@ -10,8 +10,6 @@ export default function AccountSettingsSection({ mutedText, profile }) {
         <div className="grid gap-4 md:grid-cols-2">
           <ReadOnlyField label="First Name" value={profile.firstName} />
           <ReadOnlyField label="Last Name" value={profile.lastName} />
-          <ReadOnlyField label="Date of Birth" value="03/10/1988" />
-          <ReadOnlyField label="Gender" value="Male" />
         </div>
         <ReadOnlyField label="Contact Number" value={profile.phone} />
         <p style={{ ...textStyles.bodySm, color: mutedText }}>Profile editing is managed via the Admin dataset in this demo.</p>

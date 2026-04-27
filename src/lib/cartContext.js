@@ -1,26 +1,51 @@
 import { createContext, useContext } from "react";
-import { activeProducts } from "./storeData";
 
 export const CART_STORAGE_KEY = "funzies-cart-item-ids";
+export const GUEST_CART_STORAGE_KEY = "funzies-guest-cart";
+export const GUEST_CART_TTL_MS = 2 * 60 * 60 * 1000; // 2 hours
 export const CartContext = createContext(null);
 
-export function getInitialCartItemIds() {
+function sanitizeIds(value) {
+  if (!Array.isArray(value)) return [];
+  return value.filter((v) => Number.isInteger(v));
+}
+
+export function getPersistedCartItemIds() {
   if (typeof window === "undefined") {
     return [];
   }
 
   const saved = window.localStorage.getItem(CART_STORAGE_KEY);
   if (!saved) {
-    return activeProducts.slice(0, 3).map((product) => product.ID);
+    return [];
   }
 
   try {
+    return sanitizeIds(JSON.parse(saved));
+  } catch {
+    return [];
+  }
+}
+
+export function getGuestCartItemIds(now = Date.now()) {
+  if (typeof window === "undefined") {
+    return [];
+  }
+
+  const saved = window.localStorage.getItem(GUEST_CART_STORAGE_KEY);
+  if (!saved) return [];
+
+  try {
     const parsed = JSON.parse(saved);
-    if (!Array.isArray(parsed)) {
+    const updatedAt = Number(parsed?.updatedAt ?? 0);
+    const items = sanitizeIds(parsed?.items);
+    if (!updatedAt || now - updatedAt > GUEST_CART_TTL_MS) {
+      window.localStorage.removeItem(GUEST_CART_STORAGE_KEY);
       return [];
     }
-    return parsed.filter((value) => Number.isInteger(value));
+    return items;
   } catch {
+    window.localStorage.removeItem(GUEST_CART_STORAGE_KEY);
     return [];
   }
 }
