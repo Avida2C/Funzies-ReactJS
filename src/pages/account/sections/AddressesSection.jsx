@@ -22,7 +22,7 @@ export default function AddressesSection({
     <div className="space-y-8">
       <section className="space-y-3">
         <h2 style={{ ...textStyles.sectionTitle, color: colors.text }}>Default Shipping Address</h2>
-        <InfoCard className="max-w-[280px]">
+        <InfoCard className="w-full md:max-w-[280px]">
           {defaultAddress ? (
             <p style={{ ...textStyles.body, ...addressCardStyle, whiteSpace: "pre-line" }}>{formatAddressBlock(defaultAddress)}</p>
           ) : (
@@ -54,7 +54,7 @@ export default function AddressesSection({
               .filter((a) => !defaultAddress || a.ID !== defaultAddress.ID)
               .map((a) => (
                 <div key={a.ID} className="space-y-2">
-                  <InfoCard className="max-w-[280px]">
+                  <InfoCard className="w-full md:max-w-[280px]">
                     <p style={{ ...textStyles.body, ...addressCardStyle, whiteSpace: "pre-line" }}>{formatAddressBlock(a)}</p>
                   </InfoCard>
                   <div className="flex flex-wrap gap-3">

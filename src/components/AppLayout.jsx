@@ -11,7 +11,6 @@ import {
   FiTwitter,
   FiUser,
 } from "react-icons/fi";
-import { BsCartFill } from "react-icons/bs";
 import { LuLightbulb, LuLightbulbOff } from "react-icons/lu";
 import { SiX } from "react-icons/si";
 import { textStyles } from "../theme/typography";
@@ -27,9 +26,9 @@ import { useAuth } from "../lib/authContext";
 import { usePublicSettings } from "../hooks/usePublicSettings";
 import ThemedTextField from "./ThemedTextField";
 
-/** Scroll padding so the page clears the fixed `MobileBottomNav` (matches its row: py-2 + icon + labels + border). */
+/** Scroll padding so the page clears the fixed `MobileBottomNav` (matches its height incl. safe area). */
 const MOBILE_BOTTOM_NAV_SCROLL_PADDING =
-  "max(3.75rem, calc(env(safe-area-inset-bottom, 0px) + 3.25rem))";
+  "max(4.5rem, calc(env(safe-area-inset-bottom, 0px) + 4rem))";
 
 const DEFAULT_DOCUMENT_TITLE = "Funzies Collection";
 
@@ -83,7 +82,8 @@ function MobileBottomNav() {
   const location = useLocation();
   const isShopRoute = location.pathname === "/shop";
   const accountRoute = isAuthenticated ? "/account" : "/login";
-  const navLinkClassName = "flex h-[56px] flex-col items-center justify-center gap-1 px-1 text-xs";
+  // ~120% sizing vs previous: taller bar + slightly larger labels/icons for easier tapping.
+  const navLinkClassName = "flex h-[68px] flex-col items-center justify-center gap-1.5 px-1 text-sm";
   const navLabelClassName = "whitespace-nowrap leading-none";
   const navItemStyle = (isActive) => ({
     color: isActive ? colors.primary : colors.text,
@@ -98,7 +98,7 @@ function MobileBottomNav() {
       <ul className="mx-auto grid max-w-[1200px] grid-cols-5">
         <li>
           <Link to="/" className={navLinkClassName} style={navItemStyle(location.pathname === "/")}>
-            <FiHome size={16} />
+            <FiHome size={19} />
             <span className={navLabelClassName} style={textStyles.caption}>Home</span>
           </Link>
         </li>
@@ -108,20 +108,20 @@ function MobileBottomNav() {
             className={navLinkClassName}
             style={navItemStyle(isShopRoute)}
           >
-            <FiList size={16} />
+            <FiList size={19} />
             <span className={navLabelClassName} style={textStyles.caption}>Categories</span>
           </Link>
         </li>
         <li>
           <Link to="/wishlist" className={navLinkClassName} style={navItemStyle(location.pathname === "/wishlist")}>
-            <FiHeart size={16} />
+            <FiHeart size={19} />
             <span className={navLabelClassName} style={textStyles.caption}>Wishlist</span>
           </Link>
         </li>
         <li>
           <Link to="/viewcart" className={navLinkClassName} style={navItemStyle(location.pathname === "/viewcart")}>
             <span className="relative inline-flex">
-              {cartCount > 0 ? <BsCartFill size={16} /> : <FiShoppingCart size={16} />}
+              <FiShoppingCart size={19} />
               {cartCount > 0 && (
                 <span
                   className="absolute -right-2 -top-2 inline-flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] leading-none text-white"
@@ -136,7 +136,7 @@ function MobileBottomNav() {
         </li>
         <li>
           <Link to={accountRoute} className={navLinkClassName} style={navItemStyle(location.pathname === accountRoute)}>
-            <FiUser size={16} />
+            <FiUser size={19} />
             <span className={navLabelClassName} style={textStyles.caption}>Account</span>
           </Link>
         </li>

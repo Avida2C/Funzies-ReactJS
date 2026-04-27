@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { FiUser } from "react-icons/fi";
+import { FiMenu, FiUser, FiX } from "react-icons/fi";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { City, Country } from "country-state-city";
 import AppLayout from "../components/AppLayout";
@@ -222,6 +222,7 @@ export default function AccountPage() {
     LINKED_ACCOUNT_ROWS.reduce((acc, row) => ({ ...acc, [row.title]: true }), {}),
   );
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [addressModalMode, setAddressModalMode] = useState(/** @type {"create" | "edit"} */ ("create"));
   const [editingAddress, setEditingAddress] = useState(/** @type {any | null} */ (null));
   const [addressForm, setAddressForm] = useState({
@@ -318,8 +319,8 @@ export default function AccountPage() {
   }, [addressForm.countryCode]);
   const hasCityOptions = cities.length > 0;
 
-  const renderSidebar = () => (
-    <aside className="flex self-start flex-col justify-between lg:sticky lg:top-6">
+  const SidebarContent = ({ onNavigate }) => (
+    <div className="flex flex-col justify-between">
       <nav aria-label="Account sections">
         <ul className="space-y-2">
           {ACCOUNT_TABS.map((tab) => {
@@ -329,7 +330,8 @@ export default function AccountPage() {
               <li key={tab.id}>
                 <Link
                   to={to}
-                  className="block w-full px-1 py-1.5 text-left hover:underline"
+                  onClick={onNavigate}
+                  className="block w-full px-1 py-1.5 text-left no-underline hover:underline"
                   style={{ ...textStyles.body, color: isActive ? accentText : mutedText, fontWeight: isActive ? 600 : 400 }}
                   aria-current={isActive ? "page" : undefined}
                   id={`account-nav-${tab.id}`}
@@ -343,14 +345,20 @@ export default function AccountPage() {
       </nav>
       <div className="mt-6 border-t pt-3" style={{ borderColor: colors.primary }}>
         <div className="flex items-start gap-3">
-          <span className="inline-flex h-8 w-8 items-center justify-center rounded border" style={{ borderColor: colors.border, color: colors.text, backgroundColor: colors.panel }}>
+          <span
+            className="inline-flex h-8 w-8 items-center justify-center rounded border"
+            style={{ borderColor: colors.border, color: colors.text, backgroundColor: colors.panel }}
+          >
             <FiUser size={14} />
           </span>
           <div className="min-w-0">
             <p style={{ ...textStyles.button, color: colors.text }}>{`Hello, ${displayName}`}</p>
             <ThemedButton
               type="button"
-              onClick={handleSignOut}
+              onClick={() => {
+                onNavigate?.();
+                handleSignOut();
+              }}
               variant="redOutline"
               size="sm"
               className="mt-2"
@@ -361,6 +369,12 @@ export default function AccountPage() {
           </div>
         </div>
       </div>
+    </div>
+  );
+
+  const renderSidebar = () => (
+    <aside className="hidden self-start lg:flex lg:flex-col lg:justify-between lg:sticky lg:top-6">
+      <SidebarContent />
     </aside>
   );
 
@@ -478,11 +492,26 @@ export default function AccountPage() {
 
   return (
     <AppLayout title="Account" description="Manage account details, communication, security, orders, and payment settings." showPageHeader={false} contentClassName="">
-      <section className="w-full rounded-box p-5 md:p-6" style={{ backgroundColor: colors.panel }}>
+      <section className="w-full rounded-box p-1 sm:p-2 md:p-6" style={{ backgroundColor: colors.panel }}>
         <header className="border-b pb-4" style={{ borderColor: colors.primary }}>
-          <h1 id={`account-tab-${activeTabId}`} style={{ ...textStyles.title, color: colors.text }}>
-            {activeTabLabel}
-          </h1>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex min-w-0 items-center gap-3">
+              <button
+                type="button"
+                className="inline-flex items-center justify-center rounded border px-2.5 py-2 lg:hidden"
+                aria-label="Open account menu"
+                aria-haspopup="dialog"
+                aria-expanded={isMobileNavOpen}
+                onClick={() => setIsMobileNavOpen(true)}
+                style={{ borderColor: colors.border, backgroundColor: colors.panel, color: colors.text }}
+              >
+                <FiMenu size={18} />
+              </button>
+              <h1 id={`account-tab-${activeTabId}`} className="min-w-0 truncate" style={{ ...textStyles.title, color: colors.text }}>
+                {activeTabLabel}
+              </h1>
+            </div>
+          </div>
         </header>
 
         <div className="mt-6 grid gap-6 lg:grid-cols-[220px_1fr]">
@@ -492,6 +521,41 @@ export default function AccountPage() {
           </div>
         </div>
       </section>
+
+      {isMobileNavOpen && (
+        <div className="fixed inset-0 z-40 lg:hidden">
+          <button
+            type="button"
+            aria-label="Close account menu backdrop"
+            className="absolute inset-0"
+            onClick={() => setIsMobileNavOpen(false)}
+            style={{ backgroundColor: "rgba(15, 23, 36, 0.6)" }}
+          />
+          <section
+            role="dialog"
+            aria-modal="true"
+            aria-label="Account menu"
+            className="absolute left-0 top-0 h-full w-[86%] max-w-[340px] overflow-auto border-r p-5 shadow-xl"
+            style={{ backgroundColor: colors.background, borderColor: colors.border }}
+          >
+            <div className="flex items-center justify-between gap-3">
+              <p style={{ ...textStyles.sectionTitle, color: colors.text }}>Account</p>
+              <button
+                type="button"
+                aria-label="Close account menu"
+                className="inline-flex items-center justify-center rounded border px-2.5 py-2"
+                onClick={() => setIsMobileNavOpen(false)}
+                style={{ borderColor: colors.border, backgroundColor: colors.panel, color: colors.text }}
+              >
+                <FiX size={18} />
+              </button>
+            </div>
+            <div className="mt-5">
+              <SidebarContent onNavigate={() => setIsMobileNavOpen(false)} />
+            </div>
+          </section>
+        </div>
+      )}
 
       {isAddressModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">

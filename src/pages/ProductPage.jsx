@@ -92,7 +92,7 @@ export default function ProductPage() {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(3);
 
-  const relatedProducts = activeProducts.filter((item) => item.ID !== product.ID).slice(0, 8);
+  const relatedProducts = activeProducts.filter((item) => item.ID !== product.ID).slice(0, 4);
   const galleryImages = useMemo(() => getProductGalleryImageUrls(product), [product]);
   useEffect(() => {
     setSelectedImageIndex(0);
