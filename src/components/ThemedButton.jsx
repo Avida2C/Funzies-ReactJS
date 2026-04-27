@@ -61,14 +61,35 @@ export default function ThemedButton({
 
   const resolvedType = Component === "button" ? (type ?? "button") : undefined;
 
+  const hoverVars = (() => {
+    if (variant === "redOutline" || variant === "outline") {
+      return {
+        "--hover-accent-bg": `${colors.primary}14`,
+        "--hover-accent-border": colors.primary,
+        "--hover-accent-fg": colors.primary,
+      };
+    }
+    if (variant === "redSolid" || variant === "primary") {
+      return {
+        "--hover-accent-border": colors.primary,
+      };
+    }
+    if (variant === "greenSolid" || variant === "success") {
+      return {
+        "--hover-accent-border": colors.success,
+      };
+    }
+    return {};
+  })();
+
   return (
     <Component
-      className={`inline-flex items-center justify-center rounded font-semibold ${SIZE_CLASS_MAP[size] ?? SIZE_CLASS_MAP.sm} ${className}`.trim()}
-      style={{ ...(variantStyleMap[variant] ?? variantStyleMap.redOutline), ...style }}
+      className={`hover-accent inline-flex items-center justify-center rounded font-semibold ${SIZE_CLASS_MAP[size] ?? SIZE_CLASS_MAP.sm} ${className}`.trim()}
+      style={{ ...(variantStyleMap[variant] ?? variantStyleMap.redOutline), ...hoverVars, ...style }}
       type={resolvedType}
       {...props}
     >
-      {children}
+      <span className="hover-accent-text inline-flex items-center">{children}</span>
     </Component>
   );
 }

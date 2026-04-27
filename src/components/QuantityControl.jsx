@@ -12,12 +12,19 @@ export default function QuantityControl({
     <div className="flex items-center gap-2">
       <button
         type="button"
-        className="inline-flex h-7 w-7 items-center justify-center rounded border pb-[0.2rem] text-sm font-semibold"
-        style={{ borderColor: colors.border, color: colors.text }}
+        className="hover-accent inline-flex h-7 w-7 items-center justify-center rounded border pb-[0.2rem] text-sm font-semibold"
+        style={{
+          borderColor: colors.border,
+          color: colors.text,
+          backgroundColor: colors.panel,
+          "--hover-accent-bg": `${colors.primary}14`,
+          "--hover-accent-border": colors.primary,
+          "--hover-accent-fg": colors.primary,
+        }}
         onClick={onDecrease}
         aria-label={decrementAriaLabel}
       >
-        -
+        <span className="hover-accent-text">-</span>
       </button>
       <input
         type="text"
@@ -31,12 +38,19 @@ export default function QuantityControl({
       />
       <button
         type="button"
-        className="inline-flex h-7 w-7 items-center justify-center rounded border pb-[0.2rem] text-sm font-semibold"
-        style={{ borderColor: colors.border, color: colors.text }}
+        className="hover-accent inline-flex h-7 w-7 items-center justify-center rounded border pb-[0.2rem] text-sm font-semibold"
+        style={{
+          borderColor: colors.border,
+          color: colors.text,
+          backgroundColor: colors.panel,
+          "--hover-accent-bg": `${colors.primary}14`,
+          "--hover-accent-border": colors.primary,
+          "--hover-accent-fg": colors.primary,
+        }}
         onClick={onIncrease}
         aria-label={incrementAriaLabel}
       >
-        +
+        <span className="hover-accent-text">+</span>
       </button>
     </div>
   );

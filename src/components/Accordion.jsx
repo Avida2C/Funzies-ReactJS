@@ -1,5 +1,6 @@
 import { FiChevronRight } from "react-icons/fi";
 import { useTheme } from "../theme/themeContext";
+import InformationHtmlBlock from "./InformationHtmlBlock";
 
 export default function Accordion({ items, className = "" }) {
   const { colors } = useTheme();
@@ -24,7 +25,13 @@ export default function Accordion({ items, className = "" }) {
           </summary>
           <div className="border-t px-4 pb-4 pt-3" style={{ borderColor: colors.border }}>
             {typeof item.content === "string" ? (
-              <p className="leading-7 text-base-content/80">{item.content}</p>
+              (() => {
+                const raw = item.content;
+                if (raw.includes("<") && (raw.includes(">") || raw.includes("/>"))) {
+                  return <InformationHtmlBlock html={raw} />;
+                }
+                return <p className="leading-7 text-base-content/80">{raw}</p>;
+              })()
             ) : (
               item.content
             )}
