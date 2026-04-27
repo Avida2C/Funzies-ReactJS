@@ -2,6 +2,7 @@ import { createContext, useContext } from "react";
 
 export const AUTH_STORAGE_KEY = "funzies-auth-state";
 export const AUTH_PROFILE_STORAGE_KEY = "funzies-auth-profile";
+export const ADMIN_AUTH_STORAGE_KEY = "funzies-admin-auth";
 export const AuthContext = createContext(null);
 
 export function getInitialIsAuthenticated() {
@@ -39,6 +40,13 @@ export function getInitialAuthProfile() {
   } catch {
     return { displayName: "Nadine", email: "" };
   }
+}
+
+export function getInitialIsAdminAuthenticated() {
+  if (typeof window === "undefined") {
+    return false;
+  }
+  return window.localStorage.getItem(ADMIN_AUTH_STORAGE_KEY) === "signed-in";
 }
 
 export function useAuth() {

@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   FiFacebook,
   FiHeart,
@@ -13,11 +13,19 @@ import {
 } from "react-icons/fi";
 import { BsCartFill } from "react-icons/bs";
 import { LuLightbulb, LuLightbulbOff } from "react-icons/lu";
+import { SiX } from "react-icons/si";
 import { textStyles } from "../theme/typography";
 import { logoDarkMode, logoLightMode } from "../lib/storeData";
 import { useTheme } from "../theme/themeContext";
+import {
+  COMPANY_SOCIAL_LINKS,
+  FOOTER_PAYMENT_METHODS,
+  FOOTER_SECURITY_CERTIFICATIONS,
+} from "../data/companyPageData";
 import { useCart } from "../lib/cartContext";
 import { useAuth } from "../lib/authContext";
+import { usePublicSettings } from "../hooks/usePublicSettings";
+import ThemedTextField from "./ThemedTextField";
 
 /** Scroll padding so the page clears the fixed `MobileBottomNav` (matches its row: py-2 + icon + labels + border). */
 const MOBILE_BOTTOM_NAV_SCROLL_PADDING =
@@ -51,25 +59,22 @@ const FOOTER_LINK_COLUMNS = [
   },
 ];
 
-const FOOTER_SECURITY_CERTIFICATIONS = [
-  { label: "Trustly secured", src: "https://www.figma.com/api/mcp/asset/2792fe29-8936-4e86-affd-c950b0313414", width: 39 },
-  { label: "Visa secured", src: "https://www.figma.com/api/mcp/asset/0f6eee51-5aa9-46cb-b379-9a276c529722", width: 29 },
-  { label: "Mastercard identity check", src: "https://www.figma.com/api/mcp/asset/3e2a382b-05c9-42b7-959e-3d10442aa58f", width: 61 },
-  { label: "SafeKey", src: "https://www.figma.com/api/mcp/asset/6f115673-864e-4a7a-b2a9-881c27ec303a", width: 61 },
-  { label: "Protect buy", src: "https://www.figma.com/api/mcp/asset/19db8e0e-dd8e-4b44-a23a-9fe1505d5cce", width: 39 },
-  { label: "JCB secured", src: "https://www.figma.com/api/mcp/asset/4886e1d5-2b8b-404a-bcea-78873307aad2", width: 39 },
-  { label: "PCI certified", src: "https://www.figma.com/api/mcp/asset/23fab86c-09dd-4d7c-bf7f-f9e8778c857e", width: 61 },
-];
+const FOOTER_SOCIAL_ICONS = {
+  facebook: FiFacebook,
+  x: SiX,
+  instagram: FiInstagram,
+  twitter: FiTwitter,
+};
 
-const FOOTER_PAYMENT_METHODS = [
-  { label: "PayPal", src: "https://www.figma.com/api/mcp/asset/05d48617-45db-4dda-a09e-413793242ef1", width: 38 },
-  { label: "Visa", src: "https://www.figma.com/api/mcp/asset/e151541f-be3b-4c94-ac13-c792e201ecb3", width: 38 },
-  { label: "Mastercard", src: "https://www.figma.com/api/mcp/asset/bec9bfc6-751f-4bb7-bdd1-1c54afa3fa53", width: 38 },
-  { label: "American Express", src: "https://www.figma.com/api/mcp/asset/00edbf29-a405-4fc7-96c7-7eb0348a3620", width: 39 },
-  { label: "Discover", src: "https://www.figma.com/api/mcp/asset/49613c20-2376-4e6d-81f5-cd5d7b8841b8", width: 39 },
-  { label: "Apple Pay", src: "https://www.figma.com/api/mcp/asset/c6cb4305-4c24-43fa-8235-9e4ef558fa7a", width: 39 },
-  { label: "Google Pay", src: "https://www.figma.com/api/mcp/asset/3a600c16-aa87-4dc6-847c-50098e747571", width: 39 },
-];
+function safeParseJson(value, fallback) {
+  if (value == null || value === "") return fallback;
+  try {
+    const parsed = JSON.parse(String(value));
+    return parsed == null ? fallback : parsed;
+  } catch {
+    return fallback;
+  }
+}
 
 function MobileBottomNav() {
   const { colors } = useTheme();
@@ -149,13 +154,32 @@ export default function AppLayout({ title, description, children, showPageHeader
   const accountRoute = isAuthenticated ? "/account" : "/login";
   const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(searchParams.get("q") ?? "");
-  const searchTextColor = mode === "dark" ? "#1f2a36" : colors.text;
-  const searchPlaceholderColor = mode === "dark" ? "#6b7280" : "#9ca3af";
+
+  const publicContent = usePublicSettings([
+    "content.company.social_links",
+    "content.footer.security_certifications",
+    "content.footer.payment_methods",
+  ]);
+  const footerSocialLinks = useMemo(
+    () => safeParseJson(publicContent.values["content.company.social_links"], COMPANY_SOCIAL_LINKS),
+    [publicContent.values],
+  );
+  const footerSecurityCerts = useMemo(
+    () => safeParseJson(publicContent.values["content.footer.security_certifications"], FOOTER_SECURITY_CERTIFICATIONS),
+    [publicContent.values],
+  );
+  const footerPaymentMethods = useMemo(
+    () => safeParseJson(publicContent.values["content.footer.payment_methods"], FOOTER_PAYMENT_METHODS),
+    [publicContent.values],
+  );
+
+  const pageTitleText = typeof title === "string" ? title.trim() : "";
+  const pageDescriptionText = typeof description === "string" ? description.trim() : "";
+  const shouldRenderPageHeader = showPageHeader && (pageTitleText || pageDescriptionText);
 
   useEffect(() => {
-    const pageLabel = typeof title === "string" ? title.trim() : "";
-    document.title = pageLabel ? `${pageLabel} | ${DEFAULT_DOCUMENT_TITLE}` : DEFAULT_DOCUMENT_TITLE;
-  }, [title]);
+    document.title = pageTitleText ? `${pageTitleText} | ${DEFAULT_DOCUMENT_TITLE}` : DEFAULT_DOCUMENT_TITLE;
+  }, [pageTitleText]);
 
   useEffect(() => {
     setSearchTerm(searchParams.get("q") ?? "");
@@ -182,19 +206,25 @@ export default function AppLayout({ title, description, children, showPageHeader
             <img src={mode === "dark" ? logoDarkMode : logoLightMode} alt="Funzies Collection" className="h-10 w-auto" />
           </Link>
           <div className="px-2">
-            <form onSubmit={submitSearch} className="flex h-9 w-full items-center overflow-hidden rounded border" style={{ borderColor: colors.primary, backgroundColor: colors.white }}>
-              <input
-                type="text"
+            <form onSubmit={submitSearch} className="w-full">
+              <ThemedTextField
+                size="sm"
+                className="w-full"
                 placeholder="Search products"
-                className="top-search-input h-full w-full bg-transparent px-3 text-sm outline-none"
-                style={{ color: searchTextColor, caretColor: searchTextColor }}
                 value={searchTerm}
                 onChange={(event) => setSearchTerm(event.target.value)}
+                aria-label="Search products"
+                endAdornment={
+                  <button
+                    type="submit"
+                    className="flex h-full items-center px-3 text-sm"
+                    style={{ color: colors.primary }}
+                    aria-label="Search"
+                  >
+                    <FiSearch size={16} />
+                  </button>
+                }
               />
-              <style>{`.top-search-input::placeholder { color: ${searchPlaceholderColor}; opacity: 1; }`}</style>
-              <button type="submit" className="px-3 text-sm" style={{ color: colors.primary }} aria-label="Search">
-                <FiSearch size={16} />
-              </button>
             </form>
           </div>
           <div className="flex h-9 items-stretch gap-2">
@@ -232,23 +262,25 @@ export default function AppLayout({ title, description, children, showPageHeader
           </div>
         </div>
         <div className="mx-auto w-full max-w-[1200px] px-4 py-3 md:hidden">
-          <form
-            onSubmit={submitSearch}
-            className="flex h-9 w-full items-center overflow-hidden rounded border"
-            style={{ borderColor: colors.primary, backgroundColor: colors.white }}
-          >
-            <input
-              type="text"
+          <form onSubmit={submitSearch} className="w-full">
+            <ThemedTextField
+              size="sm"
+              className="w-full"
               placeholder="Search products"
-              className="top-search-input h-full w-full bg-transparent px-3 text-sm outline-none"
-              style={{ color: searchTextColor, caretColor: searchTextColor }}
               value={searchTerm}
               onChange={(event) => setSearchTerm(event.target.value)}
+              aria-label="Search products"
+              endAdornment={
+                <button
+                  type="submit"
+                  className="flex h-full items-center px-3 text-sm"
+                  style={{ color: colors.primary }}
+                  aria-label="Search"
+                >
+                  <FiSearch size={16} />
+                </button>
+              }
             />
-            <style>{`.top-search-input::placeholder { color: ${searchPlaceholderColor}; opacity: 1; }`}</style>
-            <button type="submit" className="px-3 text-sm" style={{ color: colors.primary }} aria-label="Search">
-              <FiSearch size={16} />
-            </button>
           </form>
         </div>
       </header>
@@ -258,10 +290,18 @@ export default function AppLayout({ title, description, children, showPageHeader
         style={{ backgroundColor: colors.panel }}
       >
         <div className={`${contentClassName} [&_p]:max-w-[70ch] [&_li]:max-w-[70ch]`}>
-          {showPageHeader && (
+          {shouldRenderPageHeader && (
             <section className="rounded-box p-5 shadow" style={{ backgroundColor: colors.background }}>
-              <h1 className="text-3xl font-bold" style={{ ...textStyles.title, color: colors.text }}>{title}</h1>
-              <p className="mt-2" style={{ ...textStyles.body, color: colors.text }}>{description}</p>
+              {pageTitleText ? (
+                <h1 className="text-3xl font-bold" style={{ ...textStyles.title, color: colors.text }}>
+                  {pageTitleText}
+                </h1>
+              ) : null}
+              {pageDescriptionText ? (
+                <p className="mt-2" style={{ ...textStyles.body, color: colors.text }}>
+                  {pageDescriptionText}
+                </p>
+              ) : null}
             </section>
           )}
           {children}
@@ -304,10 +344,23 @@ export default function AppLayout({ title, description, children, showPageHeader
             ))}
             <div>
               <h3 className="mb-2 text-lg font-semibold" style={{ color: colors.primary }}>Connect with Funzies</h3>
-              <div className="mt-2 flex items-center gap-3" style={{ color: colors.text }}>
-                <a href="https://www.facebook.com/" target="_blank" rel="noreferrer" aria-label="Facebook" className="footer-social-icon inline-flex h-8 w-8 items-center justify-center rounded border" style={{ borderColor: colors.border, "--footer-social-hover": colors.primary }}><FiFacebook size={16} /></a>
-                <a href="https://twitter.com/" target="_blank" rel="noreferrer" aria-label="Twitter" className="footer-social-icon inline-flex h-8 w-8 items-center justify-center rounded border" style={{ borderColor: colors.border, "--footer-social-hover": colors.primary }}><FiTwitter size={16} /></a>
-                <a href="https://www.instagram.com/" target="_blank" rel="noreferrer" aria-label="Instagram" className="footer-social-icon inline-flex h-8 w-8 items-center justify-center rounded border" style={{ borderColor: colors.border, "--footer-social-hover": colors.primary }}><FiInstagram size={16} /></a>
+              <div className="mt-2 flex flex-wrap items-center gap-3" style={{ color: colors.text }}>
+                {footerSocialLinks.map((s) => {
+                  const Icon = FOOTER_SOCIAL_ICONS[s.id] ?? FOOTER_SOCIAL_ICONS.facebook;
+                  return (
+                    <a
+                      key={s.id}
+                      href={s.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={s.name}
+                      className="footer-social-icon inline-flex h-8 w-8 items-center justify-center rounded border"
+                      style={{ borderColor: colors.border, "--footer-social-hover": colors.primary }}
+                    >
+                      <Icon size={16} aria-hidden />
+                    </a>
+                  );
+                })}
               </div>
             </div>
           </section>
@@ -318,7 +371,7 @@ export default function AppLayout({ title, description, children, showPageHeader
             <div>
               <h4 className="mb-2 text-xl font-semibold" style={{ color: colors.primary }}>Security certification</h4>
               <div className="flex flex-wrap items-center gap-2">
-                {FOOTER_SECURITY_CERTIFICATIONS.map((item) => (
+                {footerSecurityCerts.map((item) => (
                   <img
                     key={item.label}
                     src={item.src}
@@ -332,7 +385,7 @@ export default function AppLayout({ title, description, children, showPageHeader
             <div>
               <h4 className="mb-2 text-xl font-semibold" style={{ color: colors.primary }}>We accept</h4>
               <div className="flex flex-wrap items-center gap-2">
-                {FOOTER_PAYMENT_METHODS.map((item) => (
+                {footerPaymentMethods.map((item) => (
                   <img
                     key={item.label}
                     src={item.src}

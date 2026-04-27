@@ -1,3 +1,15 @@
+import { reviewStatusById } from "../lib/funziesDataset";
+import { activeProducts } from "../lib/storeData";
+
+/** Default: matches `funziesData.json` → `reviewstatus` id 1 (Approved). */
+const DEFAULT_REVIEW_STATUS_ID = 1;
+
+function reviewStatusLabel(statusId) {
+  const id = Number(statusId) || DEFAULT_REVIEW_STATUS_ID;
+  const row = reviewStatusById.get(id);
+  return row?.Status ?? (id ? `Status #${id}` : "Unknown");
+}
+
 const REVIEW_TEMPLATES = [
   {
     user: "boardgamefan",
@@ -44,12 +56,14 @@ const PRODUCT_REVIEW_OVERRIDES = {
       date: "17 Nov 2023",
       text: "Astra has great replay value and the art is beautiful.",
       rating: 5,
+      statusId: 1,
     },
     {
       user: "meeplegal",
       date: "13 Jan 2024",
       text: "Rules took one round to click, then everyone enjoyed it.",
       rating: 4.5,
+      statusId: 3,
     },
   ],
   20: [
@@ -100,10 +114,15 @@ function buildTemplateReviews(productId, count = 3) {
 
 export function getReviewsForProduct(productId) {
   const reviews = PRODUCT_REVIEW_OVERRIDES[productId] ?? buildTemplateReviews(productId);
-  return reviews.map((review, index) => ({
-    ...review,
-    id: review.id ?? createReviewId(productId, index),
-  }));
+  return reviews.map((review, index) => {
+    const statusId = review.statusId != null ? Number(review.statusId) : DEFAULT_REVIEW_STATUS_ID;
+    return {
+      ...review,
+      id: review.id ?? createReviewId(productId, index),
+      statusId,
+      status: reviewStatusLabel(statusId),
+    };
+  });
 }
 
 export function getReviewSummary(reviews) {
@@ -115,5 +134,52 @@ export function getReviewSummary(reviews) {
   return {
     totalReviews: reviews.length,
     averageRating: Number((totalRating / reviews.length).toFixed(1)),
+  };
+}
+
+/** @returns {number} */
+export function getReviewTemplateCount() {
+  return REVIEW_TEMPLATES.length;
+}
+
+/** @returns { { productId: number; reviewCount: number }[] } */
+export function getProductReviewOverrideRows() {
+  return Object.entries(PRODUCT_REVIEW_OVERRIDES).map(([productId, reviews]) => ({
+    productId: Number(productId),
+    reviewCount: Array.isArray(reviews) ? reviews.length : 0,
+  }));
+}
+
+/** @returns {number[]} Product IDs that use custom review text instead of the rotating template pool. */
+export function getOverrideProductIds() {
+  return Object.keys(PRODUCT_REVIEW_OVERRIDES).map((k) => Number(k));
+}
+
+const overrideIdSet = new Set(getOverrideProductIds());
+
+/**
+ * Counts for the admin reviews table / dashboard (all active product SKUs × their reviews).
+ * @returns {{ totalRows: number, customProductCount: number, templateProductCount: number, byStatus: Record<string, number> }}
+ */
+export function getAdminReviewDisplayStats() {
+  const byStatus = Object.create(null);
+  let totalRows = 0;
+  let customProductCount = 0;
+  for (const p of activeProducts) {
+    if (overrideIdSet.has(p.ID)) {
+      customProductCount += 1;
+    }
+    const list = getReviewsForProduct(p.ID);
+    for (const r of list) {
+      totalRows += 1;
+      const label = r.status || "Unknown";
+      byStatus[label] = (byStatus[label] || 0) + 1;
+    }
+  }
+  return {
+    totalRows,
+    customProductCount,
+    templateProductCount: activeProducts.length - customProductCount,
+    byStatus,
   };
 }

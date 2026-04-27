@@ -1,43 +1,56 @@
 {
   "address": [
     {
-      "ID": 24,
-      "Street": "39, Triq Santa Marija",
-      "City": "Gudja",
-      "ZipCode": "GDJ1064",
+      "Street": "1234",
+      "City": "Imdina",
+      "ZipCode": "imd33",
       "Region": "Malta",
-      "User": 2,
+      "User": 1,
       "Def": 1,
       "Deleted": 0,
-      "Name": "Nadine",
-      "Surname": "Vidal",
-      "Mobile": ""
+      "Name": "Demo",
+      "Surname": "Admin",
+      "Mobile": "",
+      "ID": 1
     },
     {
-      "ID": 25,
-      "Street": "test",
-      "City": "test",
-      "ZipCode": "tetret",
+      "Street": "0234",
+      "City": "Imdina",
+      "ZipCode": "223",
       "Region": "Malta",
-      "User": 2,
+      "User": 1,
+      "Def": 1,
+      "Deleted": 0,
+      "Name": "Demo",
+      "Surname": "Admin",
+      "Mobile": "",
+      "ID": 2
+    },
+    {
+      "Street": "22",
+      "City": "Imsida",
+      "ZipCode": "231",
+      "Region": "Malta",
+      "User": 1,
       "Def": 0,
-      "Deleted": 1,
-      "Name": "test",
-      "Surname": "test",
-      "Mobile": "34254325342"
+      "Deleted": 0,
+      "Name": "Demo",
+      "Surname": "Admin",
+      "Mobile": "",
+      "ID": 3
     },
     {
-      "ID": 26,
-      "Street": "39, Triq Santa Marija",
-      "City": "Gudja",
-      "ZipCode": "GDJ1064",
+      "Street": "T100",
+      "City": "Imtarfa",
+      "ZipCode": "2221",
       "Region": "Malta",
-      "User": 4,
-      "Def": 1,
+      "User": 1,
+      "Def": 0,
       "Deleted": 0,
-      "Name": "Nadine",
-      "Surname": "Vidal",
-      "Mobile": "79316986"
+      "Name": "Demo",
+      "Surname": "Admin",
+      "Mobile": "793333333",
+      "ID": 4
     }
   ],
   "brand": [
@@ -172,14 +185,14 @@
       "Name": "Test",
       "Details": "This is a test",
       "Image": "img/brands/9B2D8F61-38C6-4D54-9A1A-C3C088FE4589.jpg",
-      "Deleted": 0
+      "Deleted": 1
     }
   ],
   "category": [
     {
       "ID": 1,
       "Name": "Board Games",
-      "Details": "Board games are tabletop games involving strategy, skill, or chance, played with pieces or cards on a pre-marked surface.",
+      "Details": "Board games are tabletop games involving strategy, skill, or chance, played with pieces or cards on a marked surface.",
       "Deleted": 0
     },
     {
@@ -234,7 +247,7 @@
       "ID": 10,
       "Name": "Test",
       "Details": "Testing",
-      "Deleted": 0
+      "Deleted": 1
     }
   ],
   "orders": [
@@ -268,9 +281,9 @@
     {
       "ID": 4,
       "created": "2023-12-24 15:50:46",
-      "updated": "2023-12-24 15:50:46",
+      "updated": "2026-04-27 11:49:53",
       "status": 1,
-      "user": 2,
+      "user": 1,
       "address": 24,
       "deleted": 0
     },
@@ -278,8 +291,8 @@
       "ID": 5,
       "created": "2023-12-24 15:52:03",
       "updated": "2023-12-24 15:52:03",
-      "status": 3,
-      "user": 2,
+      "status": 7,
+      "user": 1,
       "address": 24,
       "deleted": 0
     },
@@ -296,8 +309,8 @@
       "ID": 7,
       "created": "2023-12-24 16:55:02",
       "updated": "2023-12-24 16:55:02",
-      "status": 3,
-      "user": 2,
+      "status": 4,
+      "user": 1,
       "address": 24,
       "deleted": 0
     },
@@ -305,8 +318,8 @@
       "ID": 8,
       "created": "2023-12-24 18:15:46",
       "updated": "2023-12-24 18:15:46",
-      "status": 3,
-      "user": 2,
+      "status": 8,
+      "user": 1,
       "address": 24,
       "deleted": 0
     },
@@ -314,8 +327,8 @@
       "ID": 9,
       "created": "2023-12-24 18:25:14",
       "updated": "2023-12-24 18:25:14",
-      "status": 1,
-      "user": 2,
+      "status": 4,
+      "user": 1,
       "address": 24,
       "deleted": 0
     },
@@ -323,8 +336,8 @@
       "ID": 10,
       "created": "2023-12-24 18:27:30",
       "updated": "2023-12-24 18:27:30",
-      "status": 3,
-      "user": 2,
+      "status": 7,
+      "user": 1,
       "address": 24,
       "deleted": 0
     },
@@ -332,16 +345,16 @@
       "ID": 11,
       "created": "2023-12-24 18:31:13",
       "updated": "2023-12-24 18:31:13",
-      "status": 3,
-      "user": 2,
+      "status": 8,
+      "user": 1,
       "address": 25,
       "deleted": 0
     },
     {
       "ID": 12,
       "created": "2023-12-25 13:24:03",
-      "updated": "2023-12-25 13:24:03",
-      "status": 1,
+      "updated": "2026-04-26 22:15:16",
+      "status": 3,
       "user": 4,
       "address": 26,
       "deleted": 0
@@ -349,11 +362,11 @@
     {
       "ID": 15,
       "created": "2023-12-29 08:55:40",
-      "updated": "2023-12-29 08:55:40",
-      "status": 3,
+      "updated": "2026-04-26 22:15:02",
+      "status": 8,
       "user": 2,
       "address": 24,
-      "deleted": 0
+      "deleted": 1
     }
   ],
   "orderstatus": [
@@ -718,7 +731,7 @@
       "Stock": 20,
       "Brand": 10,
       "Image": "img/products/939426D8-C476-4EC1-A4C2-B6EDED6EE009.jpg",
-      "Deleted": 0,
+      "Deleted": 1,
       "DateAdded": "2023-12-21 03:35:03"
     },
     {
@@ -727,11 +740,13 @@
       "Description": "Adventure and fun await in this cooperative Minecraft game! Can you protect the Village from raiding Illagers? Explore the world, collect Blocks, fight Mobs, and build defensive buildings before marauding Illagers invade. Your helpful animal companions will stand faithfully by your side!",
       "Category": 1,
       "Price": 34.99,
-      "Stock": 20,
+      "Stock": 5,
       "Brand": 10,
       "Image": "img/products/FDF61DC7-ADF7-4E70-B83F-83172887E364.jpg",
       "Deleted": 0,
-      "DateAdded": "2023-12-23 22:18:17"
+      "DateAdded": "2023-12-23 22:18:17",
+      "Images": [],
+      "Thumbnail": null
     },
     {
       "ID": 22,
@@ -742,7 +757,7 @@
       "Stock": 20,
       "Brand": 10,
       "Image": "img/products/3CC414C1-3ABF-4DDB-B7A2-97A2E5801FDC.jpg",
-      "Deleted": 0,
+      "Deleted": 1,
       "DateAdded": "2023-12-17 10:19:28"
     },
     {
@@ -1894,7 +1909,7 @@
       "Stock": 20,
       "Brand": 19,
       "Image": "img/products/5D19621F-292A-4232-9433-2F57157308E9.jpg",
-      "Deleted": 0,
+      "Deleted": 1,
       "DateAdded": "0000-00-00 00:00:00"
     }
   ],
@@ -1923,7 +1938,7 @@
   "role": [
     {
       "ID": 1,
-      "Name": "Administrator",
+      "Name": "Administrator (edited)",
       "Details": "Has access to all the information related to the store. ",
       "Deleted": 0
     },
@@ -1938,177 +1953,3517 @@
       "Name": "Employee",
       "Details": "Has limited access to the information related to the store. (Products, Categories, Brands)",
       "Deleted": 0
-    },
-    {
-      "ID": 5,
-      "Name": "Test",
-      "Details": "Test object",
-      "Deleted": 1
-    },
-    {
-      "ID": 6,
-      "Name": "Test",
-      "Details": "Test object",
-      "Deleted": 1
-    },
-    {
-      "ID": 7,
-      "Name": "Test",
-      "Details": "Test object",
-      "Deleted": 1
-    },
-    {
-      "ID": 8,
-      "Name": "Test",
-      "Details": "Test object",
-      "Deleted": 1
-    },
-    {
-      "ID": 9,
-      "Name": "Test",
-      "Details": "Test object",
-      "Deleted": 1
-    },
-    {
-      "ID": 10,
-      "Name": "Test",
-      "Details": "Test object",
-      "Deleted": 1
-    },
-    {
-      "ID": 11,
-      "Name": "Test",
-      "Details": "Test object",
-      "Deleted": 1
-    },
-    {
-      "ID": 12,
-      "Name": "efwf",
-      "Details": "fe",
-      "Deleted": 1
-    },
-    {
-      "ID": 13,
-      "Name": "fedwf",
-      "Details": "few",
-      "Deleted": 1
-    },
-    {
-      "ID": 14,
-      "Name": "gregre",
-      "Details": "gtr",
-      "Deleted": 1
-    },
-    {
-      "ID": 15,
-      "Name": "fewfw",
-      "Details": "fewfw",
-      "Deleted": 1
-    },
-    {
-      "ID": 16,
-      "Name": "fewfew",
-      "Details": "fgwe",
-      "Deleted": 1
-    },
-    {
-      "ID": 17,
-      "Name": "fwe",
-      "Details": "few",
-      "Deleted": 1
-    },
-    {
-      "ID": 18,
-      "Name": "fe",
-      "Details": "few",
-      "Deleted": 1
-    },
-    {
-      "ID": 19,
-      "Name": "Test",
-      "Details": "Test object",
-      "Deleted": 1
-    },
-    {
-      "ID": 20,
-      "Name": "Test",
-      "Details": "Test object",
-      "Deleted": 1
-    },
-    {
-      "ID": 21,
-      "Name": "Test",
-      "Details": "Test object",
-      "Deleted": 1
-    },
-    {
-      "ID": 22,
-      "Name": "Test",
-      "Details": "Test object",
-      "Deleted": 1
-    },
-    {
-      "ID": 23,
-      "Name": "Test",
-      "Details": "Test object",
-      "Deleted": 1
-    },
-    {
-      "ID": 24,
-      "Name": "Test",
-      "Details": "Test object",
-      "Deleted": 1
-    },
-    {
-      "ID": 25,
-      "Name": "Test",
-      "Details": "Test object",
-      "Deleted": 1
-    },
-    {
-      "ID": 26,
-      "Name": "Updated Role",
-      "Details": "This is an updated test case",
-      "Deleted": 1
-    },
-    {
-      "ID": 27,
-      "Name": "Test",
-      "Details": "Testing",
-      "Deleted": 0
     }
   ],
   "user": [
     {
-      "ID": 2,
-      "Email": "n4dinevid4l@hotmail.com",
-      "Name": "Nadine",
-      "Surname": "Vidal",
-      "Joined": "2023-12-16 10:13:50",
+      "ID": 1,
+      "Email": "demo@funzies.com",
+      "Name": "Demo",
+      "Surname": "Admin",
+      "Joined": "2026-01-01 00:00:00",
       "Verified": 1,
-      "Password": "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8",
-      "ContactNumber": "79316986",
+      "Password": "",
+      "ContactNumber": "",
       "Role": 1,
-      "Deleted": 0
-    },
-    {
-      "ID": 4,
-      "Email": "nadinevid4l@gmail.com",
-      "Name": "Nadine",
-      "Surname": "Nadine",
-      "Joined": "2023-12-25 13:24:03",
-      "Verified": 0,
-      "Password": "6367c48dd193d56ea7b0baad25b19455e529f5ee",
-      "ContactNumber": "79316986",
-      "Role": 2,
       "Deleted": 0
     }
   ],
-  "wishlist": [
+  "wishlist": [],
+  "settings": [
+    {
+      "Key": "content.footer.payment_methods",
+      "Value": "[\n  {\n    \"label\": \"Visa\",\n    \"src\": \"https://www.figma.com/api/mcp/asset/e151541f-be3b-4c94-ac13-c792e201ecb3\",\n    \"width\": 38\n  },\n  {\n    \"label\": \"Mastercard\",\n    \"src\": \"https://www.figma.com/api/mcp/asset/bec9bfc6-751f-4bb7-bdd1-1c54afa3fa53\",\n    \"width\": 38\n  },\n  {\n    \"label\": \"Apple Pay\",\n    \"src\": \"https://www.figma.com/api/mcp/asset/c6cb4305-4c24-43fa-8235-9e4ef558fa7a\",\n    \"width\": 39\n  },\n  {\n    \"label\": \"Google Pay\",\n    \"src\": \"https://www.figma.com/api/mcp/asset/3a600c16-aa87-4dc6-847c-50098e747571\",\n    \"width\": 39\n  }\n]",
+      "Deleted": 0,
+      "ID": 1
+    },
+    {
+      "Key": "content.footer.security_certifications",
+      "Value": "[\n  {\n    \"label\": \"Trustly secured\",\n    \"src\": \"https://www.figma.com/api/mcp/asset/2792fe29-8936-4e86-affd-c950b0313414\",\n    \"width\": 39\n  },\n  {\n    \"label\": \"Visa secured\",\n    \"src\": \"https://www.figma.com/api/mcp/asset/0f6eee51-5aa9-46cb-b379-9a276c529722\",\n    \"width\": 29\n  },\n  {\n    \"label\": \"Mastercard identity check\",\n    \"src\": \"https://www.figma.com/api/mcp/asset/3e2a382b-05c9-42b7-959e-3d10442aa58f\",\n    \"width\": 61\n  }\n]",
+      "Deleted": 0,
+      "ID": 2
+    }
+  ],
+  "review": [
+    {
+      "ID": 1,
+      "ProductId": 1,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 2,
+      "ProductId": 1,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 3,
+      "ProductId": 1,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 4,
+      "ProductId": 2,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 5,
+      "ProductId": 2,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 6,
+      "ProductId": 2,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 7,
+      "ProductId": 3,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 8,
+      "ProductId": 3,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 9,
+      "ProductId": 3,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 10,
+      "ProductId": 4,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 11,
+      "ProductId": 4,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 12,
+      "ProductId": 4,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 13,
+      "ProductId": 5,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 14,
+      "ProductId": 5,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 15,
+      "ProductId": 5,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 16,
+      "ProductId": 7,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 17,
+      "ProductId": 7,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 18,
+      "ProductId": 7,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 19,
+      "ProductId": 8,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 20,
+      "ProductId": 8,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 21,
+      "ProductId": 8,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 22,
+      "ProductId": 9,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 23,
+      "ProductId": 9,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 24,
+      "ProductId": 9,
+      "StatusId": 3,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 25,
+      "ProductId": 10,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 26,
+      "ProductId": 10,
+      "StatusId": 3,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 27,
+      "ProductId": 10,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 28,
+      "ProductId": 11,
+      "StatusId": 3,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 29,
+      "ProductId": 11,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 30,
+      "ProductId": 11,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
     {
       "ID": 31,
-      "user": 2,
-      "product": 97
+      "ProductId": 12,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 32,
+      "ProductId": 12,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 33,
+      "ProductId": 12,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 34,
+      "ProductId": 13,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 35,
+      "ProductId": 13,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 36,
+      "ProductId": 13,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 37,
+      "ProductId": 14,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 38,
+      "ProductId": 14,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 39,
+      "ProductId": 14,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 40,
+      "ProductId": 15,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 41,
+      "ProductId": 15,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 42,
+      "ProductId": 15,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 43,
+      "ProductId": 16,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 44,
+      "ProductId": 16,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 45,
+      "ProductId": 16,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 46,
+      "ProductId": 17,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 47,
+      "ProductId": 17,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 48,
+      "ProductId": 17,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 49,
+      "ProductId": 18,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 50,
+      "ProductId": 18,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 51,
+      "ProductId": 18,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 52,
+      "ProductId": 19,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 53,
+      "ProductId": 19,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 54,
+      "ProductId": 19,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 55,
+      "ProductId": 20,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 56,
+      "ProductId": 20,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 57,
+      "ProductId": 20,
+      "StatusId": 3,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 58,
+      "ProductId": 21,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 59,
+      "ProductId": 21,
+      "StatusId": 3,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 60,
+      "ProductId": 21,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 61,
+      "ProductId": 22,
+      "StatusId": 3,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 62,
+      "ProductId": 22,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 63,
+      "ProductId": 22,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 64,
+      "ProductId": 23,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 65,
+      "ProductId": 23,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 66,
+      "ProductId": 23,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 67,
+      "ProductId": 24,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 68,
+      "ProductId": 24,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 69,
+      "ProductId": 24,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 70,
+      "ProductId": 25,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 71,
+      "ProductId": 25,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 72,
+      "ProductId": 25,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 73,
+      "ProductId": 26,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 74,
+      "ProductId": 26,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 75,
+      "ProductId": 26,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 76,
+      "ProductId": 27,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 77,
+      "ProductId": 27,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 78,
+      "ProductId": 27,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 79,
+      "ProductId": 28,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 80,
+      "ProductId": 28,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 81,
+      "ProductId": 28,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 82,
+      "ProductId": 29,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 83,
+      "ProductId": 29,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 84,
+      "ProductId": 29,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 85,
+      "ProductId": 30,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 86,
+      "ProductId": 30,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 87,
+      "ProductId": 30,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 88,
+      "ProductId": 31,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 89,
+      "ProductId": 31,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 90,
+      "ProductId": 31,
+      "StatusId": 3,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 91,
+      "ProductId": 32,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 92,
+      "ProductId": 32,
+      "StatusId": 3,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 93,
+      "ProductId": 32,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 94,
+      "ProductId": 33,
+      "StatusId": 3,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 95,
+      "ProductId": 33,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 96,
+      "ProductId": 33,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 97,
+      "ProductId": 34,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 98,
+      "ProductId": 34,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 99,
+      "ProductId": 34,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 100,
+      "ProductId": 35,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 101,
+      "ProductId": 35,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 102,
+      "ProductId": 35,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 103,
+      "ProductId": 36,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 104,
+      "ProductId": 36,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 105,
+      "ProductId": 36,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 106,
+      "ProductId": 37,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 107,
+      "ProductId": 37,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 108,
+      "ProductId": 37,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 109,
+      "ProductId": 38,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 110,
+      "ProductId": 38,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 111,
+      "ProductId": 38,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 112,
+      "ProductId": 39,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 113,
+      "ProductId": 39,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 114,
+      "ProductId": 39,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 115,
+      "ProductId": 40,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 116,
+      "ProductId": 40,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 117,
+      "ProductId": 40,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 118,
+      "ProductId": 41,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 119,
+      "ProductId": 41,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 120,
+      "ProductId": 41,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 121,
+      "ProductId": 42,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 122,
+      "ProductId": 42,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 123,
+      "ProductId": 42,
+      "StatusId": 3,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 124,
+      "ProductId": 43,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 125,
+      "ProductId": 43,
+      "StatusId": 3,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 126,
+      "ProductId": 43,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 127,
+      "ProductId": 44,
+      "StatusId": 3,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 128,
+      "ProductId": 44,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 129,
+      "ProductId": 44,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 130,
+      "ProductId": 45,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 131,
+      "ProductId": 45,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 132,
+      "ProductId": 45,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 133,
+      "ProductId": 46,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 134,
+      "ProductId": 46,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 135,
+      "ProductId": 46,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 136,
+      "ProductId": 47,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 137,
+      "ProductId": 47,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 138,
+      "ProductId": 47,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 139,
+      "ProductId": 48,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 140,
+      "ProductId": 48,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 141,
+      "ProductId": 48,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 142,
+      "ProductId": 49,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 143,
+      "ProductId": 49,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 144,
+      "ProductId": 49,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 145,
+      "ProductId": 50,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 146,
+      "ProductId": 50,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 147,
+      "ProductId": 50,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 148,
+      "ProductId": 51,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 149,
+      "ProductId": 51,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 150,
+      "ProductId": 51,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 151,
+      "ProductId": 52,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 152,
+      "ProductId": 52,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 153,
+      "ProductId": 52,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 154,
+      "ProductId": 53,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 155,
+      "ProductId": 53,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 156,
+      "ProductId": 53,
+      "StatusId": 3,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 157,
+      "ProductId": 54,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 158,
+      "ProductId": 54,
+      "StatusId": 3,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 159,
+      "ProductId": 54,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 160,
+      "ProductId": 55,
+      "StatusId": 3,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 161,
+      "ProductId": 55,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 162,
+      "ProductId": 55,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 163,
+      "ProductId": 56,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 164,
+      "ProductId": 56,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 165,
+      "ProductId": 56,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 166,
+      "ProductId": 57,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 167,
+      "ProductId": 57,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 168,
+      "ProductId": 57,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 169,
+      "ProductId": 58,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 170,
+      "ProductId": 58,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 171,
+      "ProductId": 58,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 172,
+      "ProductId": 59,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 173,
+      "ProductId": 59,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 174,
+      "ProductId": 59,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 175,
+      "ProductId": 60,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 176,
+      "ProductId": 60,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 177,
+      "ProductId": 60,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 178,
+      "ProductId": 61,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 179,
+      "ProductId": 61,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 180,
+      "ProductId": 61,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 181,
+      "ProductId": 62,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 182,
+      "ProductId": 62,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 183,
+      "ProductId": 62,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 184,
+      "ProductId": 63,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 185,
+      "ProductId": 63,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 186,
+      "ProductId": 63,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 187,
+      "ProductId": 64,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 188,
+      "ProductId": 64,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 189,
+      "ProductId": 64,
+      "StatusId": 3,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 190,
+      "ProductId": 65,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 191,
+      "ProductId": 65,
+      "StatusId": 3,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 192,
+      "ProductId": 65,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 193,
+      "ProductId": 66,
+      "StatusId": 3,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 194,
+      "ProductId": 66,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 195,
+      "ProductId": 66,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 196,
+      "ProductId": 67,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 197,
+      "ProductId": 67,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 198,
+      "ProductId": 67,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 199,
+      "ProductId": 68,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 200,
+      "ProductId": 68,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 201,
+      "ProductId": 68,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 202,
+      "ProductId": 69,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 203,
+      "ProductId": 69,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 204,
+      "ProductId": 69,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 205,
+      "ProductId": 70,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 206,
+      "ProductId": 70,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 207,
+      "ProductId": 70,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 208,
+      "ProductId": 71,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 209,
+      "ProductId": 71,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 210,
+      "ProductId": 71,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 211,
+      "ProductId": 72,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 212,
+      "ProductId": 72,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 213,
+      "ProductId": 72,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 214,
+      "ProductId": 73,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 215,
+      "ProductId": 73,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 216,
+      "ProductId": 73,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 217,
+      "ProductId": 74,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 218,
+      "ProductId": 74,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 219,
+      "ProductId": 74,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 220,
+      "ProductId": 75,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 221,
+      "ProductId": 75,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 222,
+      "ProductId": 75,
+      "StatusId": 3,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 223,
+      "ProductId": 76,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 224,
+      "ProductId": 76,
+      "StatusId": 3,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 225,
+      "ProductId": 76,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 226,
+      "ProductId": 77,
+      "StatusId": 3,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 227,
+      "ProductId": 77,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 228,
+      "ProductId": 77,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 229,
+      "ProductId": 78,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 230,
+      "ProductId": 78,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 231,
+      "ProductId": 78,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 232,
+      "ProductId": 79,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 233,
+      "ProductId": 79,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 234,
+      "ProductId": 79,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 235,
+      "ProductId": 80,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 236,
+      "ProductId": 80,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 237,
+      "ProductId": 80,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 238,
+      "ProductId": 81,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 239,
+      "ProductId": 81,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 240,
+      "ProductId": 81,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 241,
+      "ProductId": 82,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 242,
+      "ProductId": 82,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 243,
+      "ProductId": 82,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 244,
+      "ProductId": 83,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 245,
+      "ProductId": 83,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 246,
+      "ProductId": 83,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 247,
+      "ProductId": 84,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 248,
+      "ProductId": 84,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 249,
+      "ProductId": 84,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 250,
+      "ProductId": 85,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 251,
+      "ProductId": 85,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 252,
+      "ProductId": 85,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 253,
+      "ProductId": 86,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 254,
+      "ProductId": 86,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 255,
+      "ProductId": 86,
+      "StatusId": 3,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 256,
+      "ProductId": 87,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 257,
+      "ProductId": 87,
+      "StatusId": 3,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 258,
+      "ProductId": 87,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 259,
+      "ProductId": 88,
+      "StatusId": 3,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 260,
+      "ProductId": 88,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 261,
+      "ProductId": 88,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 262,
+      "ProductId": 89,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 263,
+      "ProductId": 89,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 264,
+      "ProductId": 89,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 265,
+      "ProductId": 90,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 266,
+      "ProductId": 90,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 267,
+      "ProductId": 90,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 268,
+      "ProductId": 91,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 269,
+      "ProductId": 91,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 270,
+      "ProductId": 91,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 271,
+      "ProductId": 92,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 272,
+      "ProductId": 92,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 273,
+      "ProductId": 92,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 274,
+      "ProductId": 93,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 275,
+      "ProductId": 93,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 276,
+      "ProductId": 93,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 277,
+      "ProductId": 94,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 278,
+      "ProductId": 94,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 279,
+      "ProductId": 94,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 280,
+      "ProductId": 95,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 281,
+      "ProductId": 95,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 282,
+      "ProductId": 95,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 283,
+      "ProductId": 96,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 284,
+      "ProductId": 96,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 285,
+      "ProductId": 96,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 286,
+      "ProductId": 97,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 287,
+      "ProductId": 97,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 288,
+      "ProductId": 97,
+      "StatusId": 3,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 289,
+      "ProductId": 98,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 290,
+      "ProductId": 98,
+      "StatusId": 3,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 291,
+      "ProductId": 98,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 292,
+      "ProductId": 99,
+      "StatusId": 3,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 293,
+      "ProductId": 99,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 294,
+      "ProductId": 99,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 295,
+      "ProductId": 100,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 296,
+      "ProductId": 100,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 297,
+      "ProductId": 100,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 298,
+      "ProductId": 101,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 299,
+      "ProductId": 101,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 300,
+      "ProductId": 101,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 301,
+      "ProductId": 102,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 302,
+      "ProductId": 102,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 303,
+      "ProductId": 102,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 304,
+      "ProductId": 103,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 305,
+      "ProductId": 103,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 306,
+      "ProductId": 103,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 307,
+      "ProductId": 104,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 308,
+      "ProductId": 104,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 309,
+      "ProductId": 104,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 310,
+      "ProductId": 105,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 311,
+      "ProductId": 105,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 312,
+      "ProductId": 105,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 313,
+      "ProductId": 106,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 314,
+      "ProductId": 106,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 315,
+      "ProductId": 106,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 316,
+      "ProductId": 107,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 317,
+      "ProductId": 107,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 318,
+      "ProductId": 107,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 319,
+      "ProductId": 108,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 320,
+      "ProductId": 108,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 321,
+      "ProductId": 108,
+      "StatusId": 3,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 322,
+      "ProductId": 109,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 323,
+      "ProductId": 109,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 324,
+      "ProductId": 109,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 325,
+      "ProductId": 110,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 326,
+      "ProductId": 110,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 327,
+      "ProductId": 110,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 328,
+      "ProductId": 111,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 329,
+      "ProductId": 111,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 330,
+      "ProductId": 111,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 331,
+      "ProductId": 112,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 332,
+      "ProductId": 112,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 333,
+      "ProductId": 112,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 334,
+      "ProductId": 113,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 335,
+      "ProductId": 113,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 336,
+      "ProductId": 113,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 337,
+      "ProductId": 114,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 338,
+      "ProductId": 114,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 339,
+      "ProductId": 114,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 340,
+      "ProductId": 115,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
+    },
+    {
+      "ID": 341,
+      "ProductId": 115,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 342,
+      "ProductId": 115,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 343,
+      "ProductId": 116,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "malltaShopper",
+      "Date": "2023-12-14",
+      "Text": "Good value for the price. Kids loved it immediately.",
+      "Rating": 4
+    },
+    {
+      "ID": 344,
+      "ProductId": 116,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "karenM",
+      "Date": "2023-10-21",
+      "Text": "Fast checkout and product arrived in perfect condition.",
+      "Rating": 5
+    },
+    {
+      "ID": 345,
+      "ProductId": 116,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "boardgamefan",
+      "Date": "2024-02-12",
+      "Text": "Great quality and exactly as described. Would buy again.",
+      "Rating": 5
+    },
+    {
+      "ID": 346,
+      "ProductId": 117,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "retrogeek",
+      "Date": "2023-11-09",
+      "Text": "Looks great in person. Slightly smaller than expected.",
+      "Rating": 4
+    },
+    {
+      "ID": 347,
+      "ProductId": 117,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "puzzlelover",
+      "Date": "2023-09-07",
+      "Text": "Fun item and decent build. Would recommend.",
+      "Rating": 4
+    },
+    {
+      "ID": 348,
+      "ProductId": 117,
+      "StatusId": 1,
+      "Deleted": 0,
+      "User": "toycollector",
+      "Date": "2024-01-28",
+      "Text": "Nice item, packaging was solid and delivery was quick.",
+      "Rating": 4
     }
   ]
 }

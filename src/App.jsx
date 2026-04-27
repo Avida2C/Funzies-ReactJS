@@ -5,18 +5,22 @@ import { THEME_STORAGE_KEY, ThemeContext, getInitialThemeMode } from "./theme/th
 import { WISHLIST_STORAGE_KEY, WishlistContext, getInitialWishlistIds } from "./lib/wishlistContext";
 import { CART_STORAGE_KEY, CartContext, getInitialCartItemIds } from "./lib/cartContext";
 import {
+  ADMIN_AUTH_STORAGE_KEY,
   AUTH_PROFILE_STORAGE_KEY,
   AUTH_STORAGE_KEY,
   AuthContext,
   getInitialAuthProfile,
+  getInitialIsAdminAuthenticated,
   getInitialIsAuthenticated,
+  useAuth,
 } from "./lib/authContext";
+import { validateAdminCredentials } from "./lib/adminAuth";
 import HomePage from "./pages/HomePage";
 import ShopPage from "./pages/ShopPage";
 import ProductPage from "./pages/ProductPage";
 import ProductReviewsPage from "./pages/ProductReviewsPage";
 import WishlistPage from "./pages/WishlistPage";
-import CheckoutLikePage from "./pages/CheckoutLikePage";
+import CheckoutPage from "./pages/CheckoutPage";
 import ViewCartPage from "./pages/ViewCartPage";
 import LegalPage from "./pages/LegalPage";
 import HelpCenterPage from "./pages/HelpCenterPage";
@@ -42,6 +46,27 @@ import AdminProductsPage from "./pages/admin/AdminProductsPage";
 import AdminOrdersPage from "./pages/admin/AdminOrdersPage";
 import AdminUsersPage from "./pages/admin/AdminUsersPage";
 import AdminSettingsPage from "./pages/admin/AdminSettingsPage";
+import AdminReviewsPage from "./pages/admin/AdminReviewsPage";
+import AdminWebsiteContentPage from "./pages/admin/AdminWebsiteContentPage";
+import AdminCareersPage from "./pages/admin/AdminCareersPage";
+import AdminLoginPage from "./pages/admin/AdminLoginPage";
+import AdminCatalogPage from "./pages/admin/AdminCatalogPage";
+
+function AdminLoginPageGate() {
+  const { isAdminAuthenticated } = useAuth();
+  if (isAdminAuthenticated) {
+    return <Navigate to="/admin" replace />;
+  }
+  return <AdminLoginPage />;
+}
+
+function RequireAdmin({ children }) {
+  const { isAdminAuthenticated } = useAuth();
+  if (!isAdminAuthenticated) {
+    return <Navigate to="/admin/login" replace />;
+  }
+  return children;
+}
 
 function App() {
   const { pathname } = useLocation();
@@ -50,6 +75,7 @@ function App() {
   const [cartItemIds, setCartItemIds] = useState(getInitialCartItemIds);
   const [isAuthenticated, setIsAuthenticated] = useState(getInitialIsAuthenticated);
   const [authProfile, setAuthProfile] = useState(getInitialAuthProfile);
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(getInitialIsAdminAuthenticated);
 
   useEffect(() => {
     window.localStorage.setItem(THEME_STORAGE_KEY, themeMode);
@@ -70,6 +96,10 @@ function App() {
   useEffect(() => {
     window.localStorage.setItem(AUTH_PROFILE_STORAGE_KEY, JSON.stringify(authProfile));
   }, [authProfile]);
+
+  useEffect(() => {
+    window.localStorage.setItem(ADMIN_AUTH_STORAGE_KEY, isAdminAuthenticated ? "signed-in" : "guest");
+  }, [isAdminAuthenticated]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -148,13 +178,16 @@ function App() {
   const authContextValue = useMemo(
     () => ({
       isAuthenticated,
+      isAdminAuthenticated,
       displayName: isAuthenticated ? authProfile.displayName : "Guest",
       email: isAuthenticated ? authProfile.email : "",
       signOut: () => {
         window.localStorage.removeItem(WISHLIST_STORAGE_KEY);
         window.localStorage.removeItem(CART_STORAGE_KEY);
         window.localStorage.removeItem(THEME_STORAGE_KEY);
+        window.localStorage.removeItem(ADMIN_AUTH_STORAGE_KEY);
         setIsAuthenticated(false);
+        setIsAdminAuthenticated(false);
         setWishlistProductIds(getInitialWishlistIds);
         setCartItemIds(getInitialCartItemIds);
         setThemeMode(getInitialThemeMode);
@@ -166,8 +199,18 @@ function App() {
         });
         setIsAuthenticated(true);
       },
+      signInAdmin: ({ email, password } = {}) => {
+        if (validateAdminCredentials(email, password)) {
+          setIsAdminAuthenticated(true);
+          return { ok: true };
+        }
+        return { ok: false, message: "Invalid email or password." };
+      },
+      signOutAdmin: () => {
+        setIsAdminAuthenticated(false);
+      },
     }),
-    [authProfile, isAuthenticated],
+    [authProfile, isAuthenticated, isAdminAuthenticated],
   );
 
   return (
@@ -182,7 +225,7 @@ function App() {
             <Route path="/product-page/:productId" element={<ProductPage />} />
             <Route path="/product-page/:productId/reviews" element={<ProductReviewsPage />} />
             <Route path="/viewcart" element={<ViewCartPage />} />
-            <Route path="/checkout" element={<CheckoutLikePage title="Checkout" description="Complete your order details and confirm purchase." actionText="Confirm order" />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
             <Route
               path="/account"
               element={isAuthenticated ? <AccountPage /> : <Navigate to="/login" replace />}
@@ -207,11 +250,16 @@ function App() {
             <Route path="/purchase-protection" element={<PurchaseProtectionPage />} />
             <Route path="/privacy" element={<PolicyCenterPage />} />
             <Route path="/terms" element={<PolicyCenterPage />} />
-            <Route path="/admin" element={<AdminDashboardPage />} />
-            <Route path="/admin/products" element={<AdminProductsPage />} />
-            <Route path="/admin/orders" element={<AdminOrdersPage />} />
-            <Route path="/admin/users" element={<AdminUsersPage />} />
-            <Route path="/admin/settings" element={<AdminSettingsPage />} />
+            <Route path="/admin/login" element={<AdminLoginPageGate />} />
+            <Route path="/admin" element={<RequireAdmin><AdminDashboardPage /></RequireAdmin>} />
+            <Route path="/admin/products" element={<RequireAdmin><AdminProductsPage /></RequireAdmin>} />
+            <Route path="/admin/catalog" element={<RequireAdmin><AdminCatalogPage /></RequireAdmin>} />
+            <Route path="/admin/orders" element={<RequireAdmin><AdminOrdersPage /></RequireAdmin>} />
+            <Route path="/admin/users" element={<RequireAdmin><AdminUsersPage /></RequireAdmin>} />
+            <Route path="/admin/reviews" element={<RequireAdmin><AdminReviewsPage /></RequireAdmin>} />
+            <Route path="/admin/website-content" element={<RequireAdmin><AdminWebsiteContentPage /></RequireAdmin>} />
+            <Route path="/admin/careers" element={<RequireAdmin><AdminCareersPage /></RequireAdmin>} />
+            <Route path="/admin/settings" element={<RequireAdmin><AdminSettingsPage /></RequireAdmin>} />
             <Route path="/404" element={<NotFoundPage />} />
             <Route path="*" element={<NotFoundPage />} />
             </Routes>
