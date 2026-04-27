@@ -92,6 +92,23 @@ function App() {
   }, [cartItemIds, isAuthenticated]);
 
   useEffect(() => {
+    try {
+      window.localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(Boolean(isAuthenticated)));
+      window.localStorage.setItem(AUTH_PROFILE_STORAGE_KEY, JSON.stringify(authProfile));
+    } catch {
+      // ignore
+    }
+  }, [authProfile, isAuthenticated]);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(ADMIN_AUTH_STORAGE_KEY, JSON.stringify(Boolean(isAdminAuthenticated)));
+    } catch {
+      // ignore
+    }
+  }, [isAdminAuthenticated]);
+
+  useEffect(() => {
     // Persist guest cart with a 2-hour expiry (clears after closing the site for 2h).
     if (isAuthenticated) return;
     if (cartItemIds.length === 0) {
@@ -199,11 +216,18 @@ function App() {
         setThemeMode(getInitialThemeMode);
       },
       signIn: ({ displayName, email } = {}) => {
-        setAuthProfile({
+        const nextProfile = {
           displayName: typeof displayName === "string" ? displayName.trim() : "",
           email: typeof email === "string" ? email.trim() : "",
-        });
+        };
+        setAuthProfile(nextProfile);
         setIsAuthenticated(true);
+        try {
+          window.localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(true));
+          window.localStorage.setItem(AUTH_PROFILE_STORAGE_KEY, JSON.stringify(nextProfile));
+        } catch {
+          // ignore
+        }
         // Restore persisted cart for signed-in sessions (same device/browser).
         window.localStorage.removeItem(GUEST_CART_STORAGE_KEY);
         setCartItemIds(getPersistedCartItemIds);
@@ -211,12 +235,22 @@ function App() {
       signInAdmin: ({ email, password } = {}) => {
         if (validateAdminCredentials(email, password)) {
           setIsAdminAuthenticated(true);
+          try {
+            window.localStorage.setItem(ADMIN_AUTH_STORAGE_KEY, JSON.stringify(true));
+          } catch {
+            // ignore
+          }
           return { ok: true };
         }
         return { ok: false, message: "Invalid email or password." };
       },
       signOutAdmin: () => {
         setIsAdminAuthenticated(false);
+        try {
+          window.localStorage.setItem(ADMIN_AUTH_STORAGE_KEY, JSON.stringify(false));
+        } catch {
+          // ignore
+        }
       },
     }),
     [authProfile, isAuthenticated, isAdminAuthenticated],

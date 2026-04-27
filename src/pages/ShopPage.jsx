@@ -78,11 +78,16 @@ function ShopProductCard({ product, colors }) {
         <div className="flex items-center gap-2">
           <button
             type="button"
-            className="hover-accent h-7 flex-1 rounded px-2 text-xs font-semibold text-white"
+            className="hover-accent h-8 flex-1 rounded px-2 text-xs font-semibold text-white sm:h-9 sm:px-3 sm:text-sm"
             style={{ backgroundColor: colors.success }}
             onClick={() => addToCart(product.ID)}
           >
-            <span className="inline-flex items-center gap-1"><FiShoppingCart size={12} />Add to Cart</span>
+            <span className="inline-flex items-center justify-center gap-1 whitespace-nowrap">
+              <FiShoppingCart size={12} className="sm:hidden" />
+              <FiShoppingCart size={14} className="hidden sm:inline" />
+              <span className="sm:hidden">Add</span>
+              <span className="hidden sm:inline">Add to Cart</span>
+            </span>
           </button>
           <ThemedButton
             type="button"

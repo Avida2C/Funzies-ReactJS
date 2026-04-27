@@ -128,8 +128,7 @@ export default function LoginPage({ initialMode = "login" }) {
   return (
     <AppLayout title={copy.title} description="Access your account." showPageHeader={false} contentClassName="">
       <section className="rounded-box border p-5 shadow md:p-8" style={panelStyles.outer}>
-        <div className="grid gap-6 xl:grid-cols-[minmax(0,500px)_360px] xl:justify-between">
-          <div className={`space-y-4 ${isForgotMode ? "max-w-[600px]" : "max-w-[500px]"}`}>
+        <div className={`w-full space-y-4 ${isForgotMode ? "max-w-[600px]" : "max-w-[500px]"}`}>
             <h1 style={headingStyle}>{copy.title}</h1>
 
             {activeMode === "login" && (
@@ -240,6 +239,32 @@ export default function LoginPage({ initialMode = "login" }) {
               {copy.actionLabel}
             </button>
 
+            {activeMode === "forgot" ? null : activeMode === "login" ? (
+              <p className="text-right" style={{ ...textStyles.bodySm, color: colors.text, textAlign: "right" }}>
+                Don&apos;t have an account?{" "}
+                <button
+                  type="button"
+                  onClick={() => goToMode("signup")}
+                  className="underline"
+                  style={{ color: colors.primary }}
+                >
+                  Sign Up
+                </button>
+              </p>
+            ) : (
+              <p className="text-right" style={{ ...textStyles.bodySm, color: colors.text, textAlign: "right" }}>
+                Already have an account?{" "}
+                <button
+                  type="button"
+                  onClick={() => goToMode("login")}
+                  className="underline"
+                  style={{ color: colors.primary }}
+                >
+                  Log In
+                </button>
+              </p>
+            )}
+
             {copy.showSocial && (
               <div className="space-y-3 pt-1">
                 <div className="flex items-center gap-2">
@@ -247,7 +272,7 @@ export default function LoginPage({ initialMode = "login" }) {
                   <span className="whitespace-nowrap text-xs" style={panelStyles.helper}>or continue with</span>
                   <div className="h-px w-full" style={{ backgroundColor: colors.border }} />
                 </div>
-                <div className="grid gap-3 sm:grid-cols-4">
+                <div className="grid grid-cols-2 gap-3">
                   {SOCIAL_PROVIDERS.map((provider) => (
                     <button
                       key={provider.name}
@@ -262,29 +287,6 @@ export default function LoginPage({ initialMode = "login" }) {
                 </div>
               </div>
             )}
-          </div>
-
-          <aside className="h-fit space-y-4 rounded-box p-4 shadow" style={panelStyles.info}>
-            <div className="space-y-2 p-2" style={{ ...textStyles.body, ...panelStyles.helper }}>
-              <p>Are you ready to explore the exciting world of collectibles?</p>
-              <p>Whether you&apos;re looking to find unique items or add to your existing collection, just let us know what you&apos;re interested in.</p>
-              <p>We&apos;ll guide you through this enjoyable experience, asking only for the essentials to enhance your collectibles journey.</p>
-            </div>
-            <button
-              type="button"
-              onClick={() => {
-                if (activeMode === "signup" || activeMode === "forgot") {
-                  goToMode("login");
-                  return;
-                }
-                goToMode("signup");
-              }}
-              className="min-h-[45px] w-full rounded px-4 py-2 text-base text-white"
-              style={{ backgroundColor: colors.primary, ...textStyles.sectionTitle, fontWeight: 400 }}
-            >
-              {copy.sideActionLabel}
-            </button>
-          </aside>
         </div>
       </section>
     </AppLayout>

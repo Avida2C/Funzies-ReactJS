@@ -57,9 +57,11 @@ function ShopProductCard({ product, colors, onAddToCart, onToggleWishlist, wishl
             className="h-10 flex-1"
             onClick={() => onAddToCart(product.ID)}
           >
-            <span className="inline-flex items-center gap-1">
-              <FiShoppingCart size={15} />
-              Add to Cart
+            <span className="inline-flex items-center justify-center gap-1 whitespace-nowrap">
+              <FiShoppingCart size={14} className="sm:hidden" />
+              <FiShoppingCart size={15} className="hidden sm:inline" />
+              <span className="sm:hidden">Add</span>
+              <span className="hidden sm:inline">Add to Cart</span>
             </span>
           </ThemedButton>
           <ThemedButton

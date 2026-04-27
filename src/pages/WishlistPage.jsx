@@ -29,13 +29,17 @@ function WishlistProductCard({ product, colors, onToggleWishlist }) {
         <div className="flex items-center gap-2">
           <button
             type="button"
-            className="hover-accent h-9 flex-1 rounded px-3 text-sm font-semibold text-white"
+            className="hover-accent h-9 flex-1 rounded px-2 text-xs font-semibold text-white sm:px-3 sm:text-sm"
             style={{ backgroundColor: colors.success }}
             onClick={() => addToCart(product.ID)}
           >
             <span className="inline-flex items-center gap-1">
-              <FiShoppingCart size={14} />
-              Add to Cart
+              <FiShoppingCart size={12} className="sm:hidden" />
+              <FiShoppingCart size={14} className="hidden sm:inline" />
+              <span className="whitespace-nowrap">
+                <span className="sm:hidden">Add</span>
+                <span className="hidden sm:inline">Add to Cart</span>
+              </span>
             </span>
           </button>
           <button

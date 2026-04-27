@@ -15,7 +15,7 @@ export default defineConfig({
     },
     proxy: {
       "/api": {
-        target: "https://funziesapi.avida2c.me",
+        target: "http://localhost:3007",
         changeOrigin: true,
       },
     },

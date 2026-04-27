@@ -6,19 +6,38 @@ export const ADMIN_AUTH_STORAGE_KEY = "funzies-admin-auth";
 export const AuthContext = createContext(null);
 
 export function getInitialIsAuthenticated() {
-  // Always start logged out.
-  // Auth is demo-only and should not persist across sessions/devices.
-  return false;
+  try {
+    const raw = window.localStorage.getItem(AUTH_STORAGE_KEY);
+    if (raw == null) return false;
+    const parsed = JSON.parse(raw);
+    return Boolean(parsed);
+  } catch {
+    return false;
+  }
 }
 
 export function getInitialAuthProfile() {
-  // Auth is explicit: no default identity, no persisted profile.
-  return { displayName: "", email: "" };
+  try {
+    const raw = window.localStorage.getItem(AUTH_PROFILE_STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : null;
+    return {
+      displayName: typeof parsed?.displayName === "string" ? parsed.displayName : "",
+      email: typeof parsed?.email === "string" ? parsed.email : "",
+    };
+  } catch {
+    return { displayName: "", email: "" };
+  }
 }
 
 export function getInitialIsAdminAuthenticated() {
-  // Always start logged out.
-  return false;
+  try {
+    const raw = window.localStorage.getItem(ADMIN_AUTH_STORAGE_KEY);
+    if (raw == null) return false;
+    const parsed = JSON.parse(raw);
+    return Boolean(parsed);
+  } catch {
+    return false;
+  }
 }
 
 export function useAuth() {
