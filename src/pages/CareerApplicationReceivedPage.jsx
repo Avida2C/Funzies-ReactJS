@@ -1,11 +1,12 @@
 import { Link, useParams } from "react-router-dom";
 import AppLayout from "../components/AppLayout";
 import ThemedSurface from "../components/ThemedSurface";
-import { getRoleById } from "../data/careersData";
+import { useCareersRoles } from "../hooks/useCareersRoles";
 
 export default function CareerApplicationReceivedPage() {
   const { roleId } = useParams();
-  const role = getRoleById(roleId);
+  const { roles } = useCareersRoles();
+  const role = roles.find((r) => r.id === roleId);
 
   if (!role) {
     return (

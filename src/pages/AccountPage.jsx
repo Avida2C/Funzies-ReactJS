@@ -1,22 +1,33 @@
-import { useMemo, useState } from "react";
-import { FiEdit2, FiEyeOff, FiPlus, FiSearch, FiTrash2, FiUser } from "react-icons/fi";
-import { BsFillStarFill } from "react-icons/bs";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { FiUser } from "react-icons/fi";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { City, Country } from "country-state-city";
 import AppLayout from "../components/AppLayout";
+import ThemedButton from "../components/ThemedButton";
+import ThemedCheckbox from "../components/ThemedCheckbox";
+import ThemedTextBox from "../components/ThemedTextBox";
 import { textStyles } from "../theme/typography";
 import { useTheme } from "../theme/themeContext";
-import { useAuth } from "../lib/authContext";
+import { getInitialIsAuthenticated, useAuth } from "../lib/authContext";
+import { allAddresses, allOrders, allUsers, computeOrderSubtotalEur, formatEurValue, orderStatusById } from "../lib/funziesDataset";
+import { createRow, deleteRow, listTable, updateRow } from "../lib/crudApi";
+import { InfoCard, ReadOnlyField, SectionHeader } from "./account/AccountSectionPrimitives";
+import ProfileOverviewSection from "./account/sections/ProfileOverviewSection";
+import AccountSettingsSection from "./account/sections/AccountSettingsSection";
+import PreferencesTabSection from "./account/sections/PreferencesTabSection";
+import AddressesSection from "./account/sections/AddressesSection";
+import OrdersReturnsSection from "./account/sections/OrdersReturnsSection";
 
+/** Slugs for `?tab=` — shareable deep links, e.g. /account?tab=addresses */
 const ACCOUNT_TABS = [
-  "Profile Overview",
-  "Account Settings",
-  "Security & Privacy",
-  "Communication Settings",
-  "Addresses",
-  "Payment Methods",
-  "Orders & Returns",
+  { id: "profile", label: "Profile Overview" },
+  { id: "settings", label: "Account Settings" },
+  { id: "preferences", label: "Preferences" },
+  { id: "addresses", label: "Addresses" },
+  { id: "orders", label: "Orders & Returns" },
 ];
+
+const DEFAULT_ACCOUNT_TAB = "settings";
 
 const COMMUNICATION_GROUPS = [
   { title: "Order Updates", options: ["Email", "SMS", "Push Notifications"] },
@@ -43,117 +54,153 @@ const LINKED_ACCOUNT_ROWS = [
   { title: "Download Account Data", description: "GDPR/CCPA" },
 ];
 
-const ORDERS = [
-  {
-    id: "#5563111",
-    date: "Sep 17, 2025",
-    items: "1 Items",
-    total: "$10.99",
-    status: "Processing",
-    statusColor: "#facc15",
-    actions: ["View Order Details", "Edit Order", "Cancel Order"],
-    thumbnailUrls: ["https://www.figma.com/api/mcp/asset/2453e7dc-e615-405e-988f-1be79c7cb75d"],
-  },
-  {
-    id: "#223111",
-    date: "Dec 29, 2023",
-    items: "3 Items",
-    total: "$14.99",
-    status: "Cancelled",
-    statusColor: "#ff4e4e",
-    actions: ["View Order Details"],
-    thumbnailUrls: [
-      "https://www.figma.com/api/mcp/asset/2453e7dc-e615-405e-988f-1be79c7cb75d",
-      "https://www.figma.com/api/mcp/asset/b8d90f1a-82ab-45e7-9f22-9131532f8cb3",
-      "https://www.figma.com/api/mcp/asset/b8d90f1a-82ab-45e7-9f22-9131532f8cb3",
-    ],
-  },
-  {
-    id: "#220111",
-    date: "Jan 04, 2023",
-    items: "5 Items",
-    total: "$100.99",
-    status: "Complete",
-    statusColor: "#16a34a",
-    actions: ["View Order Details"],
-    thumbnailUrls: [
-      "https://www.figma.com/api/mcp/asset/2453e7dc-e615-405e-988f-1be79c7cb75d",
-      "https://www.figma.com/api/mcp/asset/b8d90f1a-82ab-45e7-9f22-9131532f8cb3",
-      "https://www.figma.com/api/mcp/asset/b8d90f1a-82ab-45e7-9f22-9131532f8cb3",
-      "https://www.figma.com/api/mcp/asset/b8d90f1a-82ab-45e7-9f22-9131532f8cb3",
-      "https://www.figma.com/api/mcp/asset/b8d90f1a-82ab-45e7-9f22-9131532f8cb3",
-    ],
-  },
-  {
-    id: "#113111",
-    date: "Dec 29, 2022",
-    items: "4 Items",
-    total: "$33.99",
-    status: "Complete",
-    statusColor: "#16a34a",
-    actions: ["View Order Details"],
-    thumbnailUrls: [
-      "https://www.figma.com/api/mcp/asset/2453e7dc-e615-405e-988f-1be79c7cb75d",
-      "https://www.figma.com/api/mcp/asset/2453e7dc-e615-405e-988f-1be79c7cb75d",
-      "https://www.figma.com/api/mcp/asset/b8d90f1a-82ab-45e7-9f22-9131532f8cb3",
-      "https://www.figma.com/api/mcp/asset/b8d90f1a-82ab-45e7-9f22-9131532f8cb3",
-    ],
-  },
-];
-
 const ORDER_FILTERS = ["All Orders", "Processing", "Completed", "Returns"];
-
-function ReadOnlyField({ label, value, rightIcon, className = "" }) {
-  const { colors } = useTheme();
-  return (
-    <div className={`space-y-2 ${className}`.trim()}>
-      <p style={{ ...textStyles.body, color: colors.text }}>{label}</p>
-      <div className="flex min-h-10 items-center justify-between border px-3 py-2" style={{ borderColor: colors.primary, backgroundColor: colors.white }}>
-        <span style={{ ...textStyles.body, color: "#1f2a36" }}>{value}</span>
-        {rightIcon}
-      </div>
-    </div>
-  );
-}
-
-function SectionHeader({ children }) {
-  const { colors } = useTheme();
-  return (
-    <h2 style={{ ...textStyles.sectionTitle, color: colors.primary }}>
-      {children}
-    </h2>
-  );
-}
-
-function ActionLink({ children, icon = null, onClick = undefined }) {
-  const { colors } = useTheme();
-  return (
-    <button type="button" onClick={onClick} className="inline-flex items-center gap-2" style={{ ...textStyles.body, color: colors.primary }}>
-      {icon}
-      {children}
-    </button>
-  );
-}
-
-function InfoCard({ children, className = "" }) {
-  const { colors } = useTheme();
-  return (
-    <div
-      className={`rounded-box p-4 shadow ${className}`.trim()}
-      style={{ backgroundColor: colors.background }}
-    >
-      {children}
-    </div>
-  );
-}
 
 export default function AccountPage() {
   const { colors, mode } = useTheme();
-  const mutedText = colors.muted ?? (mode === "dark" ? "#94a3b8" : "#8896b2");
-  const { displayName, email, signOut } = useAuth();
+  const mutedText = colors.muted ?? (mode === "dark" ? "#94a3b8" : "#475569");
+  const accentText = colors.primary;
+  const { displayName, email, signOut, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  const isDemoAccount = email.trim().toLowerCase() === "demo@funzies.com" || displayName === "Demo Account";
-  const [activeTab, setActiveTab] = useState("Account Settings");
+  const [searchParams] = useSearchParams();
+  const prefsStorageKey = useMemo(() => `funzies:account:prefs:${email.trim().toLowerCase() || "guest"}`, [email]);
+  const [prefLanguage, setPrefLanguage] = useState(() => {
+    try {
+      const raw = window.localStorage.getItem(prefsStorageKey);
+      const j = raw ? JSON.parse(raw) : null;
+      return typeof j?.language === "string" && j.language.trim() ? j.language : "English";
+    } catch {
+      return "English";
+    }
+  });
+  const [prefTimeZone, setPrefTimeZone] = useState(() => {
+    try {
+      const raw = window.localStorage.getItem(prefsStorageKey);
+      const j = raw ? JSON.parse(raw) : null;
+      return typeof j?.timeZone === "string" && j.timeZone.trim() ? j.timeZone : "GMT+2";
+    } catch {
+      return "GMT+2";
+    }
+  });
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(prefsStorageKey, JSON.stringify({ language: prefLanguage, timeZone: prefTimeZone }));
+    } catch {
+      // ignore
+    }
+  }, [prefsStorageKey, prefLanguage, prefTimeZone]);
+  const userRow = useMemo(() => {
+    const normalized = email.trim().toLowerCase();
+    if (!normalized) {
+      return null;
+    }
+    return allUsers.find((u) => String(u.Email ?? "").trim().toLowerCase() === normalized) ?? null;
+  }, [email]);
+
+  // Demo data note: the bundled dataset has orders/addresses tied to user #2, but may not include that user row.
+  // For authenticated sessions without a matching user row, fall back to user #2 so the account UX is populated.
+  const signedIn = typeof isAuthenticated === "boolean" ? isAuthenticated : getInitialIsAuthenticated();
+  const normalizedEmail = email.trim().toLowerCase();
+  const isDemoAccountEmail = normalizedEmail === "demo@funzies.com";
+  const isDemoAccountProfile = String(displayName ?? "")
+    .trim()
+    .toLowerCase()
+    .includes("demo");
+  const isDemoAccount = isDemoAccountEmail || isDemoAccountProfile;
+  const userId = userRow ? Number(userRow.ID) : signedIn ? 1 : null;
+
+  const [addressRows, setAddressRows] = useState(/** @type {any[]} */ ([]));
+  const [addressLoading, setAddressLoading] = useState(false);
+  const [addressError, setAddressError] = useState(/** @type {string | null} */ (null));
+
+  const refreshAddresses = async () => {
+    if (!userId) {
+      setAddressRows([]);
+      return;
+    }
+    setAddressLoading(true);
+    setAddressError(null);
+    try {
+      const r = await listTable("address", { all: 1 });
+      const all = Array.isArray(r.data) ? r.data : [];
+      setAddressRows(all.filter((a) => Number(a.User) === userId && Number(a.Deleted ?? 0) === 0));
+    } catch (e) {
+      // Fallback to bundled dataset if API isn't running.
+      setAddressError(e instanceof Error ? e.message : "Could not load addresses");
+      setAddressRows(allAddresses.filter((a) => Number(a.User) === userId && Number(a.Deleted ?? 0) === 0));
+    } finally {
+      setAddressLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    refreshAddresses();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId]);
+
+  useEffect(() => {
+    refreshOrders();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId]);
+
+  const userAddresses = useMemo(
+    () =>
+      [...addressRows].sort(
+        (a, b) => (Number(b.Def) || 0) - (Number(a.Def) || 0) || (Number(a.ID) || 0) - (Number(b.ID) || 0),
+      ),
+    [addressRows],
+  );
+
+  const defaultAddress = userAddresses.find((a) => Number(a.Def) === 1) ?? userAddresses[0] ?? null;
+
+  const userOrders = useMemo(() => {
+    if (!userId) {
+      return [];
+    }
+    return allOrders
+      .filter((o) => Number(o.user) === userId && Number(o.deleted ?? 0) === 0)
+      .slice()
+      .sort((a, b) => (Number(b.ID) || 0) - (Number(a.ID) || 0));
+  }, [userId]);
+
+  const [orderRows, setOrderRows] = useState(/** @type {any[]} */ ([]));
+  const [orderLoading, setOrderLoading] = useState(false);
+  const [orderError, setOrderError] = useState(/** @type {string | null} */ (null));
+
+  const refreshOrders = async () => {
+    if (!userId) {
+      setOrderRows([]);
+      return;
+    }
+    setOrderLoading(true);
+    setOrderError(null);
+    try {
+      const r = await listTable("orders", { all: 1 });
+      const all = Array.isArray(r.data) ? r.data : [];
+      const mine = all
+        .filter((o) => Number(o.user) === userId && Number(o.deleted ?? 0) === 0)
+        .slice()
+        .sort((a, b) => (Number(b.ID) || 0) - (Number(a.ID) || 0));
+      // Demo UX: if API is running but has no rows yet, fall back to the bundled dataset.
+      setOrderRows(mine.length ? mine : userOrders);
+    } catch (e) {
+      setOrderError(e instanceof Error ? e.message : "Could not load orders");
+      setOrderRows(userOrders);
+    } finally {
+      setOrderLoading(false);
+    }
+  };
+
+  const activeTabId = useMemo(() => {
+    const raw = searchParams.get("tab");
+    if (ACCOUNT_TABS.some((t) => t.id === raw)) {
+      return raw;
+    }
+    return DEFAULT_ACCOUNT_TAB;
+  }, [searchParams]);
+
+  const activeTabLabel = ACCOUNT_TABS.find((t) => t.id === activeTabId)?.label ?? "Account";
   const [orderFilter, setOrderFilter] = useState("All Orders");
   const [communication, setCommunication] = useState({
     "Order Updates-Email": false,
@@ -175,51 +222,86 @@ export default function AccountPage() {
     LINKED_ACCOUNT_ROWS.reduce((acc, row) => ({ ...acc, [row.title]: true }), {}),
   );
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+  const [addressModalMode, setAddressModalMode] = useState(/** @type {"create" | "edit"} */ ("create"));
+  const [editingAddress, setEditingAddress] = useState(/** @type {any | null} */ (null));
   const [addressForm, setAddressForm] = useState({
     fullName: "",
     streetAddress1: "",
     streetAddress2: "",
-    countryCode: "US",
+    countryCode: "MT",
     city: "",
     postCode: "",
   });
+  const [addressIsDefault, setAddressIsDefault] = useState(true);
+  const [addressSaving, setAddressSaving] = useState(false);
+  const [addressFormError, setAddressFormError] = useState(/** @type {string | null} */ (null));
 
-  const profile = isDemoAccount
-    ? {
-      firstName: "Demo",
-      lastName: "Account",
-      fullName: "Demo Account",
-      emailMasked: "demo@funzies.com",
-      joinedOn: "2026-04-26",
-      shippingAddress: "Demo Account\n1001 Collector Ave.\nDemo City,\nCalifornia 90001",
-      otherAddress: "Demo Account\n202 Sample Street\nTestville,\nCalifornia 90002",
-      phone: "001 *** *** 9999",
-    }
-    : {
-      firstName: "Nadine",
-      lastName: "Customer",
-      fullName: "Nadine Customer",
-      emailMasked: email || "na*******@email.com",
-      joinedOn: "2023-12-16",
-      shippingAddress: "Nadine Customer\n2972\nWestheimer Rd. Santa Ana,\nIllinois 85486",
-      otherAddress: "Nadine Customer\n1234\nCedar St. Brooksville,\nFlorida 34601",
-      phone: "001 *** *** 1122",
+  const profile = useMemo(() => {
+    const fallbackName = displayName?.trim() || "Customer";
+    const firstName = userRow?.Name ? String(userRow.Name) : fallbackName.split(" ")[0] || "Customer";
+    const lastName =
+      userRow?.Surname ? String(userRow.Surname) : fallbackName.split(" ").slice(1).join(" ").trim() || "—";
+    const fullName = [firstName, lastName].filter((x) => x && x !== "—").join(" ").trim() || fallbackName;
+    return {
+      firstName,
+      lastName,
+      fullName,
+      emailMasked: email || "—",
+      joinedOn: userRow?.Joined ? String(userRow.Joined) : "—",
+      phone: userRow?.ContactNumber ? String(userRow.ContactNumber) : "—",
     };
+  }, [displayName, email, userRow]);
+
+  const formatAddressBlock = (a) => {
+    if (!a) {
+      return "";
+    }
+    const nameLine = [a.Name, a.Surname].filter(Boolean).join(" ").trim() || profile.fullName;
+    const line2 = String(a.Street ?? "").trim();
+    const line3 = [a.City, a.ZipCode].filter(Boolean).join(" ").trim();
+    const line4 = String(a.Region ?? "").trim();
+    return [nameLine, line2, line3, line4].filter(Boolean).join("\n");
+  };
 
   const handleSignOut = () => {
     signOut();
     navigate("/login", { replace: true });
   };
 
-  const openAddressModal = () => {
+  const openCreateAddressModal = () => {
+    setAddressModalMode("create");
+    setEditingAddress(null);
+    setAddressFormError(null);
     setAddressForm({
       fullName: profile.fullName,
-      streetAddress1: profile.shippingAddress.split("\n")[1] ?? "",
+      streetAddress1: "",
       streetAddress2: "",
-      countryCode: "US",
-      city: isDemoAccount ? "Demo City" : "Santa Ana",
-      postCode: isDemoAccount ? "90001" : "85486",
+      countryCode: "MT",
+      city: "",
+      postCode: "",
     });
+    setAddressIsDefault(userAddresses.length === 0);
+    setIsAddressModalOpen(true);
+  };
+
+  const openEditAddressModal = (row) => {
+    setAddressModalMode("edit");
+    setEditingAddress(row);
+    setAddressFormError(null);
+    const fullName = [row.Name, row.Surname].filter(Boolean).join(" ").trim() || profile.fullName;
+    const streetParts = String(row.Street ?? "")
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+    setAddressForm({
+      fullName,
+      streetAddress1: streetParts[0] ?? "",
+      streetAddress2: streetParts.slice(1).join(", "),
+      countryCode: "MT",
+      city: String(row.City ?? ""),
+      postCode: String(row.ZipCode ?? ""),
+    });
+    setAddressIsDefault(Number(row.Def) === 1);
     setIsAddressModalOpen(true);
   };
 
@@ -227,7 +309,10 @@ export default function AccountPage() {
     setIsAddressModalOpen(false);
   };
 
-  const countries = useMemo(() => Country.getAllCountries(), []);
+  const countries = useMemo(() => {
+    const mt = Country.getCountryByCode("MT");
+    return mt ? [mt] : [];
+  }, []);
   const cities = useMemo(() => {
     return City.getCitiesOfCountry(addressForm.countryCode);
   }, [addressForm.countryCode]);
@@ -235,376 +320,176 @@ export default function AccountPage() {
 
   const renderSidebar = () => (
     <aside className="flex self-start flex-col justify-between lg:sticky lg:top-6">
-      <nav>
+      <nav aria-label="Account sections">
         <ul className="space-y-2">
-          {ACCOUNT_TABS.map((tab) => (
-            <li key={tab}>
-              <button
-                type="button"
-                onClick={() => setActiveTab(tab)}
-                className="w-full px-1 py-1.5 text-left"
-                style={{ ...textStyles.body, color: tab === activeTab ? colors.primary : mutedText }}
-              >
-                {tab}
-              </button>
-            </li>
-          ))}
+          {ACCOUNT_TABS.map((tab) => {
+            const to = tab.id === DEFAULT_ACCOUNT_TAB ? "/account" : `/account?tab=${tab.id}`;
+            const isActive = tab.id === activeTabId;
+            return (
+              <li key={tab.id}>
+                <Link
+                  to={to}
+                  className="block w-full px-1 py-1.5 text-left hover:underline"
+                  style={{ ...textStyles.body, color: isActive ? accentText : mutedText, fontWeight: isActive ? 600 : 400 }}
+                  aria-current={isActive ? "page" : undefined}
+                  id={`account-nav-${tab.id}`}
+                >
+                  {tab.label}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </nav>
       <div className="mt-6 border-t pt-3" style={{ borderColor: colors.primary }}>
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-start gap-3">
           <span className="inline-flex h-8 w-8 items-center justify-center rounded border" style={{ borderColor: colors.border, color: colors.text, backgroundColor: colors.panel }}>
             <FiUser size={14} />
           </span>
-          <div>
+          <div className="min-w-0">
             <p style={{ ...textStyles.button, color: colors.text }}>{`Hello, ${displayName}`}</p>
-            <button type="button" onClick={handleSignOut} style={{ ...textStyles.bodySm, color: colors.primary }}>
+            <ThemedButton
+              type="button"
+              onClick={handleSignOut}
+              variant="redOutline"
+              size="sm"
+              className="mt-2"
+              style={{ ...textStyles.bodySm }}
+            >
               Sign Out
-            </button>
+            </ThemedButton>
           </div>
         </div>
       </div>
     </aside>
   );
 
-  const renderOverview = () => (
-    <div className="space-y-8">
-      <InfoCard className="max-w-[640px]">
-        <div className="flex items-start gap-3">
-          <BsFillStarFill size={26} color="#facc15" />
-          <div className="space-y-6">
-            <div>
-              <p style={{ ...textStyles.sectionTitle, color: colors.text }}>Premium Member</p>
-              <p style={{ ...textStyles.body, color: colors.text }}>1,245 Loyalty Points</p>
-              <p style={{ ...textStyles.body, color: colors.primary }}>View Rewards</p>
-            </div>
-            <div>
-              <p style={{ ...textStyles.body, color: colors.text, fontWeight: 600 }}>Joined On</p>
-              <p style={{ ...textStyles.body, color: colors.text }}>{profile.joinedOn}</p>
-            </div>
-          </div>
-        </div>
-      </InfoCard>
-
-      <section className="space-y-3">
-        <h2 style={{ ...textStyles.sectionTitle, color: colors.text }}>Default Shipping Address</h2>
-        <InfoCard className="w-full max-w-[280px]">
-          <p style={{ ...textStyles.body, color: colors.text, whiteSpace: "pre-line" }}>{profile.shippingAddress}</p>
-        </InfoCard>
-      </section>
-
-      <section className="space-y-3">
-        <h2 style={{ ...textStyles.sectionTitle, color: colors.text }}>Default Payment Method</h2>
-        <InfoCard className="w-full max-w-[280px] space-y-3">
-          <div className="flex items-center justify-between">
-            <span style={{ ...textStyles.body, color: colors.text }}>Credit Card</span>
-            <strong style={{ ...textStyles.sectionTitle, color: "#2563eb" }}>VISA</strong>
-          </div>
-          <p style={{ ...textStyles.body, color: colors.text }}>•••• •••• •••• 4321</p>
-          <div className="flex items-center justify-between">
-            <span style={{ ...textStyles.body, color: colors.text }}>{profile.fullName}</span>
-            <span style={{ ...textStyles.body, color: colors.text }}>Expires 12/20</span>
-          </div>
-        </InfoCard>
-      </section>
-    </div>
-  );
-
-  const renderAccountSettings = () => (
-    <div className="space-y-8">
-      <section className="space-y-4">
-        <SectionHeader>Personal Information</SectionHeader>
-        <div className="grid gap-4 md:grid-cols-2">
-          <ReadOnlyField label="First Name" value={profile.firstName} />
-          <ReadOnlyField label="Last Name" value={profile.lastName} />
-          <ReadOnlyField label="Date of Birth" value="03/10/1988" />
-          <ReadOnlyField label="Gender" value="Male" />
-          <ReadOnlyField label="Language Preference" value="English" />
-          <ReadOnlyField label="TimeZone" value="GM+2" />
-        </div>
-        <ReadOnlyField label="Contact Number" value={profile.phone} />
-        <ActionLink icon={<FiEdit2 size={18} />}>Edit Personal Information</ActionLink>
-      </section>
-
-      <section className="space-y-4">
-        <SectionHeader>Email Address Management</SectionHeader>
-        <ReadOnlyField label="Email Address" value={profile.emailMasked} />
-        <ActionLink icon={<FiEdit2 size={18} />}>Edit Email Address</ActionLink>
-      </section>
-
-      <section className="space-y-4">
-        <SectionHeader>Password Management</SectionHeader>
-        <p style={{ ...textStyles.body, color: mutedText }}>Last changed on: 2025-06-01</p>
-        <ReadOnlyField label="Current Password" value="*******************" rightIcon={<FiEyeOff size={16} style={{ color: mutedText }} />} />
-        <ReadOnlyField label="New Password" value="*******************" rightIcon={<FiEyeOff size={16} style={{ color: mutedText }} />} />
-        <ReadOnlyField label="Confirm New Password" value="*******************" rightIcon={<FiEyeOff size={16} style={{ color: mutedText }} />} />
-        <ActionLink icon={<FiEdit2 size={18} />}>Change Password</ActionLink>
-      </section>
-    </div>
-  );
-
-  const renderCommunication = () => (
-    <section className="space-y-6">
-      <div>
-        <SectionHeader>Communication Preferences</SectionHeader>
-        <p style={{ ...textStyles.body, color: colors.text }}>Choose how you&apos;d like to hear from us.</p>
-      </div>
-      {COMMUNICATION_GROUPS.map((group) => (
-        <div key={group.title} className="space-y-2">
-          <h3 style={{ ...textStyles.body, color: colors.text, fontWeight: 600 }}>{group.title}</h3>
-          {group.options.map((option) => {
-            const key = `${group.title}-${option}`;
-            return (
-              <label key={key} className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={Boolean(communication[key])}
-                  onChange={() => setCommunication((current) => ({ ...current, [key]: !current[key] }))}
-                  className="h-5 w-5 rounded border bg-transparent accent-red-500"
-                />
-                <span style={{ ...textStyles.body, color: colors.text }}>{option}</span>
-              </label>
-            );
-          })}
-        </div>
-      ))}
-      <button type="button" className="rounded-box px-6 py-2" style={{ ...textStyles.sectionTitle, backgroundColor: colors.primary, color: colors.white }}>
-        Save Preferences
-      </button>
-    </section>
-  );
-
-  const renderSecurity = () => (
-    <div className="space-y-8">
-      <section className="space-y-4">
-        <SectionHeader>Two-Factor Authentication (2FA)</SectionHeader>
-        {SECURITY_2FA_ROWS.map((row) => (
-          <div key={row.title} className="flex items-start justify-between gap-4">
-            <div>
-              <p style={{ ...textStyles.body, color: colors.text, fontWeight: 600 }}>{row.title}</p>
-              <p style={{ ...textStyles.body, color: mutedText }}>{row.description}</p>
-            </div>
-            <label className="relative inline-flex cursor-pointer items-center">
-              <input
-                type="checkbox"
-                className="peer sr-only"
-                checked={Boolean(securityToggles[row.title])}
-                onChange={() => setSecurityToggles((current) => ({ ...current, [row.title]: !current[row.title] }))}
-              />
-              <div
-                className="h-9 w-[72px] rounded-full after:absolute after:start-[3px] after:top-[3px] after:h-7 after:w-7 after:rounded-full after:transition-all after:content-[''] peer-checked:after:translate-x-[36px]"
-                style={{
-                  backgroundColor: securityToggles[row.title] ? colors.primary : "#9db2d2",
-                }}
-              />
-            </label>
-          </div>
-        ))}
-      </section>
-
-      <section className="space-y-4">
-        <SectionHeader>Linked Accounts</SectionHeader>
-        {LINKED_ACCOUNT_ROWS.map((row) => (
-          <div key={row.title} className="flex items-start justify-between gap-4">
-            <div>
-              <p style={{ ...textStyles.body, color: colors.text, fontWeight: 600 }}>{row.title}</p>
-              <p style={{ ...textStyles.body, color: mutedText }}>{row.description}</p>
-            </div>
-            <label className="relative inline-flex cursor-pointer items-center">
-              <input
-                type="checkbox"
-                className="peer sr-only"
-                checked={Boolean(linkedAccounts[row.title])}
-                onChange={() => setLinkedAccounts((current) => ({ ...current, [row.title]: !current[row.title] }))}
-              />
-              <div
-                className="h-9 w-[72px] rounded-full after:absolute after:start-[3px] after:top-[3px] after:h-7 after:w-7 after:rounded-full after:transition-all after:content-[''] peer-checked:after:translate-x-[36px]"
-                style={{
-                  backgroundColor: linkedAccounts[row.title] ? colors.primary : "#9db2d2",
-                }}
-              />
-            </label>
-          </div>
-        ))}
-      </section>
-
-      <section className="space-y-4">
-        <SectionHeader>Deactivate or Delete Account</SectionHeader>
-        <button type="button" className="w-full rounded-box px-4 py-2" style={{ ...textStyles.sectionTitle, backgroundColor: colors.primary, color: colors.white }}>
-          Download Account Data (GDPR/CCPA)
-        </button>
-        <button type="button" className="w-full rounded-box px-4 py-2" style={{ ...textStyles.sectionTitle, backgroundColor: colors.primary, color: colors.white }}>
-          Deactivate or Delete Account
-        </button>
-      </section>
-    </div>
-  );
-
-  const renderAddresses = () => {
-    const addressCardStyle = { color: colors.text };
-    return (
-      <div className="space-y-8">
-        <section className="space-y-3">
-          <h2 style={{ ...textStyles.sectionTitle, color: colors.text }}>Default Shipping Address</h2>
-          <InfoCard className="max-w-[280px]">
-            <p style={{ ...textStyles.body, ...addressCardStyle, whiteSpace: "pre-line" }}>{profile.shippingAddress}</p>
-          </InfoCard>
-          <div className="flex items-center gap-6">
-            <ActionLink icon={<FiEdit2 size={18} />}>Edit Address</ActionLink>
-            <ActionLink icon={<FiTrash2 size={18} />}>Delete Address</ActionLink>
-          </div>
-        </section>
-
-        <section className="space-y-3">
-          <h2 style={{ ...textStyles.sectionTitle, color: colors.text }}>Other Shipping Addresses</h2>
-          <div className="grid gap-4 md:grid-cols-2">
-            {[1, 2].map((idx) => (
-              <div key={idx}>
-                <InfoCard className="max-w-[280px]">
-                  <p style={{ ...textStyles.body, ...addressCardStyle, whiteSpace: "pre-line" }}>{profile.otherAddress}</p>
-                </InfoCard>
-                <div className="mt-1 flex items-center gap-6">
-                  <ActionLink icon={<FiEdit2 size={18} />}>Edit Address</ActionLink>
-                  <ActionLink icon={<FiTrash2 size={18} />}>Delete Address</ActionLink>
-                </div>
-              </div>
-            ))}
-          </div>
-          <button type="button" className="inline-flex items-center gap-2 rounded-box px-5 py-2" style={{ ...textStyles.sectionTitle, backgroundColor: "#16a34a", color: colors.white }}>
-            <FiPlus size={24} />
-            New Address
-          </button>
-        </section>
-      </div>
-    );
-  };
-
   const renderPaymentMethods = () => (
     <div className="space-y-8">
       <section className="space-y-3">
-        <h2 style={{ ...textStyles.sectionTitle, color: colors.text }}>Default Payment Method</h2>
-        <InfoCard className="max-w-[280px] space-y-3">
-          <div className="flex items-center justify-between">
-            <span style={{ ...textStyles.body, color: colors.text }}>Credit Card</span>
-            <strong style={{ ...textStyles.sectionTitle, color: "#2563eb" }}>VISA</strong>
-          </div>
-          <p style={{ ...textStyles.body, color: colors.text }}>•••• •••• •••• 4321</p>
-          <div className="flex items-center justify-between">
-            <span style={{ ...textStyles.body, color: colors.text }}>{profile.fullName}</span>
-            <span style={{ ...textStyles.body, color: colors.text }}>Expires 12/20</span>
-          </div>
+        <h2 style={{ ...textStyles.sectionTitle, color: colors.text }}>Payment Methods</h2>
+        <InfoCard className="max-w-[520px]">
+          <p style={{ ...textStyles.body, color: mutedText }}>
+            For safety, payment methods are never stored in Funzies. Payment details are collected at checkout and handled by a secure payment processor.
+          </p>
         </InfoCard>
-        <ActionLink icon={<FiTrash2 size={18} />}>Remove Payment Method</ActionLink>
-      </section>
-
-      <section className="space-y-3">
-        <h2 style={{ ...textStyles.sectionTitle, color: colors.text }}>Other Payment Methods</h2>
-        <button type="button" className="inline-flex items-center gap-2 rounded-box px-5 py-2" style={{ ...textStyles.sectionTitle, backgroundColor: "#16a34a", color: colors.white }}>
-          <FiPlus size={24} />
-          New Payment Method
-        </button>
       </section>
     </div>
   );
 
-  const filteredOrders = ORDERS.filter((order) => {
-    if (orderFilter === "All Orders") return true;
-    if (orderFilter === "Completed") return order.status === "Complete";
-    return order.status === orderFilter;
-  });
-
-  const renderOrders = () => (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div className="flex flex-wrap items-center gap-4">
-          {ORDER_FILTERS.map((filter) => (
-            <button
-              key={filter}
-              type="button"
-              onClick={() => setOrderFilter(filter)}
-              className={`pb-1 ${filter === orderFilter ? "border-b" : ""}`}
-              style={{ ...textStyles.body, color: filter === orderFilter ? colors.primary : mutedText, borderColor: colors.primary }}
-            >
-              {filter}
-            </button>
-          ))}
-        </div>
-        <label className="flex h-10 w-full max-w-[300px] items-center justify-between rounded-box border px-3" style={{ borderColor: colors.primary, backgroundColor: colors.white }}>
-          <input type="text" placeholder="Item name / Order ID" className="w-full bg-transparent outline-none" style={{ ...textStyles.body, color: "#1f2a36" }} />
-          <FiSearch size={18} style={{ color: colors.primary }} />
-        </label>
-      </div>
-      {filteredOrders.map((order) => (
-        <InfoCard key={order.id} className="space-y-4">
-          <div className="flex items-start justify-between gap-3">
-            <div className="flex flex-wrap gap-2">
-              {order.thumbnailUrls?.map((url, index) => (
-                <div key={`${order.id}-thumb-${index}`} className="h-[56px] w-[56px] overflow-hidden rounded-sm" style={{ backgroundColor: "#d9d9d9" }}>
-                  <img src={url} alt={`${order.id} item ${index + 1}`} className="h-full w-full object-cover" />
-                </div>
-              ))}
-            </div>
-            <span className="rounded-box px-3 py-1" style={{ ...textStyles.button, backgroundColor: order.statusColor, color: "#ffffff" }}>
-              {order.status}
-            </span>
-          </div>
-          <div className="grid grid-cols-1 gap-3 rounded-box p-3 md:grid-cols-3" style={{ backgroundColor: colors.panel }}>
-            <div>
-              <p style={{ ...textStyles.bodySm, color: mutedText }}>Order ID</p>
-              <p style={{ ...textStyles.sectionTitle, fontSize: "20px", color: colors.text }}>{order.id}</p>
-            </div>
-            <div>
-              <p style={{ ...textStyles.bodySm, color: mutedText }}>Order Date</p>
-              <p style={{ ...textStyles.sectionTitle, fontSize: "20px", color: colors.text }}>{order.date}</p>
-            </div>
-            <div>
-              <p style={{ ...textStyles.bodySm, color: mutedText }}>{order.items}</p>
-              <p style={{ ...textStyles.sectionTitle, fontSize: "20px", color: colors.text }}>{order.total}</p>
-            </div>
-          </div>
-          <div className="flex flex-wrap justify-end gap-2">
-            {order.actions.map((action) => (
-              <button
-                key={`${order.id}-${action}`}
-                type="button"
-                className="rounded-box border px-3 py-1"
-                style={{
-                  ...textStyles.body,
-                  fontWeight: 600,
-                  borderColor: action === "View Order Details" ? colors.primary : "transparent",
-                  backgroundColor: action === "Edit Order" ? "#2563eb" : action === "Cancel Order" ? colors.primary : "transparent",
-                  color: action === "View Order Details" ? colors.text : "#ffffff",
-                }}
-              >
-                {action}
-              </button>
-            ))}
-          </div>
-        </InfoCard>
-      ))}
-    </div>
-  );
+  const filteredOrders = useMemo(() => {
+    if (orderFilter === "All Orders") {
+      return orderRows;
+    }
+    const want = orderFilter === "Completed" ? "Complete" : orderFilter;
+    return orderRows.filter((o) => {
+      const st = orderStatusById.get(o.status);
+      const label = String(st?.Status ?? "");
+      const normalized = label.toLowerCase();
+      if (orderFilter === "Completed") {
+        // Completed = delivered (and any status that contains "complete" for legacy labels).
+        return Number(o.status) === 8 || normalized.includes("complete");
+      }
+      return normalized.includes(want.toLowerCase());
+    });
+  }, [orderFilter, orderRows]);
 
   const renderActiveContent = () => {
-    if (activeTab === "Profile Overview") return renderOverview();
-    if (activeTab === "Account Settings") return renderAccountSettings();
-    if (activeTab === "Security & Privacy") return renderSecurity();
-    if (activeTab === "Communication Settings") return renderCommunication();
-    if (activeTab === "Addresses") return renderAddresses();
-    if (activeTab === "Payment Methods") return renderPaymentMethods();
-    return renderOrders();
+    switch (activeTabId) {
+      case "profile":
+        return (
+          <ProfileOverviewSection
+            colors={colors}
+            mutedText={mutedText}
+            profile={profile}
+            defaultAddress={defaultAddress}
+            formatAddressBlock={formatAddressBlock}
+          />
+        );
+      case "settings":
+        return <AccountSettingsSection mutedText={mutedText} profile={profile} />;
+      case "preferences":
+        return (
+          <PreferencesTabSection
+            colors={colors}
+            mutedText={mutedText}
+            language={prefLanguage}
+            setLanguage={setPrefLanguage}
+            timeZone={prefTimeZone}
+            setTimeZone={setPrefTimeZone}
+            communicationGroups={COMMUNICATION_GROUPS}
+            communication={communication}
+            setCommunication={setCommunication}
+            securityToggles={securityToggles}
+            setSecurityToggles={setSecurityToggles}
+            linkedAccounts={linkedAccounts}
+            setLinkedAccounts={setLinkedAccounts}
+            security2faRows={SECURITY_2FA_ROWS}
+            linkedAccountRows={LINKED_ACCOUNT_ROWS}
+          />
+        );
+      case "addresses":
+        return (
+          <AddressesSection
+            colors={colors}
+            mutedText={mutedText}
+            defaultAddress={defaultAddress}
+            userAddresses={userAddresses}
+            formatAddressBlock={formatAddressBlock}
+            openCreateAddressModal={openCreateAddressModal}
+            openEditAddressModal={openEditAddressModal}
+            refreshAddresses={refreshAddresses}
+            addressLoading={addressLoading}
+            addressError={addressError}
+            userId={userId}
+            deleteRow={deleteRow}
+          />
+        );
+      case "payment":
+        return renderPaymentMethods();
+      case "orders":
+        return (
+          <OrdersReturnsSection
+            colors={colors}
+            mutedText={mutedText}
+            orderFilters={ORDER_FILTERS}
+            orderFilter={orderFilter}
+            setOrderFilter={setOrderFilter}
+            filteredOrders={filteredOrders}
+            orderStatusById={orderStatusById}
+            computeOrderSubtotalEur={computeOrderSubtotalEur}
+            formatEurValue={formatEurValue}
+            orderLoading={orderLoading}
+            orderError={orderError}
+            onCancelOrder={async (orderId) => {
+              try {
+                await updateRow("orders", orderId, { status: 3 });
+                await refreshOrders();
+              } catch (e) {
+                window.alert(e instanceof Error ? e.message : "Cancel order failed");
+              }
+            }}
+          />
+        );
+      default:
+        return <AccountSettingsSection mutedText={mutedText} profile={profile} />;
+    }
   };
 
   return (
     <AppLayout title="Account" description="Manage account details, communication, security, orders, and payment settings." showPageHeader={false} contentClassName="">
       <section className="w-full rounded-box p-5 md:p-6" style={{ backgroundColor: colors.panel }}>
         <header className="border-b pb-4" style={{ borderColor: colors.primary }}>
-          <h1 style={{ ...textStyles.title, color: colors.text }}>{activeTab}</h1>
+          <h1 id={`account-tab-${activeTabId}`} style={{ ...textStyles.title, color: colors.text }}>
+            {activeTabLabel}
+          </h1>
         </header>
 
         <div className="mt-6 grid gap-6 lg:grid-cols-[220px_1fr]">
           {renderSidebar()}
-          <div>{renderActiveContent()}</div>
+          <div id={`account-panel-${activeTabId}`}>
+            {renderActiveContent()}
+          </div>
         </div>
       </section>
 
@@ -623,35 +508,54 @@ export default function AccountPage() {
               className="relative w-full max-w-[520px] rounded-box border p-5 shadow-xl"
               style={{ backgroundColor: colors.background, borderColor: colors.border }}
             >
-              <h3 style={{ ...textStyles.sectionTitle, color: colors.primary }}>Edit Address</h3>
+              <h3 style={{ ...textStyles.sectionTitle, color: colors.primary }}>
+                {addressModalMode === "create" ? "New Address" : "Edit Address"}
+              </h3>
               <div className="mt-4 space-y-3">
-                <label className="block space-y-1">
-                  <span style={{ ...textStyles.body, color: colors.text }}>Full Name</span>
-                  <input
-                    value={addressForm.fullName}
-                    onChange={(event) => setAddressForm((current) => ({ ...current, fullName: event.target.value }))}
-                    className="w-full rounded border px-3 py-2 outline-none"
-                    style={{ borderColor: colors.primary, backgroundColor: colors.white, color: "#1f2a36" }}
-                  />
-                </label>
-                <label className="block space-y-1">
-                  <span style={{ ...textStyles.body, color: colors.text }}>Street Address 1</span>
-                  <input
-                    value={addressForm.streetAddress1}
-                    onChange={(event) => setAddressForm((current) => ({ ...current, streetAddress1: event.target.value }))}
-                    className="w-full rounded border px-3 py-2 outline-none"
-                    style={{ borderColor: colors.primary, backgroundColor: colors.white, color: "#1f2a36" }}
-                  />
-                </label>
-                <label className="block space-y-1">
-                  <span style={{ ...textStyles.body, color: colors.text }}>Street Address 2 (Optional)</span>
-                  <input
-                    value={addressForm.streetAddress2}
-                    onChange={(event) => setAddressForm((current) => ({ ...current, streetAddress2: event.target.value }))}
-                    className="w-full rounded border px-3 py-2 outline-none"
-                    style={{ borderColor: colors.primary, backgroundColor: colors.white, color: "#1f2a36" }}
-                  />
-                </label>
+                {addressFormError ? (
+                  <p className="rounded border px-3 py-2 text-sm" style={{ borderColor: "rgba(239, 68, 68, 0.45)", color: "#b91c1c", backgroundColor: "rgba(239, 68, 68, 0.08)" }}>
+                    {addressFormError}
+                  </p>
+                ) : null}
+                <ThemedTextBox
+                  label="Full Name"
+                  value={addressForm.fullName}
+                  onChange={(event) => setAddressForm((current) => ({ ...current, fullName: event.target.value }))}
+                />
+                <ThemedTextBox
+                  label="Street Address 1"
+                  value={addressForm.streetAddress1}
+                  onChange={(event) => setAddressForm((current) => ({ ...current, streetAddress1: event.target.value }))}
+                />
+                <ThemedTextBox
+                  label="Street Address 2 (Optional)"
+                  value={addressForm.streetAddress2}
+                  onChange={(event) => setAddressForm((current) => ({ ...current, streetAddress2: event.target.value }))}
+                />
+                <ThemedCheckbox
+                  checked={addressIsDefault}
+                  onChange={(e) => setAddressIsDefault(e.target.checked)}
+                  label="Set as default"
+                  labelClassName="text-base"
+                />
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <label className="block space-y-1">
+                    <span style={{ ...textStyles.body, color: colors.text }}>Country</span>
+                    <select
+                      value={addressForm.countryCode}
+                      onChange={() => {}}
+                      disabled
+                      className="w-full rounded border px-3 py-2 outline-none"
+                      style={{ borderColor: colors.primary, backgroundColor: colors.white, color: "#1f2a36", opacity: 0.9 }}
+                    >
+                      {countries.map((country) => (
+                        <option key={country.isoCode} value={country.isoCode}>
+                          {country.name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
                 <div className="grid gap-3 sm:grid-cols-2">
                   <label className="block space-y-1">
                     <span style={{ ...textStyles.body, color: colors.text }}>City</span>
@@ -663,6 +567,10 @@ export default function AccountPage() {
                         style={{ borderColor: colors.primary, backgroundColor: colors.white, color: "#1f2a36" }}
                       >
                         <option value="">Select city</option>
+                        {addressForm.city &&
+                        !cities.some((c) => String(c?.name ?? "").trim().toLowerCase() === addressForm.city.trim().toLowerCase()) ? (
+                          <option value={addressForm.city}>{addressForm.city}</option>
+                        ) : null}
                         {cities.map((cityOption) => (
                           <option key={`${cityOption.countryCode}-${cityOption.stateCode}-${cityOption.name}`} value={cityOption.name}>
                             {cityOption.name}
@@ -670,62 +578,104 @@ export default function AccountPage() {
                         ))}
                       </select>
                     ) : (
-                      <input
+                      <ThemedTextBox
+                        label=""
                         value={addressForm.city}
                         onChange={(event) => setAddressForm((current) => ({ ...current, city: event.target.value }))}
                         placeholder="Enter city"
-                        className="w-full rounded border px-3 py-2 outline-none"
-                        style={{ borderColor: colors.primary, backgroundColor: colors.white, color: "#1f2a36" }}
                       />
                     )}
                   </label>
                   <label className="block space-y-1">
                     <span style={{ ...textStyles.body, color: colors.text }}>Post Code</span>
-                    <input
+                    <ThemedTextBox
+                      label=""
                       value={addressForm.postCode}
                       onChange={(event) => setAddressForm((current) => ({ ...current, postCode: event.target.value }))}
-                      className="w-full rounded border px-3 py-2 outline-none"
-                      style={{ borderColor: colors.primary, backgroundColor: colors.white, color: "#1f2a36" }}
+                      className="w-full"
                     />
-                  </label>
-                </div>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  <label className="block space-y-1">
-                    <span style={{ ...textStyles.body, color: colors.text }}>Country</span>
-                    <select
-                      value={addressForm.countryCode}
-                      onChange={(event) =>
-                        setAddressForm((current) => ({
-                          ...current,
-                          countryCode: event.target.value,
-                          city: "",
-                        }))
-                      }
-                      className="w-full rounded border px-3 py-2 outline-none"
-                      style={{ borderColor: colors.primary, backgroundColor: colors.white, color: "#1f2a36" }}
-                    >
-                      {countries.map((country) => (
-                        <option key={country.isoCode} value={country.isoCode}>
-                          {country.name}
-                        </option>
-                      ))}
-                    </select>
                   </label>
                 </div>
               </div>
               <div className="mt-5 flex justify-end gap-2">
-                <button type="button" className="rounded border px-4 py-2" onClick={closeModals} style={{ ...textStyles.body, borderColor: colors.border, color: colors.text }}>
+                <ThemedButton type="button" variant="redOutline" size="md" onClick={closeModals} style={{ ...textStyles.body }}>
                   Cancel
-                </button>
-                <button type="button" className="rounded px-4 py-2 text-white" onClick={closeModals} style={{ ...textStyles.body, backgroundColor: colors.primary }}>
-                  Save Address
-                </button>
+                </ThemedButton>
+                <ThemedButton
+                  type="button"
+                  variant="redSolid"
+                  size="md"
+                  disabled={addressSaving || !userId}
+                  onClick={async () => {
+                    if (!userId) return;
+                    setAddressSaving(true);
+                    setAddressFormError(null);
+                    try {
+                      const fullName = addressForm.fullName.trim() || profile.fullName;
+                      const parts = fullName.split(" ").filter(Boolean);
+                      const Name = parts[0] ?? "Customer";
+                      const Surname = parts.slice(1).join(" ") || "";
+                      const Street = [addressForm.streetAddress1, addressForm.streetAddress2].map((s) => s.trim()).filter(Boolean).join(", ");
+                      const City = addressForm.city.trim();
+                      const ZipCode = addressForm.postCode.trim();
+                      const country = Country.getCountryByCode(addressForm.countryCode);
+                      const Region = country?.name ?? "";
+
+                      if (!Street || !City || !ZipCode) {
+                        throw new Error("Street, City, and Post Code are required.");
+                      }
+
+                      const body = {
+                        Street,
+                        City,
+                        ZipCode,
+                        Region,
+                        User: userId,
+                        Def: addressIsDefault ? 1 : 0,
+                        Deleted: 0,
+                        Name,
+                        Surname,
+                        Mobile: "",
+                      };
+
+                      if (addressModalMode === "create") {
+                        await createRow("address", body);
+                      } else if (editingAddress) {
+                        await updateRow("address", editingAddress.ID, body);
+                      }
+
+                      // Ensure only one default address.
+                      if (addressIsDefault) {
+                        const r = await listTable("address", { all: 1 });
+                        const all = Array.isArray(r.data) ? r.data : [];
+                        const mine = all.filter((a) => Number(a.User) === userId && Number(a.Deleted ?? 0) === 0);
+                        const newest = mine.slice().sort((a, b) => (Number(b.ID) || 0) - (Number(a.ID) || 0))[0];
+                        for (const a of mine) {
+                          if (newest && a.ID !== newest.ID && Number(a.Def) === 1) {
+                            await updateRow("address", a.ID, { Def: 0 });
+                          }
+                        }
+                      }
+
+                      await refreshAddresses();
+                      closeModals();
+                    } catch (e) {
+                      setAddressFormError(e instanceof Error ? e.message : "Save failed");
+                    } finally {
+                      setAddressSaving(false);
+                    }
+                  }}
+                  style={{ ...textStyles.body, opacity: addressSaving || !userId ? 0.7 : 1 }}
+                >
+                  {addressSaving ? "Saving…" : "Save Address"}
+                </ThemedButton>
               </div>
             </section>
           )}
 
         </div>
       )}
+
     </AppLayout>
   );
 }

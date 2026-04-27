@@ -2,7 +2,10 @@ import { useMemo, useState } from "react";
 import { FiEyeOff } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import AppLayout from "../components/AppLayout";
+import ThemedCheckbox from "../components/ThemedCheckbox";
+import ThemedTextField from "../components/ThemedTextField";
 import { useAuth } from "../lib/authContext";
+import { ADMIN_DEMO_EMAIL, ADMIN_DEMO_PASSWORD } from "../lib/adminAuth";
 import { textStyles } from "../theme/typography";
 import { useTheme } from "../theme/themeContext";
 
@@ -40,35 +43,24 @@ const AUTH_COPY = {
   },
 };
 
-function InputField({ label, required = false, type = "text", placeholder, trailing = null }) {
-  const { colors } = useTheme();
-  const inputBackground = colors.white;
-  const inputBorder = colors.primary;
-  const inputTextColor = "#1f2a36";
-  const inputPlaceholder = "#9ca3af";
+function InputField({ label, required = false, type = "text", placeholder, trailing = null, className = "", ...props }) {
   return (
-    <label className="block space-y-2">
-      <div className="flex items-center gap-0.5">
-        <span style={{ ...textStyles.sectionTitle, color: colors.text, fontWeight: 400 }}>{label}</span>
-        {required && <span style={{ color: colors.primary }}>*</span>}
-      </div>
-      <div className="flex min-h-11 items-center border px-2" style={{ borderColor: inputBorder, backgroundColor: inputBackground }}>
-        <input
-          type={type}
-          className="auth-input h-full w-full bg-transparent outline-none"
-          placeholder={placeholder}
-          style={{ ...textStyles.body, color: inputTextColor }}
-        />
-        <style>{`.auth-input::placeholder { color: ${inputPlaceholder}; opacity: 1; }`}</style>
-        {trailing}
-      </div>
-    </label>
+    <ThemedTextField
+      className={className}
+      label={label}
+      required={required}
+      type={type}
+      placeholder={placeholder}
+      inputClassName="text-base"
+      endAdornment={trailing ? <span className="px-2">{trailing}</span> : null}
+      {...props}
+    />
   );
 }
 
 export default function LoginPage({ initialMode = "login" }) {
   const { colors, mode } = useTheme();
-  const { signIn } = useAuth();
+  const { signIn, signInAdmin } = useAuth();
   const navigate = useNavigate();
   const [activeMode, setActiveMode] = useState(initialMode);
   const [rememberMe, setRememberMe] = useState(false);
@@ -90,12 +82,8 @@ export default function LoginPage({ initialMode = "login" }) {
       helper: {
         color: "#8896b2",
       },
-      inputBackground: colors.white,
-      inputBorder: colors.primary,
-      inputText: "#1f2a36",
-      inputPlaceholder: "#9ca3af",
     }),
-    [colors.background, colors.primary, isDark],
+    [colors.background, isDark],
   );
 
   const goToMode = (nextMode) => {
@@ -116,7 +104,11 @@ export default function LoginPage({ initialMode = "login" }) {
       return;
     }
     const normalizedEmail = email.trim().toLowerCase();
-    const isDemoAccount = normalizedEmail === "demo@funzies.com" && password === "Demo@1234";
+    const isDemoAccount = normalizedEmail === ADMIN_DEMO_EMAIL.toLowerCase() && password === ADMIN_DEMO_PASSWORD;
+    if (isDemoAccount) {
+      // Same demo account should unlock the admin area.
+      signInAdmin({ email, password });
+    }
     signIn({
       displayName: isDemoAccount ? "Demo Account" : "Nadine",
       email: email.trim(),
@@ -125,8 +117,8 @@ export default function LoginPage({ initialMode = "login" }) {
   };
 
   const fillDemoAccount = () => {
-    setEmail("demo@funzies.com");
-    setPassword("Demo@1234");
+    setEmail(ADMIN_DEMO_EMAIL);
+    setPassword(ADMIN_DEMO_PASSWORD);
   };
 
   const headingStyle = isForgotMode
@@ -142,42 +134,27 @@ export default function LoginPage({ initialMode = "login" }) {
 
             {activeMode === "login" && (
               <>
-                <label className="block space-y-2">
-                  <div className="flex items-center gap-0.5">
-                    <span style={{ ...textStyles.sectionTitle, color: colors.text, fontWeight: 400 }}>Email Address</span>
-                  </div>
-                  <div className="flex min-h-11 items-center border px-2" style={{ borderColor: panelStyles.inputBorder, backgroundColor: panelStyles.inputBackground }}>
-                    <input
-                      type="email"
-                      className="auth-input h-full w-full bg-transparent outline-none"
-                      placeholder="example@email.com"
-                      value={email}
-                      onChange={(event) => setEmail(event.target.value)}
-                      style={{ ...textStyles.body, color: panelStyles.inputText }}
-                    />
-                  </div>
-                </label>
-                <label className="block space-y-2">
-                  <div className="flex items-center gap-0.5">
-                    <span style={{ ...textStyles.sectionTitle, color: colors.text, fontWeight: 400 }}>Password</span>
-                  </div>
-                  <div className="flex min-h-11 items-center border px-2" style={{ borderColor: panelStyles.inputBorder, backgroundColor: panelStyles.inputBackground }}>
-                    <input
-                      type="password"
-                      className="auth-input h-full w-full bg-transparent outline-none"
-                      placeholder="***********"
-                      value={password}
-                      onChange={(event) => setPassword(event.target.value)}
-                      style={{ ...textStyles.body, color: panelStyles.inputText }}
-                    />
-                    <FiEyeOff size={14} style={{ color: panelStyles.inputPlaceholder }} />
-                  </div>
-                </label>
-                <style>{`.auth-input::placeholder { color: ${panelStyles.inputPlaceholder}; opacity: 1; }`}</style>
+                <InputField
+                  label="Email Address"
+                  type="email"
+                  placeholder="example@email.com"
+                  autoComplete="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                />
+                <InputField
+                  label="Password"
+                  type="password"
+                  placeholder="***********"
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  trailing={<FiEyeOff size={14} style={{ color: "#8896b2" }} />}
+                />
                 <div className="rounded border p-3" style={{ borderColor: colors.border, backgroundColor: colors.background }}>
                   <p style={{ ...textStyles.bodySm, color: colors.text, fontWeight: 600 }}>Demo Account</p>
-                  <p style={{ ...textStyles.bodySm, color: "#8896b2" }}>Email: demo@funzies.com</p>
-                  <p style={{ ...textStyles.bodySm, color: "#8896b2" }}>Password: Demo@1234</p>
+                  <p style={{ ...textStyles.bodySm, color: "#8896b2" }}>Email: {ADMIN_DEMO_EMAIL}</p>
+                  <p style={{ ...textStyles.bodySm, color: "#8896b2" }}>Password: {ADMIN_DEMO_PASSWORD}</p>
                   <button
                     type="button"
                     onClick={fillDemoAccount}
@@ -227,16 +204,25 @@ export default function LoginPage({ initialMode = "login" }) {
                   <p>Enter your email below, and we&apos;ll dispatch a special code - like a treasure map to your inbox.</p>
                   <p>Follow the clues, enter the code, and unlock the vault to your account&apos;s hidden treasures!</p>
                 </div>
-                <InputField label="Email Address" required placeholder="email@email.com" />
+                <InputField
+                  label="Email Address"
+                  required
+                  type="email"
+                  autoComplete="email"
+                  placeholder="email@email.com"
+                />
               </>
             )}
 
             {copy.showRememberMe && (
               <div className="flex items-center justify-between" style={{ color: colors.primary }}>
-                <label className="inline-flex items-center gap-2" style={textStyles.body}>
-                  <input type="checkbox" checked={rememberMe} onChange={(event) => setRememberMe(event.target.checked)} />
-                  Remember Me
-                </label>
+                <ThemedCheckbox
+                  checked={rememberMe}
+                  onChange={(event) => setRememberMe(event.target.checked)}
+                  label="Remember Me"
+                  className="items-center"
+                  labelClassName="!text-sm"
+                />
                 {copy.showForgotLink && (
                   <button type="button" onClick={() => goToMode("forgot")} style={textStyles.body}>
                     Forgot Password?

@@ -3,6 +3,8 @@ import Accordion from "../components/Accordion";
 import AppLayout from "../components/AppLayout";
 import SupportHelpSection from "../components/SupportHelpSection";
 import ThemedSurface from "../components/ThemedSurface";
+import { usePublicSettings } from "../hooks/usePublicSettings";
+import { getContentOverrideText } from "../lib/contentOverrides";
 
 const RETURN_REFUND_ACCORDION_ITEMS = [
   {
@@ -132,6 +134,9 @@ const RETURN_REFUND_ACCORDION_ITEMS = [
 ];
 
 export default function ReturnRefundPolicyPage() {
+  const settings = usePublicSettings(["content.page.return_refund_policy"]);
+  const override = getContentOverrideText(settings.values["content.page.return_refund_policy"]);
+
   return (
     <AppLayout
       title="Return & Refund Policy"
@@ -139,7 +144,11 @@ export default function ReturnRefundPolicyPage() {
     >
       <div className="grid gap-6">
         <ThemedSurface className="p-6">
-          <Accordion items={RETURN_REFUND_ACCORDION_ITEMS} />
+          {override ? (
+            <div className="whitespace-pre-wrap leading-7 text-base-content/80">{override}</div>
+          ) : (
+            <Accordion items={RETURN_REFUND_ACCORDION_ITEMS} />
+          )}
         </ThemedSurface>
 
         <SupportHelpSection />

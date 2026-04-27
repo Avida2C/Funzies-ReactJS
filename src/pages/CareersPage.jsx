@@ -3,11 +3,12 @@ import AppLayout from "../components/AppLayout";
 import TagPill from "../components/TagPill";
 import ThemedButton from "../components/ThemedButton";
 import ThemedSurface from "../components/ThemedSurface";
-import { OPEN_ROLES } from "../data/careersData";
+import { useCareersRoles } from "../hooks/useCareersRoles";
 import { useTheme } from "../theme/themeContext";
 
 export default function CareersPage() {
   const { colors } = useTheme();
+  const { roles } = useCareersRoles();
 
   return (
     <AppLayout
@@ -18,7 +19,7 @@ export default function CareersPage() {
         <section className="space-y-4">
           <h3 className="text-xl font-semibold" style={{ color: colors.primary }}>Open roles</h3>
           <div className="grid gap-4 md:grid-cols-2">
-            {OPEN_ROLES.map((role) => (
+            {roles.map((role) => (
               <ThemedSurface as="article" key={role.id} className="p-6 space-y-4">
                 <div className="flex flex-wrap items-center gap-2">
                   <h4 className="text-lg font-semibold" style={{ color: colors.primary }}>{role.title}</h4>

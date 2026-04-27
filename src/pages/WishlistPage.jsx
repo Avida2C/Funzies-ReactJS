@@ -5,11 +5,12 @@ import AppLayout from "../components/AppLayout";
 import { useCart } from "../lib/cartContext";
 import { useTheme } from "../theme/themeContext";
 import { useWishlist } from "../lib/wishlistContext";
-import { activeProducts, frontProductImage, price, resolveAssetPath } from "../lib/storeData";
+import { getProductCardImageUrl } from "../lib/productImages";
+import { activeProducts, price } from "../lib/storeData";
 
 function WishlistProductCard({ product, colors, onToggleWishlist }) {
   const { addToCart } = useCart();
-  const productImage = resolveAssetPath(product.Image) || frontProductImage;
+  const productImage = getProductCardImageUrl(product);
 
   return (
     <article className="hover-lift rounded-lg p-3 shadow-sm" style={{ backgroundColor: colors.background }}>

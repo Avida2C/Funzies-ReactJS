@@ -3,7 +3,8 @@ import { FiArrowRight, FiTrash2, FiX } from "react-icons/fi";
 import AppLayout from "../components/AppLayout";
 import QuantityControl from "../components/QuantityControl";
 import ThemedSurface from "../components/ThemedSurface";
-import { activeProducts, frontProductImage, price, resolveAssetPath } from "../lib/storeData";
+import { getProductCardImageUrl } from "../lib/productImages";
+import { activeProducts, price } from "../lib/storeData";
 import { useCart } from "../lib/cartContext";
 import { useTheme } from "../theme/themeContext";
 
@@ -36,7 +37,7 @@ export default function ViewCartPage() {
             <div key={item.product.ID} className="flex items-start justify-between border-b pb-3 last:border-0">
               <div className="flex items-center gap-3">
                 <img
-                  src={resolveAssetPath(item.product.Image) || frontProductImage}
+                  src={getProductCardImageUrl(item.product)}
                   alt={item.product.Name}
                   className="h-14 w-14 rounded object-cover"
                   loading="lazy"
@@ -68,12 +69,14 @@ export default function ViewCartPage() {
                 <p className="font-semibold">{price.format(item.product.Price * item.quantity)}</p>
                 <button
                   type="button"
-                  className="inline-flex h-7 items-center gap-1 rounded px-2 text-xs font-semibold text-white"
-                  style={{ backgroundColor: colors.primary }}
+                  className="hover-accent inline-flex h-7 items-center gap-1 rounded px-2 text-xs font-semibold text-white"
+                  style={{ backgroundColor: colors.primary, "--hover-accent-border": colors.primary }}
                   onClick={() => removeFromCart(item.product.ID)}
                 >
-                  <FiX size={12} />
-                  Remove
+                  <span className="hover-accent-text inline-flex items-center gap-1">
+                    <FiX size={12} />
+                    Remove
+                  </span>
                 </button>
               </div>
             </div>
@@ -90,19 +93,33 @@ export default function ViewCartPage() {
           <div className="flex flex-wrap justify-end gap-2">
             <button
               type="button"
-              className="inline-flex h-9 items-center justify-center gap-1 rounded px-3 text-xs font-semibold"
-              style={{ border: `1px solid ${colors.border}`, color: colors.text }}
+              className="hover-accent inline-flex h-9 items-center justify-center gap-1 rounded px-3 text-xs font-semibold"
+              style={{
+                border: `1px solid ${colors.border}`,
+                color: colors.text,
+                backgroundColor: colors.panel,
+                "--hover-accent-bg": `${colors.primary}14`,
+                "--hover-accent-border": colors.primary,
+              }}
               onClick={clearCart}
             >
-              <FiTrash2 size={12} />
-              Clear Cart
+              <span className="hover-accent-text inline-flex items-center gap-1">
+                <FiTrash2 size={12} />
+                Clear Cart
+              </span>
             </button>
             <Link
               to="/checkout"
               className="hover-accent inline-flex h-9 items-center justify-center gap-1 rounded px-3 text-xs font-semibold"
-              style={{ border: `1px solid ${colors.primary}`, color: colors.primary }}
+              style={{
+                border: `1px solid ${colors.primary}`,
+                color: colors.primary,
+                backgroundColor: colors.panel,
+                "--hover-accent-bg": `${colors.primary}14`,
+                "--hover-accent-border": colors.primary,
+              }}
             >
-              <span className="inline-flex items-center gap-1 pl-1">
+              <span className="hover-accent-text inline-flex items-center gap-1 pl-1">
                 Proceed to Checkout
                 <FiArrowRight size={12} />
               </span>

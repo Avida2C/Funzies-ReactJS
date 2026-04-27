@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { FiHeart, FiShoppingCart, FiTruck, FiPackage } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
@@ -8,15 +8,8 @@ import ThemedButton from "../components/ThemedButton";
 import { useCart } from "../lib/cartContext";
 import { useTheme } from "../theme/themeContext";
 import { useWishlist } from "../lib/wishlistContext";
-import {
-  activeProducts,
-  categoriesById,
-  brandsById,
-  productsById,
-  frontProductImage,
-  resolveAssetPath,
-  price,
-} from "../lib/storeData";
+import { activeProducts, categoriesById, brandsById, productsById, price } from "../lib/storeData";
+import { getProductCardImageUrl, getProductGalleryImageUrls } from "../lib/productImages";
 import { getReviewsForProduct, getReviewSummary } from "../data/productReviews";
 
 function ReviewStars({ rating, colors, iconSize = 18 }) {
@@ -44,7 +37,7 @@ function ReviewStars({ rating, colors, iconSize = 18 }) {
 }
 
 function ShopProductCard({ product, colors, onAddToCart, onToggleWishlist, wishlisted }) {
-  const productImage = resolveAssetPath(product.Image) || frontProductImage;
+  const productImage = getProductCardImageUrl(product);
   return (
     <article className="hover-lift rounded-lg p-3 shadow-sm" style={{ backgroundColor: colors.background }}>
       <Link to={`/product-page/${product.ID}`}>
@@ -96,12 +89,14 @@ export default function ProductPage() {
 
   const category = categoriesById.get(product.Category);
   const brand = brandsById.get(product.Brand);
-  const productImage = resolveAssetPath(product.Image) || frontProductImage;
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(3);
 
   const relatedProducts = activeProducts.filter((item) => item.ID !== product.ID).slice(0, 8);
-  const galleryImages = useMemo(() => Array.from({ length: 6 }, () => productImage), [productImage]);
+  const galleryImages = useMemo(() => getProductGalleryImageUrls(product), [product]);
+  useEffect(() => {
+    setSelectedImageIndex(0);
+  }, [product.ID]);
   const wishlisted = isWishlisted(product.ID);
   const productReviews = useMemo(() => getReviewsForProduct(product.ID), [product.ID]);
   const { totalReviews, averageRating } = useMemo(
@@ -140,7 +135,7 @@ export default function ProductPage() {
           <div className="order-2 flex gap-2 overflow-x-auto pb-1 md:order-1 md:flex-col md:overflow-visible">
             {galleryImages.map((image, index) => (
               <button
-                key={`thumb-${index}`}
+                key={`thumb-${index}-${image}`}
                 type="button"
                 aria-label={`View image ${index + 1}`}
                 className="h-12 w-12 shrink-0 overflow-hidden rounded border"

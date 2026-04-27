@@ -5,12 +5,32 @@ import AppLayout from "../components/AppLayout";
 import ThemedButton from "../components/ThemedButton";
 import ThemedSurface from "../components/ThemedSurface";
 import { COMPANY_OPENING_HOURS, COMPANY_SOCIAL_LINKS, COMPANY_STORE_CONTACT } from "../data/companyPageData";
+import { usePublicSettings } from "../hooks/usePublicSettings";
 import { useTheme } from "../theme/themeContext";
 
 const COMPANY_SOCIAL_ICONS = {
   facebook: FiFacebook,
   x: SiX,
   instagram: FiInstagram,
+};
+
+function safeParseJson(value, fallback) {
+  if (value == null || value === "") return fallback;
+  try {
+    const parsed = JSON.parse(String(value));
+    return parsed == null ? fallback : parsed;
+  } catch {
+    return fallback;
+  }
+}
+
+const DEFAULT_COMPANY_ABOUT = {
+  mission:
+    'Founded in [Year], Funzies Collection was built by gamers, for gamers. We realized that finding authentic gear, rare collectibles, and reliable hardware should not feel like a "boss fight." Our mission is to provide a curated, high-trust marketplace where every player can find their next favorite piece of loot.',
+  why:
+    'Because shopping should be fun. We have stripped away the "sus" listings and the bot-dominated drops to create a shop that feels like your favorite local gaming lounge - just on your phone.',
+  partners:
+    "We work with the biggest names in the industry to ensure that every product we sell is 100% authentic. We are an authorized reseller for major gaming peripherals and lifestyle brands.",
 };
 
 function contactRow(icon, children, { primary }) {
@@ -29,7 +49,17 @@ function contactRow(icon, children, { primary }) {
 
 export default function CompanyPage() {
   const { colors } = useTheme();
-  const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(COMPANY_STORE_CONTACT.mapSearchQuery)}&output=embed`;
+  const publicContent = usePublicSettings([
+    "content.company.store_contact",
+    "content.company.social_links",
+    "content.company.opening_hours",
+    "content.page.company_about",
+  ]);
+  const storeContact = safeParseJson(publicContent.values["content.company.store_contact"], COMPANY_STORE_CONTACT);
+  const socialLinks = safeParseJson(publicContent.values["content.company.social_links"], COMPANY_SOCIAL_LINKS);
+  const openingHours = safeParseJson(publicContent.values["content.company.opening_hours"], COMPANY_OPENING_HOURS);
+  const about = safeParseJson(publicContent.values["content.page.company_about"], DEFAULT_COMPANY_ABOUT);
+  const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(storeContact.mapSearchQuery)}&output=embed`;
 
   return (
     <AppLayout
@@ -46,26 +76,21 @@ export default function CompanyPage() {
               <div className="space-y-3">
                 <h3 className="text-lg font-semibold text-base-content">Our mission</h3>
                 <p className="leading-7 text-base-content/80">
-                  Founded in [Year], Funzies Collection was built by gamers, for gamers. We realized that finding authentic
-                  gear, rare collectibles, and reliable hardware should not feel like a &quot;boss fight.&quot; Our mission
-                  is to provide a curated, high-trust marketplace where every player can find their next favorite piece of
-                  loot.
+                  {about?.mission ?? DEFAULT_COMPANY_ABOUT.mission}
                 </p>
               </div>
 
               <div className="space-y-3 border-t pt-8" style={{ borderColor: colors.border }}>
                 <h3 className="text-lg font-semibold text-base-content">Why &quot;Funzies&quot;?</h3>
                 <p className="leading-7 text-base-content/80">
-                  Because shopping should be fun. We have stripped away the &quot;sus&quot; listings and the bot-dominated
-                  drops to create a shop that feels like your favorite local gaming lounge - just on your phone.
+                  {about?.why ?? DEFAULT_COMPANY_ABOUT.why}
                 </p>
               </div>
 
               <div className="space-y-3 border-t pt-8" style={{ borderColor: colors.border }}>
                 <h3 className="text-lg font-semibold text-base-content">Our partners</h3>
                 <p className="leading-7 text-base-content/80">
-                  We work with the biggest names in the industry to ensure that every product we sell is 100% authentic. We
-                  are an authorized reseller for major gaming peripherals and lifestyle brands.
+                  {about?.partners ?? DEFAULT_COMPANY_ABOUT.partners}
                 </p>
               </div>
             </div>
@@ -136,11 +161,11 @@ export default function CompanyPage() {
                 className="flex h-full flex-col gap-4 p-4 md:p-6 lg:border-e"
                 style={{ borderColor: colors.border }}
               >
-                {contactRow(<FiMapPin size={22} aria-hidden />, COMPANY_STORE_CONTACT.address, colors)}
+                {contactRow(<FiMapPin size={22} aria-hidden />, storeContact.address, colors)}
                 {contactRow(
                   <FiPhone size={22} aria-hidden />,
-                  <a className="hover:underline" style={{ color: colors.text }} href={`tel:${COMPANY_STORE_CONTACT.phone}`}>
-                    {COMPANY_STORE_CONTACT.phone}
+                  <a className="hover:underline" style={{ color: colors.text }} href={`tel:${storeContact.phone}`}>
+                    {storeContact.phone}
                   </a>,
                   colors,
                 )}
@@ -149,9 +174,9 @@ export default function CompanyPage() {
                   <a
                     className="hover:underline"
                     style={{ color: colors.text }}
-                    href={`mailto:${COMPANY_STORE_CONTACT.email}`}
+                    href={`mailto:${storeContact.email}`}
                   >
-                    {COMPANY_STORE_CONTACT.email}
+                    {storeContact.email}
                   </a>,
                   colors,
                 )}
@@ -159,7 +184,7 @@ export default function CompanyPage() {
                 <div className="mt-1 border-t pt-4" style={{ borderColor: colors.border }}>
                   <p className="mb-3 text-sm font-medium leading-5 text-base-content/90">Social</p>
                   <div className="flex flex-col gap-4">
-                    {COMPANY_SOCIAL_LINKS.map((item) => {
+                    {socialLinks.map((item) => {
                       const Icon = COMPANY_SOCIAL_ICONS[item.id];
                       if (!Icon) return null;
                       return (
@@ -193,7 +218,7 @@ export default function CompanyPage() {
                   Opening hours
                 </h3>
                 <ul className="text-base leading-[22.4px]">
-                  {COMPANY_OPENING_HOURS.map((row) => (
+                  {openingHours.map((row) => (
                     <li
                       key={row.day}
                       className="flex items-start justify-between gap-4 border-b py-2 last:border-b-0"

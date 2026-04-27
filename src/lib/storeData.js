@@ -14,9 +14,11 @@ export const productsById = new Map(activeProducts.map((product) => [product.ID,
 export const categoriesById = new Map(activeCategories.map((category) => [category.ID, category]));
 export const brandsById = new Map(activeBrands.map((brand) => [brand.ID, brand]));
 
-export const frontHeroImage = "https://www.figma.com/api/mcp/asset/d0807e64-7360-4b7b-aae1-c2e9bc6aa3fd";
-export const frontProductImage = "https://www.figma.com/api/mcp/asset/c00f60fd-7d43-4e36-acbc-8f9a36e6f44d";
-export const frontBannerImage = "https://www.figma.com/api/mcp/asset/26d1804a-96e3-489d-a28e-ec02f9f515ef";
+// Use local public/ assets for stability (Figma MCP asset URLs can expire or require auth).
+export const frontHeroImage = "/assets/img/LegoBanner.png";
+export const frontProductImage = "/assets/img/comingsoon.jpg";
+export const frontBannerImage = "/assets/img/FunkoBanner.png";
+export const maistoBannerImage = "/assets/img/MaistoBanner.png";
 export const logoLightMode = "/assets/img/logo/logo-lightmode.svg";
 export const logoDarkMode = "/assets/img/logo/logo-darkmode.svg";
 

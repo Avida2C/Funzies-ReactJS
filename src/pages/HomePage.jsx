@@ -11,11 +11,12 @@ import { textStyles } from "../theme/typography";
 import { useTheme } from "../theme/themeContext";
 import { useCart } from "../lib/cartContext";
 import { useWishlist } from "../lib/wishlistContext";
-import { activeProducts, frontBannerImage, frontHeroImage, frontProductImage, price, resolveAssetPath } from "../lib/storeData";
+import { getProductCardImageUrl } from "../lib/productImages";
+import { activeProducts, frontBannerImage, frontHeroImage, maistoBannerImage, price } from "../lib/storeData";
 
 const heroSlides = [
   { src: frontHeroImage, alt: "Featured collectibles banner" },
-  { src: frontBannerImage, alt: "Gaming channel banner" },
+  { src: maistoBannerImage, alt: "Maisto collection banner" },
 ];
 
 const popularTags = [
@@ -33,7 +34,7 @@ function FrontProductCard({ product }) {
   const { colors } = useTheme();
   const { addToCart } = useCart();
   const { isWishlisted, toggleWishlist } = useWishlist();
-  const productImage = resolveAssetPath(product.Image) || frontProductImage;
+  const productImage = getProductCardImageUrl(product);
   const wishlisted = isWishlisted(product.ID);
   return (
     <article className="hover-lift rounded-lg p-3 shadow" style={{ backgroundColor: colors.background }}>
@@ -138,7 +139,9 @@ export default function HomePage() {
         </div>
       </section>
       <HomeSection title="Best Sellers" products={activeProducts.slice(1, 1 + MOBILE_HOME_SECTION_PRODUCT_COUNT)} />
-      <section className="overflow-hidden rounded-lg shadow"><img src={frontBannerImage} alt="Gaming channel banner" className="h-[180px] w-full object-cover" /></section>
+      <Link to="/shop?q=Funko%20Pop" className="block overflow-hidden rounded-lg shadow hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-offset-2" aria-label="Shop Funko Pop">
+        <img src={frontBannerImage} alt="Funko Pop banner" className="h-[180px] w-full object-cover" />
+      </Link>
       <HomeSection title="Pre-Order" products={activeProducts.slice(2, 2 + MOBILE_HOME_SECTION_PRODUCT_COUNT)} />
     </AppLayout>
   );

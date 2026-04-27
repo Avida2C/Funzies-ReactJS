@@ -7,15 +7,14 @@ import ThemedButton from "../components/ThemedButton";
 import { useCart } from "../lib/cartContext";
 import { useTheme } from "../theme/themeContext";
 import { useWishlist } from "../lib/wishlistContext";
+import { getProductCardImageUrl } from "../lib/productImages";
 import {
   activeCategories,
   activeProducts,
   brandsById,
   categoriesById,
   frontBannerImage,
-  frontProductImage,
   price,
-  resolveAssetPath,
 } from "../lib/storeData";
 
 const POPULAR_TAG_KEYWORDS = {
@@ -68,7 +67,7 @@ const PRODUCTS_PAGE_SIZE = 10;
 function ShopProductCard({ product, colors }) {
   const { addToCart } = useCart();
   const { isWishlisted, toggleWishlist } = useWishlist();
-  const productImage = resolveAssetPath(product.Image) || frontProductImage;
+  const productImage = getProductCardImageUrl(product);
   const wishlisted = isWishlisted(product.ID);
   return (
     <article className="hover-lift rounded-lg p-2 shadow-sm" style={{ backgroundColor: colors.background }}>
@@ -306,7 +305,9 @@ export default function ShopPage() {
           </aside>
         </div>
       )}
-      <section className="overflow-hidden rounded-lg shadow"><img src={frontBannerImage} alt="Shop gaming banner" className="h-28 w-full object-cover md:h-36" /></section>
+      <Link to="/shop?q=Funko%20Pop" className="block overflow-hidden rounded-lg shadow hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-offset-2" aria-label="Shop Funko Pop">
+        <img src={frontBannerImage} alt="Funko Pop banner" className="h-28 w-full object-cover md:h-36" />
+      </Link>
       <section className="grid gap-4 lg:grid-cols-[220px,1fr]">
         <aside className="hidden rounded-lg p-4 lg:block" style={{ backgroundColor: colors.background }}>
           <h2 className="mb-3 text-lg font-semibold" style={{ color: colors.primary }}>Product Categories</h2>

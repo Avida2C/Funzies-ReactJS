@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import Accordion from "../components/Accordion";
 import AppLayout from "../components/AppLayout";
 import ThemedSurface from "../components/ThemedSurface";
+import { usePublicSettings } from "../hooks/usePublicSettings";
+import { getContentOverrideText } from "../lib/contentOverrides";
 
 const LEGAL_CENTER_ITEMS = [
   {
@@ -100,13 +102,20 @@ const LEGAL_CENTER_ITEMS = [
 ];
 
 export default function LegalCenterPage() {
+  const settings = usePublicSettings(["content.page.legal"]);
+  const override = getContentOverrideText(settings.values["content.page.legal"]);
+
   return (
     <AppLayout
       title="Legal Center"
       description="Funzies Collection is operated with transparency and compliance in mind. Below you will find all the documentation regarding our operations, your rights, and our responsibilities."
     >
       <ThemedSurface className="p-6">
-        <Accordion items={LEGAL_CENTER_ITEMS} />
+        {override ? (
+          <div className="whitespace-pre-wrap leading-7 text-base-content/80">{override}</div>
+        ) : (
+          <Accordion items={LEGAL_CENTER_ITEMS} />
+        )}
       </ThemedSurface>
     </AppLayout>
   );

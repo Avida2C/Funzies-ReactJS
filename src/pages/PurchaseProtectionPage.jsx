@@ -2,6 +2,8 @@ import AppLayout from "../components/AppLayout";
 import Accordion from "../components/Accordion";
 import SupportHelpSection from "../components/SupportHelpSection";
 import ThemedSurface from "../components/ThemedSurface";
+import { usePublicSettings } from "../hooks/usePublicSettings";
+import { getContentOverrideText } from "../lib/contentOverrides";
 
 const PURCHASE_PROTECTION_ITEMS = [
   {
@@ -68,6 +70,9 @@ const PURCHASE_PROTECTION_ITEMS = [
 ];
 
 export default function PurchaseProtectionPage() {
+  const settings = usePublicSettings(["content.page.purchase_protection"]);
+  const override = getContentOverrideText(settings.values["content.page.purchase_protection"]);
+
   return (
     <AppLayout
       title="Purchase Protection"
@@ -75,7 +80,11 @@ export default function PurchaseProtectionPage() {
     >
       <div className="grid gap-6">
         <ThemedSurface className="p-6">
-          <Accordion items={PURCHASE_PROTECTION_ITEMS} />
+          {override ? (
+            <div className="whitespace-pre-wrap leading-7 text-base-content/80">{override}</div>
+          ) : (
+            <Accordion items={PURCHASE_PROTECTION_ITEMS} />
+          )}
         </ThemedSurface>
 
         <SupportHelpSection />

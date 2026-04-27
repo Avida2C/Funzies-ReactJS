@@ -62,12 +62,22 @@
 .hover-accent {
   transition:
     filter var(--hover-transition-fast),
-    transform var(--hover-transition-fast);
+    transform var(--hover-transition-fast),
+    background-color var(--hover-transition-fast),
+    border-color var(--hover-transition-fast),
+    color var(--hover-transition-fast);
 }
 
 .hover-accent:hover {
   filter: brightness(1.08);
   transform: translateY(-1px);
+  background-color: var(--hover-accent-bg, unset);
+  border-color: var(--hover-accent-border, unset);
+  color: var(--hover-accent-fg, unset);
+}
+
+.hover-accent:hover .hover-accent-text {
+  color: var(--hover-accent-fg, unset);
 }
 
 .hover-icon {

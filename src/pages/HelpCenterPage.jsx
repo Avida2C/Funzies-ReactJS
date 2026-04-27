@@ -5,6 +5,7 @@ import { LuScale } from "react-icons/lu";
 import Accordion from "../components/Accordion";
 import AppLayout from "../components/AppLayout";
 import ThemedSurface from "../components/ThemedSurface";
+import ThemedTextField from "../components/ThemedTextField";
 import SupportHelpSection from "../components/SupportHelpSection";
 import { useTheme } from "../theme/themeContext";
 
@@ -95,10 +96,8 @@ function normalizeText(value) {
 }
 
 export default function HelpCenterPage() {
-  const { colors, mode } = useTheme();
+  const { colors } = useTheme();
   const [query, setQuery] = useState("");
-  const searchLikeTextColor = mode === "dark" ? "#1f2a36" : colors.text;
-  const searchLikePlaceholderColor = mode === "dark" ? "#6b7280" : "#9ca3af";
 
   const filteredFaq = useMemo(() => {
     const trimmed = query.trim();
@@ -154,27 +153,24 @@ export default function HelpCenterPage() {
               </p>
             </div>
             <div className="w-full max-w-md shrink-0">
-              <label className="form-control w-full">
-                <span className="sr-only">Search help articles</span>
-                <div className="relative">
+              <ThemedTextField
+                size="sm"
+                type="search"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Try: tracking, refund, authentic…"
+                autoComplete="off"
+                aria-label="Search help articles"
+                inputClassName="pl-7"
+                endAdornment={
                   <FiSearch
-                    className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2"
-                    style={{ color: "#ef4444" }}
+                    className="pointer-events-none mx-2.5"
+                    style={{ color: colors.primary }}
                     size={16}
                     aria-hidden
                   />
-                  <input
-                    type="search"
-                    value={query}
-                    onChange={(event) => setQuery(event.target.value)}
-                    placeholder="Try: tracking, refund, authentic…"
-                    className="help-center-search-input h-9 w-full rounded border p-0.5 pl-7 pr-2 text-sm outline-none"
-                    style={{ borderColor: colors.primary, backgroundColor: colors.white, color: searchLikeTextColor }}
-                    autoComplete="off"
-                  />
-                  <style>{`.help-center-search-input::placeholder { color: ${searchLikePlaceholderColor}; opacity: 1; }`}</style>
-                </div>
-              </label>
+                }
+              />
             </div>
           </div>
 

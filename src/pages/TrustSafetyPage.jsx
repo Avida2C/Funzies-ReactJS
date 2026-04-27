@@ -1,6 +1,8 @@
 import AppLayout from "../components/AppLayout";
 import Accordion from "../components/Accordion";
 import ThemedSurface from "../components/ThemedSurface";
+import { usePublicSettings } from "../hooks/usePublicSettings";
+import { getContentOverrideText } from "../lib/contentOverrides";
 
 const TRUST_SAFETY_ITEMS = [
   {
@@ -100,13 +102,20 @@ const TRUST_SAFETY_ITEMS = [
 ];
 
 export default function TrustSafetyPage() {
+  const settings = usePublicSettings(["content.page.trust_safety"]);
+  const override = getContentOverrideText(settings.values["content.page.trust_safety"]);
+
   return (
     <AppLayout
       title="Trust & Safety Center"
       description="Play Fair. Shop Secure. At Funzies Collection, we have built our shop on transparency and security. Here is how we keep the community safe and your data protected."
     >
       <ThemedSurface className="p-6">
-        <Accordion items={TRUST_SAFETY_ITEMS} />
+        {override ? (
+          <div className="whitespace-pre-wrap leading-7 text-base-content/80">{override}</div>
+        ) : (
+          <Accordion items={TRUST_SAFETY_ITEMS} />
+        )}
       </ThemedSurface>
     </AppLayout>
   );

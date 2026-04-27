@@ -2,6 +2,8 @@ import { useLocation } from "react-router-dom";
 import AppLayout from "../components/AppLayout";
 import Accordion from "../components/Accordion";
 import ThemedSurface from "../components/ThemedSurface";
+import { usePublicSettings } from "../hooks/usePublicSettings";
+import { getContentOverrideText } from "../lib/contentOverrides";
 
 const PRIVACY_POLICY_ITEMS = [
   {
@@ -220,17 +222,29 @@ export default function PolicyCenterPage() {
     ? "Terms of Use for Funzies Collection. Our Privacy Policy is also on this page."
     : "Privacy Policy for Funzies Collection. Our Terms of Use are also on this page.";
 
+  const settings = usePublicSettings(["content.page.privacy", "content.page.terms"]);
+  const privacyOverride = getContentOverrideText(settings.values["content.page.privacy"]);
+  const termsOverride = getContentOverrideText(settings.values["content.page.terms"]);
+
   return (
     <AppLayout title={pageTitle} description={pageDescription}>
       <ThemedSurface className="p-6 space-y-8">
         <section id="privacy" className="space-y-6">
           <h2 className="text-2xl font-semibold text-base-content">Privacy Policy</h2>
-          <Accordion items={PRIVACY_POLICY_ITEMS} />
+          {privacyOverride ? (
+            <div className="whitespace-pre-wrap leading-7 text-base-content/80">{privacyOverride}</div>
+          ) : (
+            <Accordion items={PRIVACY_POLICY_ITEMS} />
+          )}
         </section>
 
         <section id="terms" className="space-y-6 border-t border-base-300 pt-8">
           <h2 className="text-2xl font-semibold text-base-content">Terms of Use</h2>
-          <Accordion items={TERMS_OF_USE_ITEMS} />
+          {termsOverride ? (
+            <div className="whitespace-pre-wrap leading-7 text-base-content/80">{termsOverride}</div>
+          ) : (
+            <Accordion items={TERMS_OF_USE_ITEMS} />
+          )}
         </section>
       </ThemedSurface>
     </AppLayout>

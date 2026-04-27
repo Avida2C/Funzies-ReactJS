@@ -3,13 +3,14 @@ import AppLayout from "../components/AppLayout";
 import TagPill from "../components/TagPill";
 import ThemedButton from "../components/ThemedButton";
 import ThemedSurface from "../components/ThemedSurface";
-import { getRoleById } from "../data/careersData";
+import { useCareersRoles } from "../hooks/useCareersRoles";
 import { useTheme } from "../theme/themeContext";
 
 export default function CareerRolePage() {
   const { roleId } = useParams();
   const { colors } = useTheme();
-  const role = getRoleById(roleId);
+  const { roles } = useCareersRoles();
+  const role = roles.find((r) => r.id === roleId);
 
   if (!role) {
     return (

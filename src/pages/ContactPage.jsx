@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { FiExternalLink, FiMail, FiMessageCircle } from "react-icons/fi";
 import AppLayout from "../components/AppLayout";
 import ThemedSurface from "../components/ThemedSurface";
+import ThemedTextField from "../components/ThemedTextField";
 import { useTheme } from "../theme/themeContext";
 
 const TOPIC_OPTIONS = [
@@ -30,17 +31,10 @@ const INITIAL_FORM = {
 };
 
 export default function ContactPage() {
-  const { colors, mode } = useTheme();
+  const { colors } = useTheme();
   const location = useLocation();
   const [form, setForm] = useState(INITIAL_FORM);
   const [submitted, setSubmitted] = useState(false);
-  const formFieldTextColor = mode === "dark" ? "#1f2a36" : colors.text;
-  const formPlaceholderColor = mode === "dark" ? "#6b7280" : "#9ca3af";
-  const formFieldStyle = {
-    borderColor: colors.primary,
-    backgroundColor: colors.white,
-    color: formFieldTextColor,
-  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -121,42 +115,6 @@ export default function ContactPage() {
             </ul>
           </ThemedSurface>
 
-          <ThemedSurface className="p-6 space-y-3">
-            <h2 className="text-xl font-semibold text-base-content">Direct email</h2>
-            <p className="leading-7 text-base-content/80">
-              Prefer email? Use the form for the fastest routing, or reach out directly:
-            </p>
-            <ul className="space-y-2 text-sm leading-7 text-base-content/80">
-              <li className="flex flex-wrap items-center gap-2">
-                <FiMail size={16} aria-hidden style={{ color: colors.primary }} />
-                <strong className="text-base-content">Support:</strong>
-                <a className="link" href="mailto:demo@infofunzies.com.mt" style={{ color: colors.primary }}>
-                  demo@infofunzies.com.mt
-                </a>
-              </li>
-              <li className="flex flex-wrap items-center gap-2">
-                <FiMail size={16} aria-hidden style={{ color: colors.primary }} />
-                <strong className="text-base-content">Corporate:</strong>
-                <a className="link" href="mailto:corporate@funziescollection.com" style={{ color: colors.primary }}>
-                  corporate@funziescollection.com
-                </a>
-              </li>
-              <li className="flex flex-wrap items-center gap-2">
-                <FiMail size={16} aria-hidden style={{ color: colors.primary }} />
-                <strong className="text-base-content">Partnerships:</strong>
-                <a className="link" href="mailto:partners@funziescollection.com" style={{ color: colors.primary }}>
-                  partners@funziescollection.com
-                </a>
-              </li>
-            </ul>
-            <p className="text-sm leading-6 text-base-content/80">
-              Accessibility feedback:{" "}
-              <Link to="/accessibility" className="link" style={{ color: colors.primary }}>
-                Accessibility
-              </Link>
-              .
-            </p>
-          </ThemedSurface>
         </div>
 
         <ThemedSurface className="p-6 md:p-8">
@@ -180,7 +138,6 @@ export default function ContactPage() {
             </div>
           ) : (
             <form id="contact-form" className="scroll-mt-24 space-y-4" onSubmit={handleSubmit}>
-              <style>{`.contact-form-input::placeholder { color: ${formPlaceholderColor}; opacity: 1; }`}</style>
               <div className="space-y-1">
                 <h2 className="text-xl font-semibold text-base-content">Send us a message</h2>
                 <p className="text-sm leading-6 text-base-content/80">
@@ -189,42 +146,34 @@ export default function ContactPage() {
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
-                <label className="form-control w-full">
-                  <span className="label-text mb-1.5 text-sm font-medium" style={{ color: colors.text }}>Name</span>
-                  <input
-                    className="contact-form-input h-10 w-full rounded border px-3 text-sm outline-none"
-                    style={formFieldStyle}
-                    type="text"
-                    name="name"
-                    placeholder="Enter your full name"
-                    required
-                    autoComplete="name"
-                    value={form.name}
-                    onChange={handleChange}
-                  />
-                </label>
-                <label className="form-control w-full">
-                  <span className="label-text mb-1.5 text-sm font-medium" style={{ color: colors.text }}>Email</span>
-                  <input
-                    className="contact-form-input h-10 w-full rounded border px-3 text-sm outline-none"
-                    style={formFieldStyle}
-                    type="email"
-                    name="email"
-                    placeholder="Enter your email address"
-                    required
-                    autoComplete="email"
-                    value={form.email}
-                    onChange={handleChange}
-                  />
-                </label>
+                <ThemedTextField
+                  label="Name"
+                  type="text"
+                  name="name"
+                  placeholder="Enter your full name"
+                  required
+                  autoComplete="name"
+                  value={form.name}
+                  onChange={handleChange}
+                />
+                <ThemedTextField
+                  label="Email"
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email address"
+                  required
+                  autoComplete="email"
+                  value={form.email}
+                  onChange={handleChange}
+                />
               </div>
 
-              <div className="grid gap-4 sm:grid-cols-2">
-                <label className="form-control w-full sm:mb-6">
+              <div className="space-y-4">
+                <label className="form-control w-full">
                   <span className="label-text mb-1.5 text-sm font-medium" style={{ color: colors.text }}>Topic</span>
                   <select
                     className="h-10 w-full rounded border px-3 text-sm outline-none"
-                    style={formFieldStyle}
+                    style={{ borderColor: colors.primary, backgroundColor: colors.white, color: "#1f2a36" }}
                     name="topic"
                     value={form.topic}
                     onChange={handleChange}
@@ -236,33 +185,29 @@ export default function ContactPage() {
                     ))}
                   </select>
                 </label>
-                <label className="form-control mb-4 w-full sm:mb-0">
-                  <span className="label-text mb-1.5 text-sm font-medium" style={{ color: colors.text }}>Order number (optional)</span>
-                  <input
-                    className="contact-form-input h-10 w-full rounded border px-3 text-sm outline-none"
-                    style={formFieldStyle}
-                    type="text"
-                    name="orderNumber"
-                    placeholder="e.g. FC-102938"
-                    autoComplete="off"
-                    value={form.orderNumber}
-                    onChange={handleChange}
-                  />
-                </label>
-              </div>
-
-              <label className="form-control w-full pt-3">
-                <span className="label-text mb-1.5 text-sm font-medium" style={{ color: colors.text }}>Message</span>
-                <textarea
-                  className="contact-form-input min-h-36 w-full rounded border px-3 py-2 text-sm outline-none"
-                  style={formFieldStyle}
-                  name="message"
-                  required
-                  placeholder="Tell us what happened and what you need."
-                  value={form.message}
+                <ThemedTextField
+                  className="w-full"
+                  label="Order number (optional)"
+                  type="text"
+                  name="orderNumber"
+                  placeholder="e.g. FC-102938"
+                  autoComplete="off"
+                  value={form.orderNumber}
                   onChange={handleChange}
                 />
-              </label>
+              </div>
+
+              <ThemedTextField
+                className="w-full"
+                label="Message"
+                name="message"
+                required
+                multiline
+                rows={6}
+                placeholder="Tell us what happened and what you need."
+                value={form.message}
+                onChange={handleChange}
+              />
 
               <div className="flex flex-wrap gap-3 pt-2">
                 <button
@@ -282,6 +227,43 @@ export default function ContactPage() {
               </div>
             </form>
           )}
+        </ThemedSurface>
+
+        <ThemedSurface className="w-full p-6 space-y-3 lg:col-span-2">
+          <h2 className="text-xl font-semibold text-base-content">Direct email</h2>
+          <p className="leading-7 text-base-content/80">
+            Prefer email? Use the form for the fastest routing, or reach out directly:
+          </p>
+          <ul className="space-y-2 text-sm leading-7 text-base-content/80">
+            <li className="flex flex-wrap items-center gap-2">
+              <FiMail size={16} aria-hidden style={{ color: colors.primary }} />
+              <strong className="text-base-content">Support:</strong>
+              <a className="link" href="mailto:demo@infofunzies.com.mt" style={{ color: colors.primary }}>
+                demo@infofunzies.com.mt
+              </a>
+            </li>
+            <li className="flex flex-wrap items-center gap-2">
+              <FiMail size={16} aria-hidden style={{ color: colors.primary }} />
+              <strong className="text-base-content">Corporate:</strong>
+              <a className="link" href="mailto:corporate@funziescollection.com" style={{ color: colors.primary }}>
+                corporate@funziescollection.com
+              </a>
+            </li>
+            <li className="flex flex-wrap items-center gap-2">
+              <FiMail size={16} aria-hidden style={{ color: colors.primary }} />
+              <strong className="text-base-content">Partnerships:</strong>
+              <a className="link" href="mailto:partners@funziescollection.com" style={{ color: colors.primary }}>
+                partners@funziescollection.com
+              </a>
+            </li>
+          </ul>
+          <p className="text-sm leading-6 text-base-content/80">
+            Accessibility feedback:{" "}
+            <Link to="/accessibility" className="link" style={{ color: colors.primary }}>
+              Accessibility
+            </Link>
+            .
+          </p>
         </ThemedSurface>
       </div>
     </AppLayout>
