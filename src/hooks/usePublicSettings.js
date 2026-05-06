@@ -34,8 +34,18 @@ function saveCache(values) {
  * @param {string[]} keys
  */
 export function usePublicSettings(keys = []) {
-  const normalizedKeys = useMemo(() => (Array.isArray(keys) ? keys.filter(Boolean) : []), [keys]);
-  const keySet = useMemo(() => new Set(normalizedKeys), [normalizedKeys]);
+  // `keys` is commonly passed as an inline array literal, which changes identity every render.
+  // Build a stable signature based on contents so downstream memoization doesn't thrash.
+  const keySig = useMemo(() => {
+    const arr = Array.isArray(keys) ? keys : [];
+    const normalized = arr.filter(Boolean).map((k) => String(k)).sort();
+    // Unique after sort for stable signature and stable iteration order.
+    const unique = normalized.filter((k, i) => i === 0 || k !== normalized[i - 1]);
+    return JSON.stringify(unique);
+  }, [keys]);
+
+  const normalizedKeys = useMemo(() => JSON.parse(keySig), [keySig]);
+  const keySet = useMemo(() => new Set(normalizedKeys), [keySig]);
 
   const [values, setValues] = useState(() => {
     const cached = loadCache();
