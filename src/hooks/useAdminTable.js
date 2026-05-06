@@ -25,9 +25,9 @@ export function useAdminTable(table) {
     }
   }, [table]);
 
-  useEffect(() => {
-    refresh();
-  }, [refresh]);
+  // useEffect(() => {
+  //   refresh();
+  // }, [refresh]);
 
   return { rows, setRows, loading, error, refresh, setError };
 }
