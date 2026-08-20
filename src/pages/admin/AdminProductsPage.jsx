@@ -12,6 +12,7 @@ import { formatEurValue } from "../../lib/funziesDataset";
 import { useTheme } from "../../theme/themeContext";
 import { textStyles } from "../../theme/typography";
 import { getProductCardImageUrl, getProductExtraImageCount, parseProductExtraImages } from "../../lib/productImages";
+import { formatProductSku, getProductSpecs } from "../../lib/productSpecs";
 import AdminImageUploadButton from "../../components/admin/AdminImageUploadButton";
 import AdminLayout from "./AdminLayout";
 
@@ -60,6 +61,9 @@ export default function AdminProductsPage() {
   const [fImage, setFImage] = useState("");
   const [fThumb, setFThumb] = useState("");
   const [fImagesExtra, setFImagesExtra] = useState("");
+  const [fSku, setFSku] = useState("");
+  const [fSeries, setFSeries] = useState("");
+  const [fScale, setFScale] = useState("");
   const [fDel, setFDel] = useState("0");
 
   const productsSorted = useMemo(() => sortById(prods.rows), [prods.rows]);
@@ -90,9 +94,16 @@ export default function AdminProductsPage() {
     return base.filter((p) => {
       const name = p.Name?.toLowerCase() ?? "";
       const id = String(p.ID);
-      return name.includes(q) || id.includes(q);
+      const specs = getProductSpecs(p, { brand: brandById.get(p.Brand), category: categoryById.get(p.Category) });
+      return (
+        name.includes(q) ||
+        id.includes(q) ||
+        specs.sku.toLowerCase().includes(q) ||
+        specs.series.toLowerCase().includes(q) ||
+        specs.scale.toLowerCase().includes(q)
+      );
     });
-  }, [query, productsSorted, showDeleted]);
+  }, [query, productsSorted, showDeleted, brandById, categoryById]);
 
   const openCreate = useCallback(() => {
     setFormError(null);
@@ -108,6 +119,9 @@ export default function AdminProductsPage() {
     setFImage("");
     setFThumb("");
     setFImagesExtra("");
+    setFSku("");
+    setFSeries("");
+    setFScale("");
     setFDel("0");
     setModal("create");
   }, [catOptions, brandOptions]);
@@ -124,6 +138,9 @@ export default function AdminProductsPage() {
     setFImage(String(p.Image ?? ""));
     setFThumb(p.Thumbnail != null ? String(p.Thumbnail) : "");
     setFImagesExtra(parseProductExtraImages(p.Images).join("\n"));
+    setFSku(String(p.SKU ?? ""));
+    setFSeries(String(p.Series ?? ""));
+    setFScale(String(p.Scale ?? ""));
     setFDel(p.Deleted ? "1" : "0");
     setModal("edit");
   }, []);
@@ -163,6 +180,9 @@ export default function AdminProductsPage() {
         Image: mainImg,
         Deleted: Number.parseInt(fDel, 10) || 0,
         Images: extraPaths,
+        SKU: fSku.trim(),
+        Series: fSeries.trim(),
+        Scale: fScale.trim(),
       };
       if (fThumb.trim()) {
         body.Thumbnail = fThumb.trim();
@@ -237,7 +257,7 @@ export default function AdminProductsPage() {
         <ThemedTextField
           className="max-w-md"
           size="sm"
-          label="Filter by name or ID"
+          label="Filter by name, ID, SKU, series, or scale"
           placeholder="e.g. Ticket or 42"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -253,6 +273,7 @@ export default function AdminProductsPage() {
         columns={[
           { id: "id", label: "ID" },
           { id: "img", label: "Photo" },
+          { id: "sku", label: "SKU" },
           { id: "name", label: "Name" },
           { id: "cat", label: "Category" },
           { id: "brand", label: "Brand" },
@@ -265,6 +286,7 @@ export default function AdminProductsPage() {
         {filtered.map((p) => {
           const category = categoryById.get(p.Category);
           const brand = brandById.get(p.Brand);
+          const specs = getProductSpecs(p, { brand, category });
           return (
             <AdminDataRow key={p.ID}>
               <AdminDataCell className="whitespace-nowrap font-mono text-sm">{p.ID}</AdminDataCell>
@@ -287,6 +309,7 @@ export default function AdminProductsPage() {
                   ) : null}
                 </div>
               </AdminDataCell>
+              <AdminDataCell className="whitespace-nowrap font-mono text-xs">{specs.sku}</AdminDataCell>
               <AdminDataCell>
                 <Link
                   to={`/product-page/${p.ID}`}
@@ -435,6 +458,30 @@ export default function AdminProductsPage() {
               </p>
             )}
           </div>
+        </div>
+        <div className="mb-3 grid min-w-0 gap-3 sm:grid-cols-3">
+          <ThemedTextField
+            size="sm"
+            label="SKU"
+            value={fSku}
+            onChange={(e) => setFSku(e.target.value)}
+            placeholder={editing ? formatProductSku(editing.ID) : "Auto on save if empty"}
+            inputClassName="font-mono"
+          />
+          <ThemedTextField
+            size="sm"
+            label="Series"
+            value={fSeries}
+            onChange={(e) => setFSeries(e.target.value)}
+            placeholder="e.g. Pop!, Ticket to Ride"
+          />
+          <ThemedTextField
+            size="sm"
+            label="Scale"
+            value={fScale}
+            onChange={(e) => setFScale(e.target.value)}
+            placeholder="e.g. 1:24, 3.75&quot;"
+          />
         </div>
         <div className="mb-3 grid gap-3 sm:grid-cols-2">
           <ThemedTextField

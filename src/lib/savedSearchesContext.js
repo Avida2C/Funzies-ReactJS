@@ -20,7 +20,7 @@ export function savedSearchesStorageKey(email) {
   return `${SAVED_SEARCHES_STORAGE_PREFIX}${normalized || "guest"}`;
 }
 
-export function normalizeShopFilters({ q = "", category = "", sort = "featured" } = {}) {
+export function normalizeShopFilters({ q = "", category = "", sort = "featured", series = "", scale = "", sku = "" } = {}) {
   const query = String(q ?? "").trim();
   const categoryId = String(category ?? "").trim();
   const sortId = String(sort ?? "").trim() || "featured";
@@ -28,6 +28,9 @@ export function normalizeShopFilters({ q = "", category = "", sort = "featured" 
     q: query,
     category: categoryId,
     sort: sortId === "featured" ? "featured" : sortId,
+    series: String(series ?? "").trim(),
+    scale: String(scale ?? "").trim(),
+    sku: String(sku ?? "").trim(),
   };
 }
 
@@ -37,12 +40,22 @@ export function searchFingerprint(filters) {
     q: normalized.q.toLowerCase(),
     category: normalized.category,
     sort: normalized.sort === "featured" ? "" : normalized.sort,
+    series: normalized.series.toLowerCase(),
+    scale: normalized.scale.toLowerCase(),
+    sku: normalized.sku.toLowerCase(),
   });
 }
 
 export function hasSavableShopFilters(filters) {
   const normalized = normalizeShopFilters(filters);
-  return Boolean(normalized.q || normalized.category || (normalized.sort && normalized.sort !== "featured"));
+  return Boolean(
+    normalized.q ||
+      normalized.category ||
+      (normalized.sort && normalized.sort !== "featured") ||
+      normalized.series ||
+      normalized.scale ||
+      normalized.sku,
+  );
 }
 
 export function buildShopHref(filters) {
@@ -57,17 +70,35 @@ export function buildShopHref(filters) {
   if (normalized.sort && normalized.sort !== "featured") {
     params.set("sort", normalized.sort);
   }
+  if (normalized.series) {
+    params.set("series", normalized.series);
+  }
+  if (normalized.scale) {
+    params.set("scale", normalized.scale);
+  }
+  if (normalized.sku) {
+    params.set("sku", normalized.sku);
+  }
   const query = params.toString();
   return query ? `/shop?${query}` : "/shop";
 }
 
-export function defaultSearchName({ q, categoryName, sort } = {}) {
+export function defaultSearchName({ q, categoryName, sort, series, scale, sku } = {}) {
   const parts = [];
   if (String(q ?? "").trim()) {
     parts.push(String(q).trim());
   }
   if (String(categoryName ?? "").trim()) {
     parts.push(String(categoryName).trim());
+  }
+  if (String(series ?? "").trim()) {
+    parts.push(String(series).trim());
+  }
+  if (String(scale ?? "").trim()) {
+    parts.push(String(scale).trim());
+  }
+  if (String(sku ?? "").trim()) {
+    parts.push(String(sku).trim());
   }
   if (sort && sort !== "featured") {
     parts.push(SORT_LABELS[sort] ?? sort);
@@ -90,6 +121,9 @@ function normalizeSavedSearch(raw) {
     q: raw.q,
     category: raw.category,
     sort: raw.sort,
+    series: raw.series,
+    scale: raw.scale,
+    sku: raw.sku,
   });
   if (!hasSavableShopFilters(filters)) {
     return null;
@@ -103,6 +137,9 @@ function normalizeSavedSearch(raw) {
     q: filters.q,
     category: filters.category,
     sort: filters.sort,
+    series: filters.series,
+    scale: filters.scale,
+    sku: filters.sku,
     createdAt: Number.isFinite(createdAt) ? createdAt : Date.now(),
   };
 }
@@ -223,8 +260,8 @@ export function SavedSearchesProvider({ children }) {
         const fingerprint = searchFingerprint(filters);
         return savedSearches.find((item) => searchFingerprint(item) === fingerprint) ?? null;
       },
-      saveSearch: ({ name, q, category, sort, categoryName } = {}) => {
-        const filters = normalizeShopFilters({ q, category, sort });
+      saveSearch: ({ name, q, category, sort, series, scale, sku, categoryName } = {}) => {
+        const filters = normalizeShopFilters({ q, category, sort, series, scale, sku });
         if (!isAuthenticated || !hasSavableShopFilters(filters)) {
           return { ok: false, reason: "invalid" };
         }

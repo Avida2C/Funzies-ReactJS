@@ -15,6 +15,15 @@ function filterSummary(search) {
     const categoryName = categoriesById.get(Number(search.category))?.Name?.trim();
     parts.push(`Category: ${categoryName || `#${search.category}`}`);
   }
+  if (search.series) {
+    parts.push(`Series: ${search.series}`);
+  }
+  if (search.scale) {
+    parts.push(`Scale: ${search.scale}`);
+  }
+  if (search.sku) {
+    parts.push(`SKU: ${search.sku}`);
+  }
   if (search.sort && search.sort !== "featured") {
     parts.push(`Sort: ${SORT_LABELS[search.sort] ?? search.sort}`);
   }

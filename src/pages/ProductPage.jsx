@@ -9,6 +9,7 @@ import { useCart } from "../lib/cartContext";
 import { useTheme } from "../theme/themeContext";
 import { useWishlist } from "../lib/wishlistContext";
 import { activeProducts, categoriesById, brandsById, productsById, price } from "../lib/storeData";
+import { getProductSpecs } from "../lib/productSpecs";
 import { getProductCardImageUrl, getProductGalleryImageUrls } from "../lib/productImages";
 import { getReviewsForProduct, getReviewSummary } from "../data/productReviews";
 
@@ -48,6 +49,9 @@ function ShopProductCard({ product, colors, onAddToCart, onToggleWishlist, wishl
           <Link to={`/product-page/${product.ID}`}>
             <p className="truncate text-sm" style={{ color: colors.text }}>{product.Name.trim()}</p>
           </Link>
+          <p className="truncate text-xs" style={{ color: colors.text, opacity: 0.75 }}>
+            {getProductSpecs(product).series}
+          </p>
           <p className="text-lg font-semibold" style={{ color: colors.primary }}>{price.format(product.Price)}</p>
         </div>
         <div className="flex items-center gap-2">
@@ -91,10 +95,18 @@ export default function ProductPage() {
 
   const category = categoriesById.get(product.Category);
   const brand = brandsById.get(product.Brand);
+  const specs = getProductSpecs(product, { brand, category });
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(3);
 
-  const relatedProducts = activeProducts.filter((item) => item.ID !== product.ID).slice(0, 4);
+  const relatedProducts = useMemo(() => {
+    const others = activeProducts.filter((item) => item.ID !== product.ID);
+    const sameSeries = others.filter((item) => getProductSpecs(item).series === specs.series);
+    const sameCategory = others.filter(
+      (item) => getProductSpecs(item).series !== specs.series && item.Category === product.Category,
+    );
+    return [...sameSeries, ...sameCategory].slice(0, 4);
+  }, [product, specs.series]);
   const galleryImages = useMemo(() => getProductGalleryImageUrls(product), [product]);
   useEffect(() => {
     setSelectedImageIndex(0);
@@ -226,6 +238,34 @@ export default function ProductPage() {
             <div className="rounded p-3" style={{ backgroundColor: colors.background }}>
               <span style={{ color: colors.text }}>Brand</span>
               <p className="font-semibold">{brand?.Name ?? "Unknown"}</p>
+            </div>
+            <div className="rounded p-3" style={{ backgroundColor: colors.background }}>
+              <span style={{ color: colors.text }}>Scale</span>
+              <p className="font-semibold">
+                {specs.scale !== "—" ? (
+                  <Link to={`/shop?scale=${encodeURIComponent(specs.scale)}`} className="hover:underline" style={{ color: colors.text }}>
+                    {specs.scale}
+                  </Link>
+                ) : (
+                  "—"
+                )}
+              </p>
+            </div>
+            <div className="rounded p-3" style={{ backgroundColor: colors.background }}>
+              <span style={{ color: colors.text }}>Series</span>
+              <p className="font-semibold">
+                <Link to={`/shop?series=${encodeURIComponent(specs.series)}`} className="hover:underline" style={{ color: colors.text }}>
+                  {specs.series}
+                </Link>
+              </p>
+            </div>
+            <div className="col-span-2 rounded p-3" style={{ backgroundColor: colors.background }}>
+              <span style={{ color: colors.text }}>SKU</span>
+              <p className="font-semibold font-mono">
+                <Link to={`/shop?sku=${encodeURIComponent(specs.sku)}`} className="hover:underline" style={{ color: colors.text }}>
+                  {specs.sku}
+                </Link>
+              </p>
             </div>
           </div>
         </div>

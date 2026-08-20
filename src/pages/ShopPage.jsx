@@ -15,6 +15,7 @@ import {
 import { useTheme } from "../theme/themeContext";
 import { useWishlist } from "../lib/wishlistContext";
 import { getProductCardImageUrl } from "../lib/productImages";
+import { getProductSpecs, productSpecsSearchText, specsMatchFilter } from "../lib/productSpecs";
 import {
   activeCategories,
   activeProducts,
@@ -67,11 +68,16 @@ function ShopProductCard({ product, colors }) {
   const { isWishlisted, toggleWishlist } = useWishlist();
   const productImage = getProductCardImageUrl(product);
   const wishlisted = isWishlisted(product.ID);
+  const specs = getProductSpecs(product);
   return (
     <article className="hover-lift rounded-lg p-2 shadow-sm" style={{ backgroundColor: colors.background }}>
       <Link to={`/product-page/${product.ID}`}><img src={productImage} alt={product.Name} className="h-36 w-full rounded object-cover md:h-40" loading="lazy" /></Link>
       <div className="mt-2 space-y-1">
         <Link to={`/product-page/${product.ID}`}><p className="truncate text-[11px]" style={{ color: colors.text }}>{product.Name.trim()}</p></Link>
+        <p className="truncate text-[10px]" style={{ color: colors.text, opacity: 0.75 }}>
+          {specs.series}
+          {specs.scale && specs.scale !== "—" ? ` · ${specs.scale}` : ""}
+        </p>
         <p className="text-base font-semibold" style={{ color: colors.primary }}>{price.format(product.Price)}</p>
         <div className="flex items-center gap-2">
           <button
@@ -116,6 +122,9 @@ export default function ShopPage() {
   const rawCategory = searchParams.get("category");
   const rawQuery = searchParams.get("q") ?? "";
   const selectedSort = searchParams.get("sort") ?? "featured";
+  const selectedSeries = (searchParams.get("series") ?? "").trim();
+  const selectedScale = (searchParams.get("scale") ?? "").trim();
+  const selectedSku = (searchParams.get("sku") ?? "").trim();
   const normalizedQuery = rawQuery.trim().toLowerCase();
   const selectedCategoryId = rawCategory ? Number.parseInt(rawCategory, 10) : null;
   const selectedCategoryName = categoriesById.get(selectedCategoryId)?.Name ?? null;
@@ -135,11 +144,12 @@ export default function ShopPage() {
 
   const animeKeywords = POPULAR_TAG_KEYWORDS.anime;
   const funkoPopKeywords = POPULAR_TAG_KEYWORDS["funko pop"];
-  const displayedProducts = normalizedQuery
+  const queriedProducts = normalizedQuery
     ? categoryFilteredProducts.filter((product) => {
         const categoryName = categoriesById.get(product.Category)?.Name ?? "";
         const brandName = brandsById.get(product.Brand)?.Name ?? "";
-        const searchableText = `${product.Name} ${product.Description ?? ""} ${categoryName} ${brandName}`.toLowerCase();
+        const specsText = productSpecsSearchText(product);
+        const searchableText = `${product.Name} ${product.Description ?? ""} ${categoryName} ${brandName} ${specsText}`.toLowerCase();
 
         if (normalizedQuery === "anime") {
           if (funkoPopKeywords.some((keyword) => searchableText.includes(keyword))) {
@@ -155,6 +165,10 @@ export default function ShopPage() {
         return searchableText.includes(normalizedQuery);
       })
     : categoryFilteredProducts;
+
+  const displayedProducts = queriedProducts.filter((product) =>
+    specsMatchFilter(product, { series: selectedSeries, scale: selectedScale, sku: selectedSku }),
+  );
 
   const sortedProducts = [...displayedProducts].sort((leftProduct, rightProduct) => {
     if (selectedSort === "price-desc") {
@@ -183,7 +197,7 @@ export default function ShopPage() {
 
   useEffect(() => {
     setVisibleProductsCount(PRODUCTS_PAGE_SIZE);
-  }, [selectedSort, normalizedQuery, selectedCategoryId]);
+  }, [selectedSort, normalizedQuery, selectedCategoryId, selectedSeries, selectedScale, selectedSku]);
 
   const visibleProducts = sortedProducts.slice(0, visibleProductsCount);
   const hasMoreProducts = visibleProducts.length < sortedProducts.length;
@@ -238,6 +252,24 @@ export default function ShopPage() {
     setSearchParams(params);
   };
 
+  const clearSeriesFilter = () => {
+    const params = new URLSearchParams(searchParams);
+    params.delete("series");
+    setSearchParams(params);
+  };
+
+  const clearScaleFilter = () => {
+    const params = new URLSearchParams(searchParams);
+    params.delete("scale");
+    setSearchParams(params);
+  };
+
+  const clearSkuFilter = () => {
+    const params = new URLSearchParams(searchParams);
+    params.delete("sku");
+    setSearchParams(params);
+  };
+
   const clearAllFilters = () => {
     setSearchParams(new URLSearchParams());
   };
@@ -245,11 +277,17 @@ export default function ShopPage() {
   const hasSearchFilter = normalizedQuery.length > 0;
   const hasCategoryTag = hasCategoryFilter && Boolean(selectedCategoryName);
   const hasSortFilter = selectedSort !== "featured";
-  const hasAnyFilter = hasSearchFilter || hasCategoryTag || hasSortFilter;
+  const hasSeriesFilter = selectedSeries.length > 0;
+  const hasScaleFilter = selectedScale.length > 0;
+  const hasSkuFilter = selectedSku.length > 0;
+  const hasAnyFilter = hasSearchFilter || hasCategoryTag || hasSortFilter || hasSeriesFilter || hasScaleFilter || hasSkuFilter;
   const currentFilters = {
     q: rawQuery.trim(),
     category: hasCategoryFilter ? String(selectedCategoryId) : "",
     sort: selectedSort,
+    series: selectedSeries,
+    scale: selectedScale,
+    sku: selectedSku,
   };
   const canSaveCurrentSearch = hasSavableShopFilters(currentFilters);
   const searchIsSaved = isSearchSaved(currentFilters);
@@ -270,6 +308,9 @@ export default function ShopPage() {
         q: currentFilters.q,
         categoryName: selectedCategoryName,
         sort: currentFilters.sort,
+        series: currentFilters.series,
+        scale: currentFilters.scale,
+        sku: currentFilters.sku,
       }),
     });
   };
@@ -375,6 +416,36 @@ export default function ShopPage() {
                   style={{ borderColor: colors.border, color: colors.text }}
                 >
                   Sort: {SORT_LABELS[selectedSort] ?? selectedSort} x
+                </button>
+              )}
+              {hasSeriesFilter && (
+                <button
+                  type="button"
+                  onClick={clearSeriesFilter}
+                  className="rounded-full border px-3 py-1 text-xs font-semibold"
+                  style={{ borderColor: colors.border, color: colors.text }}
+                >
+                  Series: {selectedSeries} x
+                </button>
+              )}
+              {hasScaleFilter && (
+                <button
+                  type="button"
+                  onClick={clearScaleFilter}
+                  className="rounded-full border px-3 py-1 text-xs font-semibold"
+                  style={{ borderColor: colors.border, color: colors.text }}
+                >
+                  Scale: {selectedScale} x
+                </button>
+              )}
+              {hasSkuFilter && (
+                <button
+                  type="button"
+                  onClick={clearSkuFilter}
+                  className="rounded-full border px-3 py-1 text-xs font-semibold"
+                  style={{ borderColor: colors.border, color: colors.text }}
+                >
+                  SKU: {selectedSku} x
                 </button>
               )}
               {canSaveCurrentSearch &&
