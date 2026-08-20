@@ -15,6 +15,7 @@ import {
   useAuth,
 } from "./lib/authContext";
 import { validateAdminCredentials } from "./lib/adminAuth";
+import { SavedSearchesProvider } from "./lib/savedSearchesContext";
 import HomePage from "./pages/HomePage";
 import ShopPage from "./pages/ShopPage";
 import ProductPage from "./pages/ProductPage";
@@ -259,6 +260,7 @@ function App() {
   return (
     <ThemeContext.Provider value={themeContextValue}>
       <AuthContext.Provider value={authContextValue}>
+        <SavedSearchesProvider>
         <WishlistContext.Provider value={wishlistContextValue}>
           <CartContext.Provider value={cartContextValue}>
             <Routes>
@@ -308,6 +310,7 @@ function App() {
             </Routes>
           </CartContext.Provider>
         </WishlistContext.Provider>
+        </SavedSearchesProvider>
       </AuthContext.Provider>
     </ThemeContext.Provider>
   );

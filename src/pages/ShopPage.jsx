@@ -1,10 +1,17 @@
 import { Link, useSearchParams } from "react-router-dom";
-import { FiHeart, FiList, FiShoppingCart } from "react-icons/fi";
-import { FaHeart } from "react-icons/fa";
+import { FiBookmark, FiHeart, FiList, FiShoppingCart } from "react-icons/fi";
+import { FaBookmark, FaHeart } from "react-icons/fa";
 import { useEffect, useRef, useState } from "react";
 import AppLayout from "../components/AppLayout";
 import ThemedButton from "../components/ThemedButton";
+import { useAuth } from "../lib/authContext";
 import { useCart } from "../lib/cartContext";
+import {
+  defaultSearchName,
+  hasSavableShopFilters,
+  SORT_LABELS,
+  useSavedSearches,
+} from "../lib/savedSearchesContext";
 import { useTheme } from "../theme/themeContext";
 import { useWishlist } from "../lib/wishlistContext";
 import { getProductCardImageUrl } from "../lib/productImages";
@@ -51,15 +58,6 @@ const POPULAR_TAG_KEYWORDS = {
     "pop vinyl",
     "vinyl figure",
   ],
-};
-
-const SORT_LABELS = {
-  featured: "Featured",
-  newest: "Newest",
-  "price-desc": "Price: High to Low",
-  "price-asc": "Price: Low to High",
-  "name-asc": "Name: A to Z",
-  "name-desc": "Name: Z to A",
 };
 
 const PRODUCTS_PAGE_SIZE = 10;
@@ -109,6 +107,8 @@ function ShopProductCard({ product, colors }) {
 
 export default function ShopPage() {
   const { colors } = useTheme();
+  const { isAuthenticated } = useAuth();
+  const { isSearchSaved, saveSearch, removeMatchingSearch } = useSavedSearches();
   const [searchParams, setSearchParams] = useSearchParams();
   const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] = useState(false);
   const [visibleProductsCount, setVisibleProductsCount] = useState(PRODUCTS_PAGE_SIZE);
@@ -246,7 +246,33 @@ export default function ShopPage() {
   const hasCategoryTag = hasCategoryFilter && Boolean(selectedCategoryName);
   const hasSortFilter = selectedSort !== "featured";
   const hasAnyFilter = hasSearchFilter || hasCategoryTag || hasSortFilter;
+  const currentFilters = {
+    q: rawQuery.trim(),
+    category: hasCategoryFilter ? String(selectedCategoryId) : "",
+    sort: selectedSort,
+  };
+  const canSaveCurrentSearch = hasSavableShopFilters(currentFilters);
+  const searchIsSaved = isSearchSaved(currentFilters);
   const closeMobileCategories = () => setIsMobileCategoriesOpen(false);
+
+  const handleToggleSaveSearch = () => {
+    if (!isAuthenticated) {
+      return;
+    }
+    if (searchIsSaved) {
+      removeMatchingSearch(currentFilters);
+      return;
+    }
+    saveSearch({
+      ...currentFilters,
+      categoryName: selectedCategoryName,
+      name: defaultSearchName({
+        q: currentFilters.q,
+        categoryName: selectedCategoryName,
+        sort: currentFilters.sort,
+      }),
+    });
+  };
 
   const renderCategoryLinks = (onNavigate) => (
     <ul className="space-y-2">
@@ -351,6 +377,40 @@ export default function ShopPage() {
                   Sort: {SORT_LABELS[selectedSort] ?? selectedSort} x
                 </button>
               )}
+              {canSaveCurrentSearch &&
+                (isAuthenticated ? (
+                  <button
+                    type="button"
+                    onClick={handleToggleSaveSearch}
+                    className="inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-semibold"
+                    style={{
+                      borderColor: searchIsSaved ? colors.primary : colors.border,
+                      color: searchIsSaved ? colors.primary : colors.text,
+                    }}
+                    aria-pressed={searchIsSaved}
+                  >
+                    {searchIsSaved ? <FaBookmark size={12} /> : <FiBookmark size={12} />}
+                    {searchIsSaved ? "Saved" : "Save search"}
+                  </button>
+                ) : (
+                  <Link
+                    to="/login"
+                    className="inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-semibold no-underline"
+                    style={{ borderColor: colors.border, color: colors.text }}
+                  >
+                    <FiBookmark size={12} />
+                    Save search
+                  </Link>
+                ))}
+              {isAuthenticated ? (
+                <Link
+                  to="/account?tab=saved-searches"
+                  className="text-xs font-semibold no-underline hover:underline"
+                  style={{ color: colors.primary }}
+                >
+                  Saved searches
+                </Link>
+              ) : null}
               <button
                 type="button"
                 onClick={clearAllFilters}

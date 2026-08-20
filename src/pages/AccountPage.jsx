@@ -17,6 +17,8 @@ import AccountSettingsSection from "./account/sections/AccountSettingsSection";
 import PreferencesTabSection from "./account/sections/PreferencesTabSection";
 import AddressesSection from "./account/sections/AddressesSection";
 import OrdersReturnsSection from "./account/sections/OrdersReturnsSection";
+import SavedSearchesSection from "./account/sections/SavedSearchesSection";
+import { useSavedSearches } from "../lib/savedSearchesContext";
 
 /** Slugs for `?tab=` — shareable deep links, e.g. /account?tab=addresses */
 const ACCOUNT_TABS = [
@@ -24,6 +26,7 @@ const ACCOUNT_TABS = [
   { id: "settings", label: "Account Settings" },
   { id: "preferences", label: "Preferences" },
   { id: "addresses", label: "Addresses" },
+  { id: "saved-searches", label: "Saved searches" },
   { id: "orders", label: "Orders & Returns" },
 ];
 
@@ -61,6 +64,7 @@ export default function AccountPage() {
   const mutedText = colors.muted ?? (mode === "dark" ? "#94a3b8" : "#475569");
   const accentText = colors.primary;
   const { displayName, email, signOut, isAuthenticated } = useAuth();
+  const { savedSearches, removeSearch, renameSearch } = useSavedSearches();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const prefsStorageKey = useMemo(() => `funzies:account:prefs:${email.trim().toLowerCase() || "guest"}`, [email]);
@@ -461,6 +465,16 @@ export default function AccountPage() {
         );
       case "payment":
         return renderPaymentMethods();
+      case "saved-searches":
+        return (
+          <SavedSearchesSection
+            colors={colors}
+            mutedText={mutedText}
+            savedSearches={savedSearches}
+            onRemove={removeSearch}
+            onRename={renameSearch}
+          />
+        );
       case "orders":
         return (
           <OrdersReturnsSection
