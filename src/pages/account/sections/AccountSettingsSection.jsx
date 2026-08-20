@@ -1,4 +1,3 @@
-import { FiEyeOff } from "react-icons/fi";
 import { textStyles } from "../../../theme/typography";
 import { ReadOnlyField, SectionHeader } from "../AccountSectionPrimitives";
 
@@ -23,9 +22,9 @@ export default function AccountSettingsSection({ mutedText, profile }) {
       <section className="space-y-4">
         <SectionHeader>Password Management</SectionHeader>
         <p style={{ ...textStyles.body, color: mutedText }}>Last changed on: 2025-06-01</p>
-        <ReadOnlyField label="Current Password" value="*******************" rightIcon={<FiEyeOff size={16} style={{ color: mutedText }} />} />
-        <ReadOnlyField label="New Password" value="*******************" rightIcon={<FiEyeOff size={16} style={{ color: mutedText }} />} />
-        <ReadOnlyField label="Confirm New Password" value="*******************" rightIcon={<FiEyeOff size={16} style={{ color: mutedText }} />} />
+        <ReadOnlyField label="Current Password" type="password" value="*******************" />
+        <ReadOnlyField label="New Password" type="password" value="*******************" />
+        <ReadOnlyField label="Confirm New Password" type="password" value="*******************" />
         <p style={{ ...textStyles.bodySm, color: mutedText }}>Password updates aren’t implemented in this demo UI.</p>
       </section>
     </div>

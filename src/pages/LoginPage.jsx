@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { FiEyeOff } from "react-icons/fi";
+import { FaApple, FaFacebook, FaGoogle, FaMicrosoft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import AppLayout from "../components/AppLayout";
 import ThemedCheckbox from "../components/ThemedCheckbox";
@@ -10,10 +10,10 @@ import { textStyles } from "../theme/typography";
 import { useTheme } from "../theme/themeContext";
 
 const SOCIAL_PROVIDERS = [
-  { name: "Google", icon: "https://www.figma.com/api/mcp/asset/0e32d3da-001e-4102-93e6-5f660cb5d13d" },
-  { name: "Facebook", icon: "https://www.figma.com/api/mcp/asset/d0d55999-086c-452a-bafa-73cfb0651159" },
-  { name: "Microsoft", icon: "https://www.figma.com/api/mcp/asset/830a1dc9-50c4-46dc-91f5-e3057980ae5f" },
-  { name: "Apple", icon: "https://www.figma.com/api/mcp/asset/c1ed6ab2-354f-4979-855d-bd85c4b10c3e" },
+  { name: "Google", Icon: FaGoogle, iconColor: "#EA4335" },
+  { name: "Facebook", Icon: FaFacebook, iconColor: "#1877F2" },
+  { name: "Microsoft", Icon: FaMicrosoft, iconColor: "#00A4EF" },
+  { name: "Apple", Icon: FaApple, iconColor: "#111827" },
 ];
 
 const AUTH_COPY = {
@@ -148,7 +148,6 @@ export default function LoginPage({ initialMode = "login" }) {
                   autoComplete="current-password"
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
-                  trailing={<FiEyeOff size={14} style={{ color: "#8896b2" }} />}
                 />
                 <div className="rounded border p-3" style={{ borderColor: colors.border, backgroundColor: colors.background }}>
                   <p style={{ ...textStyles.bodySm, color: colors.text, fontWeight: 600 }}>Demo Account</p>
@@ -178,8 +177,8 @@ export default function LoginPage({ initialMode = "login" }) {
                     <li>Must have a valid domain name (e.g., example.com).</li>
                   </ul>
                 </div>
-                <InputField label="Password" required placeholder="***********" trailing={<FiEyeOff size={14} style={{ color: "#8896b2" }} />} />
-                <InputField label="Confirm Password" required placeholder="***********" trailing={<FiEyeOff size={14} style={{ color: "#8896b2" }} />} />
+                <InputField label="Password" required type="password" autoComplete="new-password" placeholder="***********" />
+                <InputField label="Confirm Password" required type="password" autoComplete="new-password" placeholder="***********" />
                 <div className="space-y-1" style={{ ...textStyles.body, ...panelStyles.helper }}>
                   <p>Password must contain at least:</p>
                   <ul className="list-disc pl-5">
@@ -273,17 +272,21 @@ export default function LoginPage({ initialMode = "login" }) {
                   <div className="h-px w-full" style={{ backgroundColor: colors.border }} />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
-                  {SOCIAL_PROVIDERS.map((provider) => (
-                    <button
-                      key={provider.name}
-                      type="button"
-                      className="space-y-2 rounded border p-3"
-                      style={{ borderColor: colors.border, backgroundColor: colors.white }}
-                    >
-                      <img src={provider.icon} alt={provider.name} className="mx-auto h-12 w-12 object-contain" />
-                      <p style={{ ...textStyles.body, color: "#8896b2" }}>{provider.name}</p>
-                    </button>
-                  ))}
+                  {SOCIAL_PROVIDERS.map((provider) => {
+                    const Icon = provider.Icon;
+                    return (
+                      <button
+                        key={provider.name}
+                        type="button"
+                        className="flex flex-col items-center justify-center gap-2 rounded border p-3"
+                        style={{ borderColor: colors.border, backgroundColor: colors.white }}
+                        aria-label={`Continue with ${provider.name}`}
+                      >
+                        <Icon size={32} color={provider.iconColor} aria-hidden />
+                        <p style={{ ...textStyles.body, color: "#8896b2" }}>{provider.name}</p>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}

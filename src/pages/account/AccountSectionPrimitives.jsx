@@ -2,11 +2,12 @@ import { useTheme } from "../../theme/themeContext";
 import { textStyles } from "../../theme/typography";
 import ThemedTextBox from "../../components/ThemedTextBox";
 
-export function ReadOnlyField({ label, value, rightIcon, className = "" }) {
+export function ReadOnlyField({ label, value, rightIcon, type = "text", className = "" }) {
   return (
     <div className={`space-y-2 ${className}`.trim()}>
       <ThemedTextBox
         label={label}
+        type={type}
         value={value}
         readOnly
         aria-readonly="true"

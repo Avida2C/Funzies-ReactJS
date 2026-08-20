@@ -16,11 +16,7 @@ import { SiX } from "react-icons/si";
 import { textStyles } from "../theme/typography";
 import { logoDarkMode, logoLightMode } from "../lib/storeData";
 import { useTheme } from "../theme/themeContext";
-import {
-  COMPANY_SOCIAL_LINKS,
-  FOOTER_PAYMENT_METHODS,
-  FOOTER_SECURITY_CERTIFICATIONS,
-} from "../data/companyPageData";
+import { COMPANY_SOCIAL_LINKS } from "../data/companyPageData";
 import { useCart } from "../lib/cartContext";
 import { useAuth } from "../lib/authContext";
 import { usePublicSettings } from "../hooks/usePublicSettings";
@@ -155,21 +151,9 @@ export default function AppLayout({ title, description, children, showPageHeader
   const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(searchParams.get("q") ?? "");
 
-  const publicContent = usePublicSettings([
-    "content.company.social_links",
-    "content.footer.security_certifications",
-    "content.footer.payment_methods",
-  ]);
+  const publicContent = usePublicSettings(["content.company.social_links"]);
   const footerSocialLinks = useMemo(
     () => safeParseJson(publicContent.values["content.company.social_links"], COMPANY_SOCIAL_LINKS),
-    [publicContent.values],
-  );
-  const footerSecurityCerts = useMemo(
-    () => safeParseJson(publicContent.values["content.footer.security_certifications"], FOOTER_SECURITY_CERTIFICATIONS),
-    [publicContent.values],
-  );
-  const footerPaymentMethods = useMemo(
-    () => safeParseJson(publicContent.values["content.footer.payment_methods"], FOOTER_PAYMENT_METHODS),
     [publicContent.values],
   );
 
@@ -361,39 +345,6 @@ export default function AppLayout({ title, description, children, showPageHeader
                     </a>
                   );
                 })}
-              </div>
-            </div>
-          </section>
-
-          <section
-            className="mt-8 grid gap-6 px-1 md:grid-cols-2"
-          >
-            <div>
-              <h4 className="mb-2 text-xl font-semibold" style={{ color: colors.primary }}>Security certification</h4>
-              <div className="flex flex-wrap items-center gap-2">
-                {footerSecurityCerts.map((item) => (
-                  <img
-                    key={item.label}
-                    src={item.src}
-                    alt={item.label}
-                    className="h-[25px] object-contain"
-                    style={{ width: `${item.width}px` }}
-                  />
-                ))}
-              </div>
-            </div>
-            <div>
-              <h4 className="mb-2 text-xl font-semibold" style={{ color: colors.primary }}>We accept</h4>
-              <div className="flex flex-wrap items-center gap-2">
-                {footerPaymentMethods.map((item) => (
-                  <img
-                    key={item.label}
-                    src={item.src}
-                    alt={item.label}
-                    className="h-[26px] object-contain"
-                    style={{ width: `${item.width}px` }}
-                  />
-                ))}
               </div>
             </div>
           </section>

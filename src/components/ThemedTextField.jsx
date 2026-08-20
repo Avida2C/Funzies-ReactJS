@@ -1,4 +1,5 @@
-import { forwardRef, useId, useMemo } from "react";
+import { forwardRef, useId, useMemo, useState } from "react";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useTheme } from "../theme/themeContext";
 
 /**
@@ -18,7 +19,9 @@ const ThemedTextField = forwardRef(function ThemedTextField(
     multiline = false,
     rows = 4,
     size = "md",
+    type = "text",
     endAdornment = null,
+    passwordToggle,
     ...rest
   },
   ref,
@@ -27,9 +30,30 @@ const ThemedTextField = forwardRef(function ThemedTextField(
   const generatedId = useId();
   const inputId = idProp ?? generatedId;
   const placeholderKey = useMemo(() => inputId.replace(/[^a-zA-Z0-9_-]/g, "_"), [inputId]);
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   const fieldTextColor = mode === "dark" ? "#1f2a36" : colors.text;
   const placeholderColor = mode === "dark" ? "#6b7280" : "#9ca3af";
+  const isPassword = type === "password";
+  const showPasswordToggle = isPassword && passwordToggle !== false;
+  const inputType = showPasswordToggle ? (passwordVisible ? "text" : "password") : type;
+  const passwordToggleAdornment = showPasswordToggle ? (
+    <button
+      type="button"
+      className="flex items-center px-3"
+      onClick={() => setPasswordVisible((visible) => !visible)}
+      aria-label={passwordVisible ? "Hide password" : "Show password"}
+      aria-pressed={passwordVisible}
+      title={passwordVisible ? "Hide password" : "Show password"}
+    >
+      {passwordVisible ? (
+        <FiEyeOff size={16} style={{ color: "#8896b2" }} aria-hidden />
+      ) : (
+        <FiEye size={16} style={{ color: "#8896b2" }} aria-hidden />
+      )}
+    </button>
+  ) : null;
+  const resolvedAdornment = passwordToggleAdornment ?? endAdornment;
 
   const Component = multiline ? "textarea" : "input";
   const isCompact = size === "sm";
@@ -59,12 +83,12 @@ const ThemedTextField = forwardRef(function ThemedTextField(
           data-funzies-ph={placeholderKey}
           className={`w-full flex-1 bg-transparent px-3 text-sm outline-none ${inputSpacing} ${multiline ? "resize-y" : ""} ${inputClassName}`.trim()}
           style={{ color: fieldTextColor, caretColor: fieldTextColor }}
-          {...(multiline ? { rows } : {})}
           {...rest}
+          {...(multiline ? { rows } : { type: inputType })}
           required={required}
         />
         <style>{`[data-funzies-ph="${placeholderKey}"]::placeholder { color: ${placeholderColor}; opacity: 1; }`}</style>
-        {endAdornment ? <span className="flex shrink-0 items-stretch">{endAdornment}</span> : null}
+        {resolvedAdornment ? <span className="flex shrink-0 items-stretch">{resolvedAdornment}</span> : null}
       </div>
       {helperText ? (
         <p className={`mt-1 text-sm ${error ? "text-error" : "text-base-content/60"}`.trim()}>
