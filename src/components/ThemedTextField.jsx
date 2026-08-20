@@ -22,6 +22,7 @@ const ThemedTextField = forwardRef(function ThemedTextField(
     type = "text",
     endAdornment = null,
     passwordToggle,
+    muted = false,
     ...rest
   },
   ref,
@@ -32,7 +33,8 @@ const ThemedTextField = forwardRef(function ThemedTextField(
   const placeholderKey = useMemo(() => inputId.replace(/[^a-zA-Z0-9_-]/g, "_"), [inputId]);
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const fieldTextColor = mode === "dark" ? "#1f2a36" : colors.text;
+  const isMuted = muted || Boolean(rest.disabled);
+  const fieldTextColor = isMuted ? colors.muted : mode === "dark" ? "#1f2a36" : colors.text;
   const placeholderColor = mode === "dark" ? "#6b7280" : "#9ca3af";
   const isPassword = type === "password";
   const showPasswordToggle = isPassword && passwordToggle !== false;
@@ -71,18 +73,18 @@ const ThemedTextField = forwardRef(function ThemedTextField(
       <div
         className={`flex w-full items-stretch overflow-hidden rounded border ${wrapperHeight}`.trim()}
         style={{
-          borderColor: colors.primary,
-          backgroundColor: colors.white,
+          borderColor: isMuted ? colors.border : colors.primary,
+          backgroundColor: isMuted ? colors.panel : colors.white,
           ...wrapperStyle,
-          ...(error ? { boxShadow: `0 0 0 1px ${colors.primary}` } : {}),
+          ...(error && !isMuted ? { boxShadow: `0 0 0 1px ${colors.primary}` } : {}),
         }}
       >
         <Component
           ref={ref}
           id={inputId}
           data-funzies-ph={placeholderKey}
-          className={`w-full flex-1 bg-transparent px-3 text-sm outline-none ${inputSpacing} ${multiline ? "resize-y" : ""} ${inputClassName}`.trim()}
-          style={{ color: fieldTextColor, caretColor: fieldTextColor }}
+          className={`w-full flex-1 bg-transparent px-3 text-sm outline-none ${inputSpacing} ${multiline ? "resize-y" : ""} ${isMuted ? "cursor-default" : ""} ${inputClassName}`.trim()}
+          style={{ color: fieldTextColor, caretColor: isMuted ? "transparent" : fieldTextColor }}
           {...rest}
           {...(multiline ? { rows } : { type: inputType })}
           required={required}

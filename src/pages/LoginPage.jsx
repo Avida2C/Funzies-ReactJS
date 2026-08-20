@@ -1,11 +1,22 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FaApple, FaFacebook, FaGoogle, FaMicrosoft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import AppLayout from "../components/AppLayout";
+import ThemedButton from "../components/ThemedButton";
 import ThemedCheckbox from "../components/ThemedCheckbox";
 import ThemedTextField from "../components/ThemedTextField";
 import { useAuth } from "../lib/authContext";
 import { ADMIN_DEMO_EMAIL, ADMIN_DEMO_PASSWORD } from "../lib/adminAuth";
+import {
+  canUsePasswordless,
+  currentAuthenticatorCode,
+  generateEmailCode,
+  hasAnyTwoFactor,
+  readTwoFactorState,
+  twoFactorMethodsEnabled,
+  writeTwoFactorState,
+} from "../lib/twoFactorAuth";
+import { getStoredAccountPassword } from "./ChangePasswordPage";
 import { textStyles } from "../theme/typography";
 import { useTheme } from "../theme/themeContext";
 
@@ -66,6 +77,21 @@ export default function LoginPage({ initialMode = "login" }) {
   const [rememberMe, setRememberMe] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const [awaitingTwoFactor, setAwaitingTwoFactor] = useState(false);
+  const [twoFactorMethod, setTwoFactorMethod] = useState("authenticator");
+  const [twoFactorCode, setTwoFactorCode] = useState("");
+  const [demoEmailCode, setDemoEmailCode] = useState("");
+  const [pendingSignIn, setPendingSignIn] = useState(/** @type {null | { displayName: string, email: string, isDemo: boolean, password: string }} */ (null));
+  const [otpTick, setOtpTick] = useState(0);
+
+  useEffect(() => {
+    if (!awaitingTwoFactor || twoFactorMethod !== "authenticator") {
+      return undefined;
+    }
+    const id = window.setInterval(() => setOtpTick((n) => n + 1), 1000);
+    return () => window.clearInterval(id);
+  }, [awaitingTwoFactor, twoFactorMethod]);
   const isDark = mode === "dark";
   const copy = AUTH_COPY[activeMode] ?? AUTH_COPY.login;
   const isForgotMode = activeMode === "forgot";
@@ -99,21 +125,117 @@ export default function LoginPage({ initialMode = "login" }) {
     navigate("/forgot-password");
   };
 
+  const completeSignIn = (profile, passwordValue, isDemo) => {
+    if (isDemo) {
+      signInAdmin({ email: profile.email, password: passwordValue });
+    }
+    signIn({ displayName: profile.displayName, email: profile.email });
+    setAwaitingTwoFactor(false);
+    setPendingSignIn(null);
+    navigate("/account");
+  };
+
+  const beginTwoFactor = (profile, passwordValue, isDemo) => {
+    const twoFactor = readTwoFactorState(profile.email);
+    const methods = twoFactorMethodsEnabled(twoFactor);
+    const firstMethod = methods.authenticator
+      ? "authenticator"
+      : methods.email
+        ? "email"
+        : methods.passkey
+          ? "passkey"
+          : "backup";
+    setPendingSignIn({ ...profile, isDemo, password: passwordValue });
+    setTwoFactorMethod(firstMethod);
+    setTwoFactorCode("");
+    setDemoEmailCode(methods.email ? generateEmailCode() : "");
+    setAwaitingTwoFactor(true);
+    setLoginError("");
+  };
+
   const handlePrimaryAction = () => {
     if (activeMode === "forgot") {
       return;
     }
-    const normalizedEmail = email.trim().toLowerCase();
+    setLoginError("");
+    const trimmedEmail = email.trim();
+    const normalizedEmail = trimmedEmail.toLowerCase();
+    const twoFactor = readTwoFactorState(trimmedEmail);
+    const passwordless = canUsePasswordless(twoFactor);
+    const storedPassword = getStoredAccountPassword(trimmedEmail);
     const isDemoAccount = normalizedEmail === ADMIN_DEMO_EMAIL.toLowerCase() && password === ADMIN_DEMO_PASSWORD;
-    if (isDemoAccount) {
-      // Same demo account should unlock the admin area.
-      signInAdmin({ email, password });
-    }
-    signIn({
+    const profile = {
       displayName: isDemoAccount ? "Demo Account" : "Nadine",
-      email: email.trim(),
-    });
-    navigate("/account");
+      email: trimmedEmail,
+    };
+
+    if (activeMode === "signup") {
+      signIn({ displayName: profile.displayName, email: trimmedEmail });
+      navigate("/account");
+      return;
+    }
+
+    if (passwordless) {
+      beginTwoFactor(profile, password, isDemoAccount);
+      return;
+    }
+
+    if (!isDemoAccount && storedPassword && storedPassword !== password) {
+      setLoginError("Incorrect password.");
+      return;
+    }
+
+    if (hasAnyTwoFactor(twoFactor)) {
+      beginTwoFactor(profile, password, isDemoAccount);
+      return;
+    }
+
+    completeSignIn(profile, password, isDemoAccount);
+  };
+
+  const verifyTwoFactor = () => {
+    if (!pendingSignIn) {
+      return;
+    }
+    const twoFactor = readTwoFactorState(pendingSignIn.email);
+    const methods = twoFactorMethodsEnabled(twoFactor);
+    const code = twoFactorCode.trim();
+
+    if (twoFactorMethod === "authenticator") {
+      const expected = currentAuthenticatorCode(twoFactor.authenticator.secret);
+      const supplied = code || expected;
+      if (!methods.authenticator || supplied !== expected) {
+        setLoginError("Authenticator code is not valid or has expired.");
+        return;
+      }
+    } else if (twoFactorMethod === "email") {
+      const supplied = code || demoEmailCode;
+      if (!methods.email || supplied !== demoEmailCode) {
+        setLoginError("Email code does not match.");
+        return;
+      }
+    } else if (twoFactorMethod === "backup") {
+      const match = twoFactor.backupCodes.unused.find((item) => item.replace(/\s+/g, "").toUpperCase() === code.replace(/\s+/g, "").toUpperCase());
+      if (!match) {
+        setLoginError("That backup code is not valid.");
+        return;
+      }
+      writeTwoFactorState(pendingSignIn.email, {
+        ...twoFactor,
+        backupCodes: {
+          ...twoFactor.backupCodes,
+          unused: twoFactor.backupCodes.unused.filter((item) => item !== match),
+          used: [...twoFactor.backupCodes.used, match],
+        },
+      });
+    } else if (twoFactorMethod === "passkey") {
+      if (!methods.passkey) {
+        setLoginError("No passkey on this account.");
+        return;
+      }
+    }
+
+    completeSignIn(pendingSignIn, pendingSignIn.password, pendingSignIn.isDemo);
   };
 
   const fillDemoAccount = () => {
@@ -131,7 +253,7 @@ export default function LoginPage({ initialMode = "login" }) {
         <div className={`w-full space-y-4 ${isForgotMode ? "max-w-[600px]" : "max-w-[500px]"}`}>
             <h1 style={headingStyle}>{copy.title}</h1>
 
-            {activeMode === "login" && (
+            {activeMode === "login" && !awaitingTwoFactor && (
               <>
                 <InputField
                   label="Email Address"
@@ -141,14 +263,21 @@ export default function LoginPage({ initialMode = "login" }) {
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                 />
-                <InputField
-                  label="Password"
-                  type="password"
-                  placeholder="***********"
-                  autoComplete="current-password"
-                  value={password}
-                  onChange={(event) => setPassword(event.target.value)}
-                />
+                {canUsePasswordless(readTwoFactorState(email)) ? (
+                  <p style={{ ...textStyles.bodySm, color: colors.text }}>
+                    Passwordless is on for this email. Continue to verify with a passkey or email code.
+                  </p>
+                ) : (
+                  <InputField
+                    label="Password"
+                    type="password"
+                    placeholder="***********"
+                    autoComplete="current-password"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
+                  />
+                )}
+                {loginError ? <p style={{ ...textStyles.bodySm, color: "#b91c1c" }}>{loginError}</p> : null}
                 <div className="rounded border p-3" style={{ borderColor: colors.border, backgroundColor: colors.background }}>
                   <p style={{ ...textStyles.bodySm, color: colors.text, fontWeight: 600 }}>Demo Account</p>
                   <p style={{ ...textStyles.bodySm, color: "#8896b2" }}>Email: {ADMIN_DEMO_EMAIL}</p>
@@ -212,7 +341,75 @@ export default function LoginPage({ initialMode = "login" }) {
               </>
             )}
 
-            {copy.showRememberMe && (
+            {activeMode === "login" && awaitingTwoFactor ? (
+              <div className="space-y-3">
+                <p style={{ ...textStyles.body, color: colors.text }}>Second step for {pendingSignIn?.email}</p>
+                {loginError ? <p style={{ ...textStyles.bodySm, color: "#b91c1c" }}>{loginError}</p> : null}
+                <div className="flex flex-wrap gap-2">
+                  {(() => {
+                    const enabled = twoFactorMethodsEnabled(readTwoFactorState(pendingSignIn?.email));
+                    return [
+                      enabled.authenticator ? "authenticator" : null,
+                      enabled.email ? "email" : null,
+                      enabled.passkey ? "passkey" : null,
+                      enabled.backupCodes ? "backup" : null,
+                    ].filter(Boolean);
+                  })().map((method) => (
+                    <button
+                      key={method}
+                      type="button"
+                      className="rounded border px-2 py-1 text-sm capitalize"
+                      style={{
+                        borderColor: twoFactorMethod === method ? colors.primary : colors.border,
+                        color: twoFactorMethod === method ? colors.primary : colors.text,
+                      }}
+                      onClick={() => {
+                        setTwoFactorMethod(method);
+                        setLoginError("");
+                        if (method === "email" && !demoEmailCode) {
+                          setDemoEmailCode(generateEmailCode());
+                        }
+                      }}
+                    >
+                      {method}
+                    </button>
+                  ))}
+                </div>
+                {twoFactorMethod === "email" ? (
+                  <p style={{ ...textStyles.bodySm, color: "#8896b2" }}>
+                    Demo inbox code: <span className="font-mono" style={{ color: colors.text }}>{demoEmailCode}</span>
+                  </p>
+                ) : null}
+                {twoFactorMethod === "authenticator" ? (
+                  <p style={{ ...textStyles.bodySm, color: colors.text }}>
+                    Current authenticator code:{" "}
+                    <span className="font-mono font-semibold">
+                      {otpTick >= 0
+                        ? currentAuthenticatorCode(readTwoFactorState(pendingSignIn?.email).authenticator.secret)
+                        : ""}
+                    </span>
+                    <span style={{ color: "#8896b2" }}> (updates every 30s)</span>
+                  </p>
+                ) : null}
+                {twoFactorMethod === "passkey" ? (
+                  <p style={{ ...textStyles.bodySm, color: "#8896b2" }}>
+                    Continue to confirm the passkey stored for this account on this device.
+                  </p>
+                ) : null}
+                {twoFactorMethod !== "passkey" && twoFactorMethod !== "authenticator" && twoFactorMethod !== "email" ? (
+                  <InputField
+                    label="Backup code"
+                    value={twoFactorCode}
+                    onChange={(event) => setTwoFactorCode(event.target.value)}
+                  />
+                ) : null}
+                <ThemedButton type="button" variant="redOutline" size="sm" onClick={() => { setAwaitingTwoFactor(false); setPendingSignIn(null); setLoginError(""); }}>
+                  Back
+                </ThemedButton>
+              </div>
+            ) : null}
+
+            {copy.showRememberMe && !awaitingTwoFactor && (
               <div className="flex items-center justify-between" style={{ color: colors.primary }}>
                 <ThemedCheckbox
                   checked={rememberMe}
@@ -231,11 +428,11 @@ export default function LoginPage({ initialMode = "login" }) {
 
             <button
               type="button"
-              onClick={handlePrimaryAction}
+              onClick={awaitingTwoFactor ? verifyTwoFactor : handlePrimaryAction}
               className="min-h-[45px] w-full rounded px-4 py-2 text-white"
               style={{ ...textStyles.sectionTitle, backgroundColor: colors.primary, fontWeight: 400 }}
             >
-              {copy.actionLabel}
+              {awaitingTwoFactor ? (twoFactorMethod === "passkey" ? "Continue with passkey" : "Verify") : copy.actionLabel}
             </button>
 
             {activeMode === "forgot" ? null : activeMode === "login" ? (
@@ -264,7 +461,7 @@ export default function LoginPage({ initialMode = "login" }) {
               </p>
             )}
 
-            {copy.showSocial && (
+            {copy.showSocial && !awaitingTwoFactor && (
               <div className="space-y-3 pt-1">
                 <div className="flex items-center gap-2">
                   <div className="h-px w-full" style={{ backgroundColor: colors.border }} />

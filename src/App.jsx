@@ -16,6 +16,7 @@ import {
 } from "./lib/authContext";
 import { validateAdminCredentials } from "./lib/adminAuth";
 import { SavedSearchesProvider } from "./lib/savedSearchesContext";
+import { TwoFactorProvider, readTwoFactorState, writeTwoFactorState, clearTwoFactorState } from "./lib/twoFactorAuth";
 import HomePage from "./pages/HomePage";
 import ShopPage from "./pages/ShopPage";
 import ProductPage from "./pages/ProductPage";
@@ -40,6 +41,8 @@ import CareerApplicationReceivedPage from "./pages/CareerApplicationReceivedPage
 import ContactPage from "./pages/ContactPage";
 import AccountPage from "./pages/AccountPage";
 import LoginPage from "./pages/LoginPage";
+import ChangeEmailPage from "./pages/ChangeEmailPage";
+import ChangePasswordPage from "./pages/ChangePasswordPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import OrderConfirmedPage from "./pages/OrderConfirmedPage";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
@@ -202,6 +205,36 @@ function App() {
       isAdminAuthenticated,
       displayName: isAuthenticated ? authProfile.displayName : "Guest",
       email: isAuthenticated ? authProfile.email : "",
+      updateProfile: ({ displayName, email: nextEmail } = {}) => {
+        const previousEmail = authProfile.email;
+        const nextProfile = {
+          displayName:
+            typeof displayName === "string" && displayName.trim() ? displayName.trim() : authProfile.displayName,
+          email: typeof nextEmail === "string" && nextEmail.trim() ? nextEmail.trim() : authProfile.email,
+        };
+        if (previousEmail && nextProfile.email && previousEmail.trim().toLowerCase() !== nextProfile.email.trim().toLowerCase()) {
+          const twoFactor = readTwoFactorState(previousEmail);
+          writeTwoFactorState(nextProfile.email, twoFactor);
+          clearTwoFactorState(previousEmail);
+          try {
+            const oldPassKey = `funzies:account:password:${previousEmail.trim().toLowerCase()}`;
+            const newPassKey = `funzies:account:password:${nextProfile.email.trim().toLowerCase()}`;
+            const existing = window.localStorage.getItem(oldPassKey);
+            if (existing) {
+              window.localStorage.setItem(newPassKey, existing);
+              window.localStorage.removeItem(oldPassKey);
+            }
+          } catch {
+            // ignore
+          }
+        }
+        setAuthProfile(nextProfile);
+        try {
+          window.localStorage.setItem(AUTH_PROFILE_STORAGE_KEY, JSON.stringify(nextProfile));
+        } catch {
+          // ignore
+        }
+      },
       signOut: () => {
         window.localStorage.removeItem(WISHLIST_STORAGE_KEY);
         window.localStorage.removeItem(CART_STORAGE_KEY);
@@ -261,6 +294,7 @@ function App() {
     <ThemeContext.Provider value={themeContextValue}>
       <AuthContext.Provider value={authContextValue}>
         <SavedSearchesProvider>
+        <TwoFactorProvider>
         <WishlistContext.Provider value={wishlistContextValue}>
           <CartContext.Provider value={cartContextValue}>
             <Routes>
@@ -274,6 +308,14 @@ function App() {
             <Route
               path="/account"
               element={isAuthenticated ? <AccountPage /> : <Navigate to="/login" replace />}
+            />
+            <Route
+              path="/account/change-email"
+              element={isAuthenticated ? <ChangeEmailPage /> : <Navigate to="/login" replace />}
+            />
+            <Route
+              path="/account/change-password"
+              element={isAuthenticated ? <ChangePasswordPage /> : <Navigate to="/login" replace />}
             />
             <Route path="/login" element={<LoginPage initialMode="login" />} />
             <Route path="/create-account" element={<LoginPage initialMode="signup" />} />
@@ -310,6 +352,7 @@ function App() {
             </Routes>
           </CartContext.Provider>
         </WishlistContext.Provider>
+        </TwoFactorProvider>
         </SavedSearchesProvider>
       </AuthContext.Provider>
     </ThemeContext.Provider>

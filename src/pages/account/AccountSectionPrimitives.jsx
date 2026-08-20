@@ -10,6 +10,8 @@ export function ReadOnlyField({ label, value, rightIcon, type = "text", classNam
         type={type}
         value={value}
         readOnly
+        muted
+        tabIndex={-1}
         aria-readonly="true"
         endAdornment={rightIcon ? <span className="flex items-center px-3">{rightIcon}</span> : null}
       />

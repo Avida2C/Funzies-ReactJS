@@ -14,6 +14,7 @@ import { createRow, deleteRow, listTable, updateRow } from "../lib/crudApi";
 import { InfoCard, ReadOnlyField, SectionHeader } from "./account/AccountSectionPrimitives";
 import ProfileOverviewSection from "./account/sections/ProfileOverviewSection";
 import AccountSettingsSection from "./account/sections/AccountSettingsSection";
+import PrivacySecuritySection from "./account/sections/PrivacySecuritySection";
 import PreferencesTabSection from "./account/sections/PreferencesTabSection";
 import AddressesSection from "./account/sections/AddressesSection";
 import OrdersReturnsSection from "./account/sections/OrdersReturnsSection";
@@ -24,6 +25,7 @@ import { useSavedSearches } from "../lib/savedSearchesContext";
 const ACCOUNT_TABS = [
   { id: "profile", label: "Profile Overview" },
   { id: "settings", label: "Account Settings" },
+  { id: "privacy-security", label: "Privacy & Security" },
   { id: "preferences", label: "Preferences" },
   { id: "addresses", label: "Addresses" },
   { id: "saved-searches", label: "Saved searches" },
@@ -40,21 +42,11 @@ const COMMUNICATION_GROUPS = [
   { title: "Account & Security Alerts (required)", options: ["Email", "SMS (optional, toggleable)"] },
 ];
 
-const SECURITY_2FA_ROWS = [
-  { title: "SMS", description: "Receive codes via SMS" },
-  { title: "Email", description: "Receive codes via email" },
-  { title: "Phone Call", description: "Receive codes through a phone call" },
-  { title: "Push Notification", description: "Receive codes via mobile app notifications" },
-  { title: "Authenticator App", description: "Use an authenticator app to generate codes" },
-  { title: "Backup Codes", description: "Use backup codes for account recovery" },
-];
-
 const LINKED_ACCOUNT_ROWS = [
   { title: "Google", description: "Connected to your account" },
   { title: "Apple", description: "Syncing with iCloud" },
   { title: "Microsoft", description: "Accessing OneDrive" },
   { title: "Facebook", description: "Files are up to date" },
-  { title: "Download Account Data", description: "GDPR/CCPA" },
 ];
 
 const ORDER_FILTERS = ["All Orders", "Processing", "Completed", "Returns"];
@@ -219,9 +211,6 @@ export default function AccountPage() {
     "Account & Security Alerts (required)-Email": true,
     "Account & Security Alerts (required)-SMS (optional, toggleable)": false,
   });
-  const [securityToggles, setSecurityToggles] = useState(
-    SECURITY_2FA_ROWS.reduce((acc, row) => ({ ...acc, [row.title]: false }), {}),
-  );
   const [linkedAccounts, setLinkedAccounts] = useState(
     LINKED_ACCOUNT_ROWS.reduce((acc, row) => ({ ...acc, [row.title]: true }), {}),
   );
@@ -425,7 +414,9 @@ export default function AccountPage() {
           />
         );
       case "settings":
-        return <AccountSettingsSection mutedText={mutedText} profile={profile} />;
+        return <AccountSettingsSection colors={colors} mutedText={mutedText} profile={profile} />;
+      case "privacy-security":
+        return <PrivacySecuritySection colors={colors} mutedText={mutedText} />;
       case "preferences":
         return (
           <PreferencesTabSection
@@ -438,11 +429,8 @@ export default function AccountPage() {
             communicationGroups={COMMUNICATION_GROUPS}
             communication={communication}
             setCommunication={setCommunication}
-            securityToggles={securityToggles}
-            setSecurityToggles={setSecurityToggles}
             linkedAccounts={linkedAccounts}
             setLinkedAccounts={setLinkedAccounts}
-            security2faRows={SECURITY_2FA_ROWS}
             linkedAccountRows={LINKED_ACCOUNT_ROWS}
           />
         );
@@ -500,7 +488,7 @@ export default function AccountPage() {
           />
         );
       default:
-        return <AccountSettingsSection mutedText={mutedText} profile={profile} />;
+        return <AccountSettingsSection colors={colors} mutedText={mutedText} profile={profile} />;
     }
   };
 
