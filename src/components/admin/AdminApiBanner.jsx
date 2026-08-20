@@ -18,7 +18,7 @@ export default function AdminApiBanner({ error, entityLabel = "this page" }) {
       <p className="mt-1" style={{ ...textStyles.bodySm, color: colors.text, opacity: 0.9 }}>
         {error} — Start the data API in another terminal: <code className="rounded bg-black/10 px-1">npm run dev:api</code> (or
         use <code className="rounded bg-black/10 px-1">npm run dev:stack</code> to run the app and API together). Vite
-        proxies <code className="rounded bg-black/10 px-1">/api</code> to port 3001 in development.
+        proxies <code className="rounded bg-black/10 px-1">/api</code> to port 3007 in development.
       </p>
     </ThemedSurface>
   );

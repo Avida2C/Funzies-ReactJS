@@ -56,8 +56,8 @@ npm run dev:stack
 Vite proxies API requests to the local Express server:
 
 - Frontend: `http://localhost:5173`
-- API: `http://localhost:3001`
-- Proxy: requests to `/api/*` are forwarded to `http://localhost:3001`
+- API: `http://localhost:3007`
+- Proxy: requests to `/api/*` are forwarded to `http://localhost:3007`
 
 ## Scripts
 

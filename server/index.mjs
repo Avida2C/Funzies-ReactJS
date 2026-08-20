@@ -3,7 +3,7 @@ import express from "express";
 import { createRow, CRUD_TABLES, deleteRow, getById, listTable, load, updateRow } from "./lib/store.mjs";
 import { registerProductImageUpload } from "./lib/productUpload.mjs";
 
-const PORT = Number.parseInt(process.env.PORT ?? "3001", 10) || 3001;
+const PORT = Number.parseInt(process.env.PORT ?? "3007", 10) || 3007;
 
 const app = express();
 app.use(cors());
